@@ -58,7 +58,7 @@ module.exports = {
     ],
     resolve: {
       alias: {
-        'createjs' : path.join(__dirname, '/vendor/createjs.js')
+        'createjs' : path.join(__dirname, '/vendors/createjs.js')
       },
       root: [
         path.resolve(__dirname, 'src'),
