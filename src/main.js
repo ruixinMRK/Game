@@ -16,7 +16,7 @@ class Main extends React.Component {
 
   componentDidMount(){
 
-    alert('渲染完成');
+    alert('渲染完成,我是土豆虎12');
 
   }
 
