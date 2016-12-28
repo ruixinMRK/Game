@@ -8,6 +8,11 @@ class Main extends React.Component {
     super(props);
   }
 
+  componentWillUnmount(){
+
+    alert('页面即将卸载')
+
+  }
 
   componentDidMount(){
 
