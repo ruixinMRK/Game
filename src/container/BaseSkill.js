@@ -1,8 +1,8 @@
 /**
  * 弹道技能基类 所有弹道技能均继承与此类
  */
-//Barrage
 
+import 'createjs';
 class BaseSkill extends createjs.Container {
 
   constructor() {
@@ -29,7 +29,7 @@ class BaseSkill extends createjs.Container {
   }
   runing(){
     this.move(this.sx,this.sy);
-    if(this.x > (1206 + 100)||this.x < -100||this.y < -100||this.y > 1206)
+    if(this.x > 500||this.x < 0||this.y < 0||this.y > 300)
     {
       this.stopRun()
     }

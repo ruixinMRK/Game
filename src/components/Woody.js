@@ -2,7 +2,8 @@
  * 角色Woody
  */
 //Woody
-import BasePeople from './container/BasePeople';
+import BasePeople from 'container/BasePeople';
+import Guiqizhan from 'components/Guiqizhan';
 
 class Woody extends BasePeople{
 
@@ -20,10 +21,10 @@ class Woody extends BasePeople{
       }
     }
     this.data = {
-      images: ["images/woody_0.png","images/woody_1.png","images/woody_2.png"],
+      images: ["assets/img/woody_0.png","assets/img/woody_1.png","assets/img/woody_2.png"],
       frames: {width:80, height:80, regX: 40, regY:40},
       animations: {
-        stand:[0,3,"stand",0.3],
+        stand:[0,3,"stand",0.2],
         walk:{
           frames: [4,5,6,7,6,5],
           next: "walk",
@@ -39,8 +40,8 @@ class Woody extends BasePeople{
           next: "stand",
           speed: 0.3
         },
-        attack1:[10,13,"stand",0.3],
-        attack2:[14,17,"stand",0.3],
+        attack1:[10,13,"stand",0.4],
+        attack2:[14,17,"stand",0.4],
         attack3:{
           frames: [8,9,19],
           next: "stand",
@@ -49,7 +50,7 @@ class Woody extends BasePeople{
         jump:{
           frames: [60,61,62],
           next: "jumpSky",
-          speed: 0.3
+          speed: 0.5
         },
         jumpSky:{
           frames: [62],
@@ -90,7 +91,7 @@ class Woody extends BasePeople{
     {
       if(this.guiqizhan1 != 1)
       {
-        var guiqizhan1 = new cls.Guiqizhan();
+        var guiqizhan1 = new Guiqizhan();
         this.parent.addChild(guiqizhan1);
         guiqizhan1.x = this.x + (this.arrow == "left"?-30:30);
         guiqizhan1.y = this.y;
@@ -106,7 +107,7 @@ class Woody extends BasePeople{
     {
       if(this.guiqizhan2 != 1)
       {
-        var guiqizhan2 = new cls.Guiqizhan();
+        var guiqizhan2 = new Guiqizhan();
         this.parent.addChild(guiqizhan2);
         guiqizhan2.x = this.x + (this.arrow == "left"?-30:30);
         guiqizhan2.y = this.y;

@@ -2,8 +2,10 @@
  * 技能鬼气斩
  */
 
+import 'createjs';
+import BaseSkill from 'container/BaseSkill';
 
-class Guiqizhan extends createjs.Container {
+class Guiqizhan extends BaseSkill {
 
   constructor(){
     super();
@@ -16,7 +18,7 @@ class Guiqizhan extends createjs.Container {
       }
     }
     this.data = {
-      images: ["images/guiqizhan.png"],
+      images: ["assets/img/guiqizhan.png"],
       frames: {width: 82, height: 83, regX: 41, regY: 41.5},
       animations: {
         run: [0, 3, "run", 0.3],
