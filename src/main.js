@@ -1,6 +1,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Woody from 'components/Woody';
 
 class Main extends React.Component {
 
@@ -16,7 +17,7 @@ class Main extends React.Component {
 
   componentDidMount(){
 
-    alert('渲染完成,我是土豆虎12');
+
 
   }
 
