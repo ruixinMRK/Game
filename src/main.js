@@ -7,6 +7,7 @@ import Test from 'Test';
 import Other from 'Other';
 import Timer from 'common/Timer';
 import Lib from 'res/Lib.js';
+import Tools from 'common/Tools';
 
 class Main extends React.Component {
 
@@ -43,11 +44,22 @@ class Main extends React.Component {
     document.addEventListener('keyup',this.onKey);
     document.addEventListener('mousemove',e=>{flash.txt.text = e.clientX+','+e.clientY});
 
+    Timer.add(this.getAjax,3000,1);
+
     //创建并实时刷新舞台
     var stage=new createjs.Stage(this.refs.myCan);
     Timer.add(e=>{stage.update()},30,0);
 
     stage.addChild(testS,txt,this.wood,flash);
+  }
+
+  getAjax = ()=>{
+    Tools.ajax({url:'http://60.205.222.103:8888',mothed:'get',async:true,timeout:5000,
+      callback:(data)=>{
+        console.log('------我是nodejs');
+        this.refs.ajaxDiv.innerHTML = data;
+      }}
+    )
   }
 
   onKey = (e)=>{
@@ -93,6 +105,7 @@ class Main extends React.Component {
           <Test></Test>
           <h1>欢迎来到装逼世界</h1>
           <h1>w跳a左d右 j攻击 k技能</h1>
+          <div ref='ajaxDiv'>即将获取来自nodejs的数据....</div>
           <canvas ref = 'myCan' width="1000px" height = '300px' ></canvas>
         </div>
     );

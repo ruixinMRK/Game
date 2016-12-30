@@ -1051,22 +1051,22 @@ class Tools{
     }
     if(xhr.status == 200){
 
-      let arr = xhr.responseText.split("#");
-      let i = 0;
-      let cacheData = [];
-      for(; i<arr.length;i++){
-        let obj = null;
-        try{
-          obj = JSON.parse(arr[i]);
-        }
-        catch(e){
-          console.log('解析数据错误');
-        }
-        if(obj) cacheData.push(obj);
-      }
-      //Router.instance.dispatcher(arr[i])
-      let returnObj = cacheData.length>1?cacheData:cacheData[0];
-      success&&success(returnObj);
+      //let arr = xhr.responseText.split("#");
+      //let i = 0;
+      //let cacheData = [];
+      //for(; i<arr.length;i++){
+      //  let obj = null;
+      //  try{
+      //    obj = JSON.parse(arr[i]);
+      //  }
+      //  catch(e){
+      //    console.log('解析数据错误');
+      //  }
+      //  if(obj) cacheData.push(obj);
+      //}
+      ////Router.instance.dispatcher(arr[i])
+      //let returnObj = cacheData.length>1?cacheData:cacheData[0];
+      success&&success(xhr.responseText);
       // Router.instance.dispatcher(returnObj);
     }
     else{
