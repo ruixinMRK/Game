@@ -43,6 +43,9 @@ class Main extends React.Component {
     // document.addEventListener('keydown',this.onKey);
     // document.addEventListener('keyup',this.onKey);
     document.addEventListener('mousemove',e=>{flash.txt.text = e.clientX+','+e.clientY});
+    this.refs.name.addEventListener('input',e=>{
+      console.log(e.target.value);
+    });
 
     // Timer.add(this.getAjax,3000,1);
 
@@ -53,7 +56,10 @@ class Main extends React.Component {
     this.refs.tijiao.addEventListener('click',e=>{
 
       // console.log(JSON.stringify({name:this.refs.name.value,password:this.refs.password.value,date:this.refs.date.value}));
-
+      if(this.refs.name.value == '') {
+        alert('name不能为空');
+        return;
+      }
       Tools.ajax({data:{name:this.refs.name.value,password:this.refs.password.value,date:this.refs.date.value},url:'http://60.205.222.103:8888',mothed:'get',async:true,timeout:5000,
         callback:(d)=>{
           // alert(d.data);
