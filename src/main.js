@@ -32,35 +32,54 @@ class Main extends React.Component {
     var txt = new Other();
     txt.y = 50;
 
-    this.wood = new Woody();
-    this.wood.x = 100;
-    this.wood.y = 180;
+    // this.wood = new Woody();
+    // this.wood.x = 100;
+    // this.wood.y = 180;
 
     var flash = new Lib.Instance();
     flash.x = 200;
     flash.y = 100;
 
-    document.addEventListener('keydown',this.onKey);
-    document.addEventListener('keyup',this.onKey);
+    // document.addEventListener('keydown',this.onKey);
+    // document.addEventListener('keyup',this.onKey);
     document.addEventListener('mousemove',e=>{flash.txt.text = e.clientX+','+e.clientY});
 
-    Timer.add(this.getAjax,3000,1);
+    // Timer.add(this.getAjax,3000,1);
 
     //创建并实时刷新舞台
     var stage=new createjs.Stage(this.refs.myCan);
     Timer.add(e=>{stage.update()},30,0);
 
-    stage.addChild(testS,txt,this.wood,flash);
+    this.refs.tijiao.addEventListener('click',e=>{
+
+      // console.log(JSON.stringify({name:this.refs.name.value,password:this.refs.password.value,date:this.refs.date.value}));
+
+      Tools.ajax({data:{name:this.refs.name.value,password:this.refs.password.value,date:this.refs.date.value},url:'http://60.205.222.103:8888',mothed:'get',async:true,timeout:5000,
+        callback:(d)=>{
+          // alert(d.data);
+          console.log(JSON.parse(d).data);
+          var str = JSON.parse(d).data;
+          if(str == '1') alert('插入成功');
+          else if(str == '0') alert('用户已经存在');
+
+
+        }}
+      )
+
+
+    });
+
+    stage.addChild(testS,txt,flash);
   }
 
-  getAjax = ()=>{
-    Tools.ajax({url:'http://60.205.222.103:8888',mothed:'get',async:true,timeout:5000,
-      callback:(data)=>{
-        console.log('------我是nodejs');
-        this.refs.ajaxDiv.innerHTML = data;
-      }}
-    )
-  }
+  // getAjax = ()=>{
+  //   Tools.ajax({url:'http://60.205.222.103:8888',mothed:'get',async:true,timeout:5000,
+  //     callback:(data)=>{
+  //       console.log('------我是nodejs');
+  //       this.refs.ajaxDiv.innerHTML = data;
+  //     }}
+  //   )
+  // }
 
   onKey = (e)=>{
 
@@ -102,6 +121,12 @@ class Main extends React.Component {
   render() {
     return (
         <div>
+          <div>
+            名字<input type="text" ref = 'name'/>
+            密码<input type="text" ref = 'password'/>
+            日期<input type="text" ref = 'date'/>
+            <button ref = 'tijiao'>点击注册</button>
+          </div>
           <Test></Test>
           <h1>欢迎来到装逼世界</h1>
           <h1>w跳a左d右 j攻击 k技能</h1>
