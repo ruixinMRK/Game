@@ -13,6 +13,7 @@ class Main extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {type:'注册'};
   }
 
   componentWillUnmount(){
@@ -50,26 +51,9 @@ class Main extends React.Component {
     var stage=new createjs.Stage(this.refs.myCan);
     Timer.add(e=>{stage.update()},30,0);
 
-    this.refs.tijiao.addEventListener('click',e=>{
-
-      // console.log(JSON.stringify({name:this.refs.name.value,password:this.refs.password.value,date:this.refs.date.value}));
-
-      Tools.ajax({data:{name:this.refs.name.value,password:this.refs.password.value,date:this.refs.date.value},url:'http://60.205.222.103:8888',mothed:'get',async:true,timeout:5000,
-        callback:(d)=>{
-          // alert(d.data);
-          console.log(JSON.parse(d).data);
-          var str = JSON.parse(d).data;
-          if(str == '1') alert('插入成功');
-          else if(str == '0') alert('用户已经存在');
-
-
-        }}
-      )
-
-
-    });
 
     stage.addChild(testS,txt,flash);
+
   }
 
   // getAjax = ()=>{
@@ -80,6 +64,53 @@ class Main extends React.Component {
   //     }}
   //   )
   // }
+  toggle = e=>{
+
+    if(this.refs.name.value==''||this.refs.password.value=='') {
+      alert('请输入完整的账户和密码');
+      return;
+    }
+
+    let d = {name:this.refs.name.value,password:this.refs.password.value,type:this.state.type};
+
+    Tools.ajax({data:d,url:'http://60.205.222.103:8000',mothed:'get',async:true,timeout:10000,
+      callback:(d)=>{
+
+        //{"data":"0"}  //已存在
+        //{"data":"1"}  // 注册成功
+        //{'data':'err'} //数据库错误
+        console.log(d);
+
+
+        try{
+
+          var str = JSON.parse(d).data;
+          if(this.state.type == '注册'){
+            if(str=='0') alert('已存在');
+            else if(str =='1') {
+              alert('注册成功');
+              this.setState({type:'登陆'});
+            }
+
+          }
+          else{
+            if(str=='0') alert('用户名或者密码错误');
+            else if(str =='1') {
+              alert('登陆成功');
+              this.refs.formDiv.innerHTML = '欢迎你'+this.refs.name.value;
+              this.refs.tijiao.style.display = 'none';
+            }
+          }
+
+        }
+        catch(e){
+
+        }
+      }}
+    )
+
+
+  }
 
   onKey = (e)=>{
 
@@ -121,14 +152,12 @@ class Main extends React.Component {
   render() {
     return (
         <div>
-          <div>
+          <div ref = 'formDiv'>
             名字<input type="text" ref = 'name'/>
             密码<input type="text" ref = 'password'/>
-            日期<input type="text" ref = 'date'/>
-            <button ref = 'tijiao'>点击注册</button>
           </div>
+          <button ref = 'tijiao' onClick= {this.toggle}>点击{this.state.type}</button>
           <Test></Test>
-          <h1>欢迎来到装逼世界</h1>
           <h1>w跳a左d右 j攻击 k技能</h1>
           <div ref='ajaxDiv'>即将获取来自nodejs的数据....</div>
           <canvas ref = 'myCan' width="1000px" height = '300px' ></canvas>
