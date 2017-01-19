@@ -44,6 +44,9 @@ class Main extends React.Component {
     // document.addEventListener('keydown',this.onKey);
     // document.addEventListener('keyup',this.onKey);
     document.addEventListener('mousemove',e=>{flash.txt.text = e.clientX+','+e.clientY});
+    this.refs.name.addEventListener('input',e=>{
+      console.log(e.target.value);
+    });
 
     // Timer.add(this.getAjax,3000,1);
 
@@ -80,7 +83,6 @@ class Main extends React.Component {
         //{"data":"1"}  // 注册成功
         //{'data':'err'} //数据库错误
         console.log(d);
-
 
         try{
 
