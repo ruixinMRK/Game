@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "webpack": "webpack -w",
-    "dev": "echo 'Open http://localhost:4004 or http://anyIP:4004'; webpack-dev-server --config webpack-dev-server.config.js --hot --progress --colors --host 0.0.0.0 --port 4004 --content-base ."
+    "dev": "webpack-dev-server --config webpack-dev-server.config.js --hot --progress --colors --host 0.0.0.0 --port 4004 --content-base ."
   },
   "repository": {
     "type": "git",
