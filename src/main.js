@@ -153,17 +153,17 @@ class Main extends React.Component {
 
   render() {
     return (
-        <div>
-          <div ref = 'formDiv'>
-            名字<input type="text" ref = 'name'/>
-            密码<input type="text" ref = 'password'/>
-          </div>
-          <button ref = 'tijiao' onClick= {this.toggle}>点击{this.state.type}</button>
-          <Test></Test>
-          <h1>w跳a左d右 j攻击 k技能</h1>
-          <div ref='ajaxDiv'>即将获取来自nodejs的数据....</div>
-          <canvas ref = 'myCan' width="1000px" height = '300px' ></canvas>
+      <div>
+        <div ref = 'formDiv'>
+          名字<input type="text" ref = 'name'/>
+          密码<input type="text" ref = 'password'/>
         </div>
+        <button ref = 'tijiao' onClick= {this.toggle}>点击{this.state.type}</button>
+        <Test></Test>
+        <h1>w跳a左d右 j攻击 k技能</h1>
+        <div ref='ajaxDiv'>即将获取来自nodejs的数据....</div>
+        <canvas ref = 'myCan' width="1000px" height = '300px' ></canvas>
+      </div>
     );
   }
 
