@@ -11,7 +11,7 @@ class Other extends createjs.Container{
 
   init(){
 
-    var txt = new createjs.Text('我是Other',"20px 'Microsoft Yahei'",'#f00');
+    var txt = new createjs.Text('我是1Other',"20px 'Microsoft Yahei'",'#f00');
     this.addChild(txt);
 
   }
