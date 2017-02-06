@@ -1,172 +1,144 @@
-
+/**
+ * Created by tudouhu on 2017/1/21.
+ */
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Woody from 'components/Woody';
-import 'createjs';
-import Test from 'Test';
+import ReactDom from 'react-dom';
+import '../vendors/createjs';
 import Other from 'Other';
+import Test from 'Test';
+import Login from 'components/Login';
 import Timer from 'common/Timer';
-import Lib from 'res/Lib.js';
-import Tools from 'common/Tools';
+import Lib from 'res/Lib';
+import Woody from 'components/Woody';
 
-class Main extends React.Component {
+/**
+ * 继承React.Component类 React组件类继承可以写成html写法
+ */
+class Main extends React.Component{
 
-  constructor(props) {
+
+  /**
+   * Main类构造函数
+   * @param props
+   */
+  constructor(props){
     super(props);
-    this.state = {type:'注册'};
   }
 
-  componentWillUnmount(){
 
-    alert('页面即将卸载')
-
+  /**
+   * 页面卸载移除
+   */
+  componentWillUnMount(){
+    alert("页面卸载移除");
   }
 
+
+  /**
+   * 渲染完成执行
+   */
   componentDidMount(){
 
-
-    var testS = new createjs.Shape();
+    //createjs创建矩形
+    var testS=new createjs.Shape();
     testS.graphics.beginFill('#00ff00');
     testS.graphics.drawRect(0,0,100,50);
     testS.graphics.endFill();
 
-    var txt = new Other();
-    txt.y = 50;
+    //new一个Other类实例对象
+    var txt=new Other();
+    txt.y = 70;
 
-    // this.wood = new Woody();
-    // this.wood.x = 100;
-    // this.wood.y = 180;
-
-    var flash = new Lib.Instance();
+    //创建Flash打包的元件
+    var flash=new Lib.Instance();
     flash.x = 200;
-    flash.y = 100;
+    flash.y = 30;
 
-    // document.addEventListener('keydown',this.onKey);
-    // document.addEventListener('keyup',this.onKey);
-    document.addEventListener('mousemove',e=>{flash.txt.text = e.clientX+','+e.clientY});
-    this.refs.name.addEventListener('input',e=>{
-      console.log(e.target.value);
-    });
+    //创建人物
+    this.woody=new Woody();
+    this.woody.x=100;
+    this.woody.y=180;
 
-    // Timer.add(this.getAjax,3000,1);
 
-    //创建并实时刷新舞台
+    //添加键盘事件
+    document.addEventListener('keydown',this.onKey);
+    document.addEventListener('keyup',this.onKey);
+    //给文档添加鼠标移动事件
+    document.addEventListener("mousemove",e=>{flash.txt.text=e.clientX+','+e.clientY});
+
+
+    // 创建一个舞台，参数为画布
     var stage=new createjs.Stage(this.refs.myCan);
-    Timer.add(e=>{stage.update()},30,0);
-
-
-    stage.addChild(testS,txt,flash);
-
-  }
-
-  // getAjax = ()=>{
-  //   Tools.ajax({url:'http://60.205.222.103:8888',mothed:'get',async:true,timeout:5000,
-  //     callback:(data)=>{
-  //       console.log('------我是nodejs');
-  //       this.refs.ajaxDiv.innerHTML = data;
-  //     }}
-  //   )
-  // }
-  toggle = e=>{
-
-    if(this.refs.name.value==''||this.refs.password.value=='') {
-      alert('请输入完整的账户和密码');
-      return;
-    }
-
-    let d = {name:this.refs.name.value,password:this.refs.password.value,type:this.state.type};
-
-    Tools.ajax({data:d,url:'http://60.205.222.103:8000',mothed:'get',async:true,timeout:10000,
-      callback:(d)=>{
-
-        //{"data":"0"}  //已存在
-        //{"data":"1"}  // 注册成功
-        //{'data':'err'} //数据库错误
-        console.log(d);
-
-        try{
-
-          var str = JSON.parse(d).data;
-          if(this.state.type == '注册'){
-            if(str=='0') alert('已存在');
-            else if(str =='1') {
-              alert('注册成功');
-              this.setState({type:'登陆'});
-            }
-
-          }
-          else{
-            if(str=='0') alert('用户名或者密码错误');
-            else if(str =='1') {
-              alert('登陆成功');
-              this.refs.formDiv.innerHTML = '欢迎你'+this.refs.name.value;
-              this.refs.tijiao.style.display = 'none';
-            }
-          }
-
-        }
-        catch(e){
-
-        }
-      }}
-    )
-
+    //createjs创建的舞台刷新才能显示，下面通过计时器设置为30毫秒刷新一次的帧频
+    Timer.add(e=>{stage.update();},30,0);
+    //添加到舞台显示，可以添加多个
+    stage.addChild(testS,txt,flash,this.woody);
 
   }
 
-  onKey = (e)=>{
-
-    var type = e.type =='keydown'?true:e.type=='keyup'?false:'';
-    var keyCode = e.keyCode;
+  /**
+   * 键盘事件
+   * @param e
+   */
+  onKey=(e)=>{
+    let type=e.type=='keydown'?true:e.type=='keyup'?false:'';
+    let keyCode=e.keyCode;
     switch(keyCode){
-
-      case 87:
-        type?this.wood.jump():'';
+      case 87://W
+        type?this.woody.jump():'';
         break;
-      case 65:
-        type?this.wood.startWalk(-2,0):e.type=='keyup'?this.wood.stopWalk():'';
+      case 65://A
+        type?this.woody.startWalk(-2,0):type==false?this.woody.stopWalk():'';
         break;
-      case 83:
+      case 68://D
+        type?this.woody.startWalk(2,0):type==false?this.woody.stopWalk():'';
         break;
-      case 68:
-        type?this.wood.startWalk(2,0):e.type=='keyup'?this.wood.stopWalk():'';
+      case 74://J
+        this.woody.startAttack();
         break;
-      case 74:
-        //j
-        this.wood.startAttack(3);
+      case 75://K
+        this.woody.startguiqizhan();
         break;
-      case 75:
-        //k
-        this.wood.startguiqizhan();
-        break;
-      case 76:
-        //l
-        break;
-      case 32:
-        this.wood.startDecelerate();
+      case 32://空格
+        this.woody.startDecelerate();
         break;
       default:
         break;
+
+
     }
+
 
   }
 
-  render() {
-    return (
+
+  /**
+   * 渲染
+   */
+  render(){
+    return(
       <div>
-        <div ref = 'formDiv'>
-          名字<input type="text" ref = 'name'/>
-          密码<input type="text" ref = 'password'/>
-        </div>
-        <button ref = 'tijiao' onClick= {this.toggle}>点击{this.state.type}</button>
         <Test></Test>
-        <h1>w跳a左d右 j攻击 k技能</h1>
-        <div ref='ajaxDiv'>即将获取来自nodejs的数据....</div>
-        <canvas ref = 'myCan' width="1000px" height = '300px' ></canvas>
+        <h1>A左 D右 W跳 J攻击 K技能</h1>
+        <div ref='ajaxDiv'>即将获取来自nodejs的数据</div>
+        <Login></Login>
+        <canvas ref='myCan' width='1000px' height='300px'></canvas>
       </div>
     );
   }
 
 }
+//创建Main标签添加html中id=‘app'Div中
+ReactDom.render(<Main></Main>,document.getElementById('app'));
 
-ReactDOM.render(<Main></Main>, document.getElementById('app'));
+
+
+
+
+
+
+
+
+
+
+
