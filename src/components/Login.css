@@ -1,0 +1,50 @@
+.bk{
+  background-color:rgb(241,240,244);
+  height:150px;
+  width:300px;
+  text-align: center;
+  position: relative;
+}
+img{
+  width: 50px;
+  height: 50px;
+  margin: 2px 2px 2px 2px;
+  cursor: pointer;
+  outline-width: 2px;
+}
+.heroIcon{
+  margin: 0px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  cursor: default;
+}
+.iconDiv{
+  /*头像选择div*/
+  position: absolute;
+  padding-top: 10px;
+  width: 180px;
+  height: 150px;
+  background-color:rgb(221,220,224);
+  left: 60px;
+  top: 0px;
+  display: none;
+}
+input{
+  margin: 8px 0px 0px 10px;
+}
+.btn{
+  margin: 8px 5px 0px 5px;
+  width:40%;
+  height: 20%;
+  background-color:rgb(255,68,0);
+  border-style: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+.sign{
+  text-align:right;
+  font-size: 14px;
+  cursor: pointer;
+}
