@@ -11,7 +11,18 @@ class Bullet extends createjs.Container{
 
   constructor(){
     super();
+    this.init();
   }
+
+  /**
+   * 初始化
+   */
+  init(){
+
+  }
+
+
+
 
 }
 
