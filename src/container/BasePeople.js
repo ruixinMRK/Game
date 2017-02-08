@@ -84,7 +84,7 @@ class BasePeople extends createjs.Container{
     if(this.jumpP)
     {
       this.jumpNum-=3;
-      console.log(this.jumpNum);
+      //console.log(this.jumpNum);
       this.move(0,-this.jumpNum);
       this.y>this.jumpY?(this.y=this.jumpY,this.stopJump()):'';
     }

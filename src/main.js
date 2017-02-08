@@ -118,9 +118,11 @@ class Main extends React.Component{
   render(){
     return(
       <div>
-        <Test></Test>
-        <h1>A左 D右 W跳 J攻击 K技能</h1>
-        <div ref='ajaxDiv'>即将获取来自nodejs的数据</div>
+        {
+          //<Test></Test>
+          //<h1>A左 D右 W跳 J攻击 K技能</h1>
+          //<div ref='ajaxDiv'>即将获取来自nodejs的数据</div>
+        }
         <Login></Login>
         <canvas ref='myCan' width='1000px' height='300px'></canvas>
       </div>

@@ -17,7 +17,7 @@ img{
   position: absolute;
   top: 0px;
   left: 0px;
-  cursor: default;
+  cursor: pointer;
 }
 .iconDiv{
   /*头像选择div*/
@@ -27,8 +27,36 @@ img{
   height: 150px;
   background-color:rgb(221,220,224);
   left: 60px;
-  top: 0px;
   display: none;
+  overflow:scroll;
+}
+.iconDivSolid{
+  outline-style:solid;
+}
+.iconDiv img:first-child{
+  outline-style:solid;
+}
+.selectIconDiv{
+  position: absolute;
+  top:0;
+  left:0;
+}
+.fileUp{
+  position:absolute;
+  clip:rect(0px,0px,0px,0px);
+  width:0px;
+  left:0;
+}
+.ui_button{
+  display: inline-block;
+  line-height: 38px;
+  font-size: 14px;
+  text-align: center;
+  color: #545a6c;
+  border: 1px solid #d0d0d5;
+  border-radius: 4px;
+  padding: 0 15px;
+  cursor: pointer;
 }
 input{
   margin: 8px 0px 0px 10px;

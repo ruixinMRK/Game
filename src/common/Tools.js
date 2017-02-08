@@ -958,7 +958,7 @@ class Tools{
   }
 
   //ajax请求
-  //{data:{},url:'',mothed:'post,get',callback:function(){},async:true,timeout:6000};
+  //{data:{},url:'',upload:true,mothed:'post,get',callback:function(){},async:true,timeout:6000};
   static ajax(obj){
 
     var xhr = Tools.createAjax();
@@ -995,8 +995,8 @@ class Tools{
     //发送请求
     xhr.open(mothed,url,obj.async);
     if(mothed === 'post'){
-      xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-      xhr.send(Tools.paramsData(obj.data,obj.dataType));
+      if(!obj.upload) xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+      xhr.send(obj.upload?obj.data:Tools.paramsData(obj.data,obj.dataType));
     }
     else{
       xhr.send(null);

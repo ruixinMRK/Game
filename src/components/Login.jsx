@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import Tools from '../common/Tools';
 import style from './Login.css';
+import SelectIcon from './SelectIcon.jsx';
 
 /**
  * 登录组件 继承React.Component
@@ -15,25 +16,24 @@ class Login extends React.Component{
    * 登录组件构造函数
    * @param props
    */
-  constructor(props){
-    super(props);
-    this.state = {type:'登陆'};
+  constructor(p){
+    super(p);
+    this.state = {type:'login'};
+    this.img = [];
+    for(let j =0;j<=2;j++){
+      for(let i =1;i<=6;i++){
+        this.img.push('assets/icon/icon_'+i+'.png');
+      }
+    }
+
+
   }
 
   /**
    * 渲染完成执行
    */
   componentDidMount(){
-    //给姓名输入框添加输入事件
-    this.refs.name.addEventListener("input",e=>{console.log(e.target.value)});
-
-    //循环插入图片
-    for(let i=1;i<=6;i++){
-      let str='<img src="assets/icon/icon_'+i+'.png" />';
-      // this.refs.iconDiv.appendChild(<img src={str}/>);
-      this.refs.iconDiv.innerHTML+=str;
-    }
-
+    console.log('is ok')
   }
 
   /**
@@ -58,12 +58,7 @@ class Login extends React.Component{
              <u onClick={this.change}>用户注册</u>
            </div>
          </div>
-         <img ref='heroIcon' src="assets/img/icon.png" className={style.heroIcon} onClick={this.onCilckImg}/>
-         <div ref='iconDivP' className={style.iconDiv}>
-           <div ref='iconDiv' onClick={this.onCilckIcon}>
-
-           </div>
-         </div>
+         {this.state.type=='reg'?<SelectIcon  imgArr = {this.img}></SelectIcon>:null}
        </div>
       );
   }
@@ -92,11 +87,11 @@ class Login extends React.Component{
         try{
 
           var str = JSON.parse(d).data;
-          if(this.state.type == '注册'){
+          if(this.state.type == 'reg'){
             if(str=='0') alert('已存在');
             else if(str =='1') {
               alert('注册成功');
-              this.setState({type:'登陆'});
+              this.setState({type:'login'});
             }
 
           }
@@ -123,49 +118,16 @@ class Login extends React.Component{
    * 注册登陆切换
    */
   change=(e)=>{
-    if(this.state.type=='登陆'){
-      e.target.innerHTML ='用户'+this.state.type;
-      this.setState({type:'注册'});
-      this.refs.heroIcon.style.cursor='pointer';
+    if(this.state.type=='login'){
+      e.target.innerHTML ='用户登陆';
+      this.setState({type:'reg'});
     }
-    else if(this.state.type=='注册') {
-      e.target.innerHTML ='用户'+this.state.type;
-      this.setState({type:'登陆'});
-      this.refs.heroIcon.style.cursor='default';
+    else if(this.state.type=='reg') {
+      e.target.innerHTML ='用户注册';
+      this.setState({type:'login'});
     }
 
   }
-
-  /**
-   * 头像点击
-   * @param e
-   */
-  onCilckImg=(e)=>{
-    if(this.state.type=='注册'){
-      if(this.icon)
-        this.icon.style['outline-style']='';
-      if(this.refs.iconDivP.style.display=='')
-        this.refs.iconDivP.style.display='block';
-      else
-        this.refs.iconDivP.style.display='';
-    }
-  }
-
-  /**
-   * 头像选择点击
-   * @param e
-   */
-  onCilckIcon=(e)=>{
-    e.target.style['outline-style']='solid';
-    if(this.icon){
-      this.icon.style['outline-style']='';
-    }
-    this.icon=e.target;
-    this.refs.heroIcon.src=e.target.src;
-  }
-
-
-
 
 }
 
