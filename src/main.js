@@ -123,6 +123,7 @@ class Main extends React.Component{
         {
           //<Test></Test>
           //<h1>A左 D右 W跳 J攻击 K技能</h1>
+          <h1>A左 D右 J攻击</h1>
           //<div ref='ajaxDiv'>即将获取来自nodejs的数据</div>
         }
         <Login></Login>

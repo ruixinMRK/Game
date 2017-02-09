@@ -56,6 +56,8 @@ class NameSpr extends createjs.Container{
     if(this[fileName+'index']==null)return null;
 
     let spr=new createjs.Sprite(this[fileName+'sheet']);
+    spr.fileName=fileName;
+    spr.sprName=sprName;
     spr.gotoAndStop(this[fileName+'index'][sprName]);
     return spr;
   }

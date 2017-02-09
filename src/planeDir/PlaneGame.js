@@ -6,12 +6,12 @@
 import 'createjs';
 import Timer from '../common/Timer';
 import Plane from './Plane';
-import Tools from '../common/Tools';
 
 /**
  * 飞机大战游戏主类
  */
 class PlaneGame extends createjs.Container{
+
 
   constructor(){
     super();
@@ -53,7 +53,6 @@ class PlaneGame extends createjs.Container{
     this.key_A=false;
     this.key_D=false;
 
-
   }
 
   /**
@@ -82,6 +81,10 @@ class PlaneGame extends createjs.Container{
     else if(keyCode==68){//D
       this.key_D=false;
     }
+    else if(keyCode==74){//J
+      this.plane.attack();
+    }
+
   }
 
   /**
@@ -90,26 +93,28 @@ class PlaneGame extends createjs.Container{
    */
   onFrame=(e)=>{
     if(this.key_A){
-      this.plane.rotation-=5;
+      this.plane.rotation-=this.plane.rotationSpeed;
     }
     else if(this.key_D){
-      this.plane.rotation+=5;
+      this.plane.rotation+=this.plane.rotationSpeed;
     }
-    //移动
-    let speed=3;
-    let angle=Tools.getHD(this.plane.rotation);
-    let vx=Math.cos(angle)*speed;
-    let vy=Math.sin(angle)*speed;
-    this.plane.move(vx,vy);
+    this.plane.onFrame();
 
-    //滚屏
+    this.planeScroll();
+  }
+
+
+  /**
+   * 飞机滚屏
+   */
+  planeScroll=()=>{
     let spx=this.x+this.plane.x;
     let spy=this.y+this.plane.y;
     let rect={t:100,b:200,l:100,r:700};
 
     if(spx>rect.r){
       this.x-=spx-rect.r;
-      if(this.x<-200)this.x=-200;
+      if(this.x<-(PlaneGame.mapW-PlaneGame.stageW))this.x=-(PlaneGame.mapW-PlaneGame.stageW);
     }
     else if(spx<rect.l){
       this.x+=rect.l-spx;
@@ -118,7 +123,7 @@ class PlaneGame extends createjs.Container{
 
     if(spy>rect.b){
       this.y-=spy-rect.b;
-      if(this.y<-700)this.y=-700;
+      if(this.y<-(PlaneGame.mapH-PlaneGame.stageH))this.y=-(PlaneGame.mapH-PlaneGame.stageH);
     }
     else if(spy<rect.t){
       this.y+=rect.t-spy;
@@ -130,5 +135,24 @@ class PlaneGame extends createjs.Container{
 
 
 }
-
+/**
+ * 舞台宽
+ * @type {number}
+ */
+PlaneGame.stageW=800;
+/**
+ * 舞台高
+ * @type {number}
+ */
+PlaneGame.stageH=300;
+/**
+ * 地图宽
+ * @type {number}
+ */
+PlaneGame.mapW=1000;
+/**
+ * 地图高
+ * @type {number}
+ */
+PlaneGame.mapH=1000;
 export default PlaneGame;
