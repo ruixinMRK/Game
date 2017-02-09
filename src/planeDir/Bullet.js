@@ -3,6 +3,7 @@
  */
 
 import 'createjs';
+import NameSpr from '../common/NameSpr';
 
 /**
  * 子弹类

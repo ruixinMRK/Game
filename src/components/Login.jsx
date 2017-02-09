@@ -33,7 +33,7 @@ class Login extends React.Component{
    * 渲染完成执行
    */
   componentDidMount(){
-    console.log('is ok')
+    // console.log('is ok')
   }
 
   /**

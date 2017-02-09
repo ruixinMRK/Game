@@ -17,7 +17,7 @@ class NameSpr extends createjs.Container{
    * 初始化
    */
   init(){
-    let planeArr=[["plane",0,0,58,48],["bullet",58,0,20,20]];
+    let planeArr=[["plane",0,0,48,58],["bullet",48,0,20,20]];
     this.setSheet('plane',['assets/img/plane.png'],planeArr);
   }
 

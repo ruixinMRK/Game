@@ -60,10 +60,9 @@ class Main extends React.Component{
     this.woody.x=100;
     this.woody.y=180;
 
-
     //添加键盘事件
-    document.addEventListener('keydown',this.onKey);
-    document.addEventListener('keyup',this.onKey);
+    // document.addEventListener('keydown',this.onKey);
+    // document.addEventListener('keyup',this.onKey);
     //给文档添加鼠标移动事件
     document.addEventListener("mousemove",e=>{flash.txt.text=e.clientX+','+e.clientY});
 
@@ -127,7 +126,7 @@ class Main extends React.Component{
           //<div ref='ajaxDiv'>即将获取来自nodejs的数据</div>
         }
         <Login></Login>
-        <canvas ref='myCan' width='1000px' height='300px'></canvas>
+        <canvas ref='myCan' width='800px' height='300px'></canvas>
       </div>
     );
   }
