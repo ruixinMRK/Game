@@ -50,7 +50,7 @@ class Plane extends createjs.Container{
     Router.instance.reg('planWalk',this.socketD);
 
     console.log('2');
-    Timer.add(e=>{SocketClient.instance.send('this is clinet');},500,1)
+    Timer.add(e=>{SocketClient.instance.send({d:12});},500,1);
   }
 
   //服务器接受的数据

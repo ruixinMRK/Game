@@ -46,9 +46,11 @@ class SocketClient{
   }
   send(data) {
     console.log('socketsExist',this.socketsExist);
-    if (this.socketsExist) {
-      console.log('需要发送的数据',data);
-      this.socket.send(data);
+    if (this.socketsExist&&typeof data =='object') {
+
+      let str = 'start' + JSON.stringify(data) + 'end';
+      console.log('需要发送的数据',str);
+      this.socket.send(str);
     }
   }
   close(){
