@@ -6,6 +6,8 @@
 import 'createjs';
 import Timer from '../common/Timer';
 import Plane from './Plane';
+import Router from '../common/socket/Router';
+import SocketClient from '../common/socket/SocketClient';
 
 /**
  * 飞机大战游戏主类
@@ -48,12 +50,38 @@ class PlaneGame extends createjs.Container{
     //添加键盘事件
     document.addEventListener('keydown',this.onKeyDown);
     document.addEventListener('keyup',this.onKeyUp);
+    //帧频
     Timer.add(this.onFrame,30,0);
+    //接受数据
+    Router.instance.reg('planWalk',this.socketD);
 
     this.key_A=false;
     this.key_D=false;
+    this.key_J=false;
+    /**
+     * 飞机传输数据
+     * @type {PSData}
+     */
+    this.psd=new PSData();
+    this.psd.type='create';
+    this.psd.name=this.plane.Name;
+    this.psd.x=this.plane.x;
+    this.psd.y=this.plane.y;
+    this.psd.rot=this.plane.rotation;
+
+
+    //发送飞机信息-创建
+    SocketClient.instance.send(this.psd);
+    this.psd.init();
+  }
+
+  //接受服务器的数据
+  socketD = (data)=>{
+
+    console.log('接收的数据：',data);
 
   }
+
 
   /**
    * 按键按下
@@ -66,6 +94,9 @@ class PlaneGame extends createjs.Container{
     }
     else if(keyCode==68){//D
       this.key_D=true;
+    }
+    else if(keyCode==74){//J
+      this.key_J=true;
     }
   }
 
@@ -82,7 +113,7 @@ class PlaneGame extends createjs.Container{
       this.key_D=false;
     }
     else if(keyCode==74){//J
-      this.plane.attack();
+      this.key_J=false;
     }
 
   }
@@ -98,9 +129,22 @@ class PlaneGame extends createjs.Container{
     else if(this.key_D){
       this.plane.rotation+=this.plane.rotationSpeed;
     }
+    if(this.key_J){
+      this.plane.attack();
+      this.psd.attack=true;
+    }
     this.plane.onFrame();
 
     this.planeScroll();
+
+
+    this.psd.name=this.plane.Name;
+    this.psd.x=this.plane.x;
+    this.psd.y=this.plane.y;
+    this.psd.rot=this.plane.rotation;
+    //发送飞机信息-移动
+    SocketClient.instance.send(this.psd);
+    this.psd.init();
   }
 
 
@@ -155,4 +199,60 @@ PlaneGame.mapW=1000;
  * @type {number}
  */
 PlaneGame.mapH=1000;
+
+PlaneGame.Name='';
 export default PlaneGame;
+
+/**
+ * 飞机传输数据类
+ */
+class PSData{
+
+  constructor(){
+
+  }
+
+  init(){
+
+    /**
+     * 类型 move-帧频移动 create-创建
+     * @type {string}
+     */
+    this.type="move";
+    /**
+     * 用户名
+     * @type {string}
+     */
+    this.name='';
+    /**
+     * x位置
+     * @type {number}
+     */
+    this.x=0;
+    /**
+     * y位置
+     * @type {number}
+     */
+    this.y=0;
+    /**
+     * 角度
+     * @type {number}
+     */
+    this.rot=0;
+    /**
+     * 攻击
+     * @type {boolean}
+     */
+    this.attack=false;
+    /**
+     * 子弹数组
+     * @type {Array}
+     */
+    this.bulletArr=[];
+    /**
+     * 飞机数组
+     * @type {Array}
+     */
+    this.planeArr=[];
+  }
+}

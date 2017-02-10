@@ -69,6 +69,7 @@ class Login extends React.Component{
    */
   toggle = e=>{
 
+
     if(this.refs.name.value==''||this.refs.password.value=='') {
       alert('请输入完整的账户和密码');
       return;

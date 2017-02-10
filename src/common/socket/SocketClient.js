@@ -45,9 +45,9 @@ class SocketClient{
     ws.parent = this;
   }
   send(data) {
-    console.log('socketsExist',this.socketsExist);
+    // console.log('socketsExist',this.socketsExist);
     if (this.socketsExist) {
-      console.log('需要发送的数据',data);
+       console.log('发送数据');
       this.socket.send(data);
     }
   }
