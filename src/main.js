@@ -11,6 +11,7 @@ import Timer from 'common/Timer';
 import Lib from 'res/Lib';
 import Woody from 'components/Woody';
 import PlaneGame from 'planeDir/PlaneGame';
+import SocketClient from 'common/socket/SocketClient';
 
 /**
  * 继承React.Component类 React组件类继承可以写成html写法

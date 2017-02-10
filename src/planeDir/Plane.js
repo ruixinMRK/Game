@@ -7,6 +7,9 @@ import NameSpr from '../common/NameSpr';
 import PlaneGame from './PlaneGame';
 import Tools from '../common/Tools';
 import Bullet from './Bullet';
+import Router from 'common/socket/Router';
+import Timer from 'common/Timer';
+import SocketClient from 'common/socket/SocketClient';
 
 /**
  * 飞机类
@@ -43,6 +46,18 @@ class Plane extends createjs.Container{
     this.mc.x=-bound.width/2;
     this.mc.y=-bound.height/2;
     this.addChild(this.mc);
+
+    Router.instance.reg('planWalk',this.socketD);
+
+    console.log('2');
+    Timer.add(e=>{SocketClient.instance.send('this is clinet');},500,1)
+  }
+
+  //服务器接受的数据
+  socketD = (data)=>{
+
+    console.log(data);
+
   }
 
   /**
@@ -81,7 +96,7 @@ class Plane extends createjs.Container{
         bullet.onFrame();
       }
     }
-    console.log(this.bulletArr.length);
+    // console.log(this.bulletArr.length);
   }
 
 
