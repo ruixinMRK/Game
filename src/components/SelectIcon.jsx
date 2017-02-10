@@ -53,7 +53,7 @@ class SelectIcon extends React.Component{
       fd.append('iconImg',e.target.files[0]);
 
 
-      Tools.ajax({data:fd,upload:true,url:'http://60.205.222.103:8000/updata',mothed:'post',async:true,timeout:0,
+      Tools.ajax({data:fd,upload:true,url:'http://60.205.222.103:8000/upload',mothed:'post',async:true,timeout:0,
         callback:(d)=>{
             console.log(d);
         }}
