@@ -46,9 +46,11 @@ class SocketClient{
   }
   send(data) {
     // console.log('socketsExist',this.socketsExist);
-    if (this.socketsExist) {
-       console.log('发送数据');
-      this.socket.send(data);
+    if (this.socketsExist&&typeof data =='object') {
+
+      let str = 'start' + JSON.stringify(data) + 'end';
+      // console.log('发送数据',str);
+      this.socket.send(str);
     }
   }
   close(){
@@ -71,7 +73,7 @@ class SocketClient{
   WSonMessage=(event)=>{
     //大数据量 需多次 message
     // this.Log(eval("'"+event.data+"'"));
-    this.Log(JSON.stringify(event.data));
+    // this.Log(JSON.stringify(event.data));
 
     var orgJsonData;
 

@@ -52,6 +52,7 @@ class Plane extends createjs.Container{
 
   }
 
+
   /**
    * 移动
    * @param x x速度

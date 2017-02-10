@@ -44,6 +44,7 @@ class PlaneGame extends createjs.Container{
     }
     //飞机
     this.plane=new Plane();
+    this.plane.Name=PlaneGame.Name;
     this.plane.x=100;
     this.plane.y=100;
     this.addChild(this.plane);
@@ -63,22 +64,28 @@ class PlaneGame extends createjs.Container{
      * @type {PSData}
      */
     this.psd=new PSData();
-    this.psd.type='create';
-    this.psd.name=this.plane.Name;
-    this.psd.x=this.plane.x;
-    this.psd.y=this.plane.y;
-    this.psd.rot=this.plane.rotation;
-
-
-    //发送飞机信息-创建
-    SocketClient.instance.send(this.psd);
-    this.psd.init();
+    /**
+     * 敌机
+     * @type {{}}
+     */
+    this.enemyP={};
+    /**
+     * 敌机数据数组
+     * @type {Array}
+     */
+    this.enemyPDataArr=[];
   }
 
   //接受服务器的数据
   socketD = (data)=>{
+    if(data.Name!=this.plane.Name){
+      //不是自己的数据
+      if(data.type=='move'){
+        this.enemyPDataArr.push(data);
+      }
+    }
 
-    console.log('接收的数据：',data);
+     console.log('接收的数据：',data,data.Name);
 
   }
 
@@ -123,6 +130,8 @@ class PlaneGame extends createjs.Container{
    * @param e
    */
   onFrame=(e)=>{
+    this.enemyPDataDispose();
+
     if(this.key_A){
       this.plane.rotation-=this.plane.rotationSpeed;
     }
@@ -138,7 +147,7 @@ class PlaneGame extends createjs.Container{
     this.planeScroll();
 
 
-    this.psd.name=this.plane.Name;
+    this.psd.Name=this.plane.Name;
     this.psd.x=this.plane.x;
     this.psd.y=this.plane.y;
     this.psd.rot=this.plane.rotation;
@@ -146,6 +155,34 @@ class PlaneGame extends createjs.Container{
     SocketClient.instance.send(this.psd);
     this.psd.init();
   }
+
+  /**
+   * 敌机数据处理
+   */
+  enemyPDataDispose=()=>{
+    for(let i=this.enemyPDataArr.length-1;i>=0;i--){
+      let obj=this.enemyPDataArr[i];
+      if(this.enemyP[obj.Name]==null){
+        this.enemyP[obj.Name]=new Plane();
+        this.enemyP[obj.Name].x=obj.x;
+        this.enemyP[obj.Name].y=obj.y;
+        this.enemyP[obj.Name].rotation=obj.rot;
+        this.enemyP[obj.Name].Name=obj.Name;
+        this.addChild(this.enemyP[obj.Name]);
+      }
+      else {
+        let p=this.enemyP[obj.Name];
+        p.x=obj.x;
+        p.y=obj.y;
+        p.rotation=obj.rot;
+        if(obj.attack){
+          p.attack();
+        }
+      }
+    }
+    this.enemyPDataArr=[];
+  }
+
 
 
   /**
@@ -223,7 +260,9 @@ class PSData{
      * 用户名
      * @type {string}
      */
-    this.name='';
+    this.Name='';
+    //数据名
+    this.name='planWalk';
     /**
      * x位置
      * @type {number}

@@ -74,7 +74,6 @@ class Main extends React.Component{
     Timer.add(e=>{this.stage.update();},30,0);
     //添加到舞台显示，可以添加多个
     // stage.addChild(testS,txt,flash,this.woody);
-    this.plane();
 
     //显示帧频 默认createjs刷新20
     // createjs.Ticker.framerate = 60;
@@ -103,7 +102,9 @@ class Main extends React.Component{
     // FPS.startFPS(stage);
   }
 
-  plane(){
+  plane=(userName)=>{
+    PlaneGame.Name=userName;
+    console.log(PlaneGame.Name);
     var planeG=new PlaneGame();
     this.stage.addChild(planeG);
   }
@@ -151,12 +152,11 @@ class Main extends React.Component{
   render(){
     return(
       <div>
-        {
-          //<Test></Test>
-          //<h1>A左 D右 W跳 J攻击 K技能</h1>
+          {/*//<Test></Test>*/}
+          {/*//<h1>A左 D右 W跳 J攻击 K技能</h1>*/}
           <h1>A左 D右 J攻击</h1>
-          //<div ref='ajaxDiv'>即将获取来自nodejs的数据</div>
-        }
+          <p>登陆功能不能用，随便输入一个用户名点击登陆可以玩</p>
+          {/*//<div ref='ajaxDiv'>即将获取来自nodejs的数据</div>*/}
         <Login fn={this.plane}></Login>
         <canvas ref='myCan' width='800px' height='300px'></canvas>
       </div>
