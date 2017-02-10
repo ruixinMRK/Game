@@ -47,10 +47,10 @@ class Plane extends createjs.Container{
     this.mc.y=-bound.height/2;
     this.addChild(this.mc);
 
-    Router.instance.reg('planWalk',this.socketD);
+    //Router.instance.reg('planWalk',this.socketD);
 
     console.log('2');
-    Timer.add(e=>{SocketClient.instance.send({d:12});},500,1);
+    //Timer.add(e=>{SocketClient.instance.send({name:'planWalk',d:12});},500,1);
   }
 
   //服务器接受的数据

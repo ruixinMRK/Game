@@ -56,8 +56,11 @@ class Router{
     try{
 
       let orgJsonData = JSON.parse(orgData);
-      var kpiName=orgJsonData['name'];
 
+      //console.log(orgJsonData);
+
+      var kpiName = orgJsonData['name'];
+      //console.log(kpiName);
       if(typeof orgJsonData == "object"&&this.containKpiForOther(kpiName)){
 
           //异步处理 非阻塞

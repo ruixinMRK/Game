@@ -76,7 +76,7 @@ class Login extends React.Component{
 
     let d = {name:this.refs.name.value,password:this.refs.password.value,type:this.state.type};
 
-    Tools.ajax({data:d,url:'http://60.205.222.103:8000',mothed:'get',async:true,timeout:10000,
+    Tools.ajax({data:d,url:'http://60.205.222.103:8000/user',mothed:'get',async:true,timeout:10000,
       callback:(d)=>{
 
         //{"data":"0"}  //已存在
@@ -91,7 +91,6 @@ class Login extends React.Component{
             if(str=='0') alert('已存在');
             else if(str =='1') {
               alert('注册成功');
-              this.setState({type:'login'});
             }
 
           }

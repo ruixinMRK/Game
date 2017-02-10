@@ -73,10 +73,9 @@ class SocketClient{
   WSonMessage=(event)=>{
     //大数据量 需多次 message
     // this.Log(eval("'"+event.data+"'"));
-    this.Log(JSON.stringify(event.data));
+    this.Log(event.data);
 
     var orgJsonData;
-
     if (!event.data) return;
     this.respone += event.data;
     //console.log(len);
@@ -106,11 +105,14 @@ class SocketClient{
     var end =  this.respone.indexOf("end");
     var imageData = this.respone.substring(start, end);
 
+
+
     if(this.respone.indexOf("start") != -1 && this.respone.indexOf("end") != -1){
       if(start > end) return;
       this.respone = this.respone.replace("start" + imageData + "end","");
       this._data = imageData;
 
+      //console.log(this._data);
       var arr = this._data.split("#");
       for(var i = 0 ; i<arr.length;i++){
         Router.instance.dispatcher(arr[i]);
