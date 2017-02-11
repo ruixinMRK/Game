@@ -59,7 +59,7 @@ class Router{
 
       //console.log(orgJsonData);
 
-      var kpiName = orgJsonData['name'];
+      var kpiName = orgJsonData['KPI'];
       //console.log(kpiName);
       if(typeof orgJsonData == "object"&&this.containKpiForOther(kpiName)){
 

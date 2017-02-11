@@ -111,8 +111,6 @@ class SocketClient{
     var end =  this.respone.indexOf("end");
     var imageData = this.respone.substring(start, end);
 
-
-
     if(this.respone.indexOf("start") != -1 && this.respone.indexOf("end") != -1){
       if(start > end) return;
       this.respone = this.respone.replace("start" + imageData + "end","");
