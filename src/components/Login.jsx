@@ -83,7 +83,6 @@ class Login extends React.Component{
         //{"data":"0"}  //已存在
         //{"data":"1"}  // 注册成功
         //{'data':'err'} //数据库错误
-        console.log(d);
 
         try{
 
@@ -98,7 +97,6 @@ class Login extends React.Component{
           else{
             if(str=='0') alert('用户名或者密码错误');
             else if(str =='1') {
-              alert('登陆成功');
               this.refs.formDiv.innerHTML = '欢迎你'+this.refs.name.value;
               this.refs.tijiao.style.display = 'none';
             }

@@ -78,8 +78,8 @@ class SocketClient{
 
   WSonMessage=(event)=>{
     //大数据量 需多次 message
-    // this.Log(eval("'"+event.data+"'"));
-    this.Log(event.data,"OK");
+
+    //this.Log(event.data,"OK");
 
     var orgJsonData;
     if (!event.data) return;
@@ -134,6 +134,6 @@ class SocketClient{
 
 SocketClient.__instance = null;
 SocketClient.__host = "60.205.222.103";//"localhost";
-SocketClient.__url = "ws://" + SocketClient.__host + ":8080";
+SocketClient.__url = "ws://" + SocketClient.__host + ":8080/user";
 
 export default SocketClient;
