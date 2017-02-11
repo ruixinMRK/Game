@@ -109,12 +109,12 @@ class Plane extends createjs.Container{
     }
     //敌机结束不需要这些下面功能
     if(this.enemyB){
-      this.noLinkNum++;
-      if(this.noLinkNum>60){
-        if(!this.parent)return ;
-          this.parent.removeChild(this);
-        this.mc=null;
-      }
+      // this.noLinkNum++;
+      // if(this.noLinkNum>60){
+      //   if(!this.parent)return ;
+      //     this.parent.removeChild(this);
+      //   this.mc=null;
+      // }
       return;
     }
     //移动
