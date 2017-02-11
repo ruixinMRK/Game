@@ -7,9 +7,7 @@ import NameSpr from '../common/NameSpr';
 import PlaneGame from './PlaneGame';
 import Tools from '../common/Tools';
 import Bullet from './Bullet';
-import Router from 'common/socket/Router';
-import Timer from 'common/Timer';
-import SocketClient from 'common/socket/SocketClient';
+import Timer from '../common/Timer';
 
 /**
  * 飞机类
@@ -33,6 +31,11 @@ class Plane extends createjs.Container{
      * @type {Array}
      */
     this.bulletArr=[];
+    /**
+     * 用户名
+     * @type {string}
+     */
+    this.Name='tudouhu';
 
     this.init();
   }
@@ -40,25 +43,18 @@ class Plane extends createjs.Container{
   /**
    * 初始化
    */
-  init(){
-    this.mc=NameSpr.getInstance().getSpr('plane','plane');
-    let bound=this.mc.getBounds();
-    this.mc.x=-bound.width/2;
-    this.mc.y=-bound.height/2;
+  init() {
+    this.mc = NameSpr.getInstance().getSpr('plane', 'plane');
+    let bound = this.mc.getBounds();
+    this.mc.x = -bound.width / 2;
+    this.mc.y = -bound.height / 2;
     this.addChild(this.mc);
 
-    //Router.instance.reg('planWalk',this.socketD);
 
-    console.log('2');
     //Timer.add(e=>{SocketClient.instance.send({name:'planWalk',d:12});},500,1);
-  }
-
-  //服务器接受的数据
-  socketD = (data)=>{
-
-    console.log(data);
 
   }
+
 
   /**
    * 移动
@@ -96,7 +92,7 @@ class Plane extends createjs.Container{
         bullet.onFrame();
       }
     }
-    // console.log(this.bulletArr.length);
+    // console.log('子弹',this.bulletArr.length);
   }
 
 

@@ -2,6 +2,7 @@
 import Router from "./Router";
 
 class SocketClient{
+
   constructor() {
     this.socketsExist = false;
     //var host=window.location.protocol.indexOf("http")!=-1?window.location.hostname:"localhost";
@@ -12,6 +13,7 @@ class SocketClient{
     this.len = 0;
     this.respone = "";
     this._data = "";
+    this.prevSendStr = '';
 
     SocketClient.__instance = null;
 
@@ -45,13 +47,16 @@ class SocketClient{
     ws.parent = this;
   }
   send(data) {
-    console.log('socketsExist',this.socketsExist);
-    if (this.socketsExist&&typeof data =='object') {
+    // console.log('socketsExist',this.socketsExist);
 
-      let str = 'start' + JSON.stringify(data) + 'end';
-      console.log('需要发送的数据',str);
+    //与上次相同的数据不再发送
+    data = JSON.stringify(data);
+    if (this.prevSendStr!=data&&this.socketsExist) {
+      let str = 'start' + data + 'end';
       this.socket.send(str);
+      this.prevSendStr = data;
     }
+
   }
   close(){
     this.socket.close();
@@ -59,9 +64,10 @@ class SocketClient{
     this.socketsExist=false;
   }
   Log(Text, MessageType){
-    if (MessageType == "OK") Text = "<span style='color: green;'>" + Text + "</span>";
-    if (MessageType == "ERROR") Text = "<span style='color: red;'>" + Text + "</span>";
-    console.info(Text);
+    let color = MessageType == "OK"?'green':'red';
+
+    console.log('%c ' + Text,'color:'+color);
+
   }
   //** 事件 this went**/
   WSonOpen=()=>{
@@ -73,7 +79,7 @@ class SocketClient{
   WSonMessage=(event)=>{
     //大数据量 需多次 message
     // this.Log(eval("'"+event.data+"'"));
-    this.Log(event.data);
+    this.Log(event.data,"OK");
 
     var orgJsonData;
     if (!event.data) return;
@@ -91,9 +97,9 @@ class SocketClient{
   };
 
   WSonClose=()=> {
-    this.Log("WebSocket连接关闭！");
+    this.Log("WebSocket连接关闭！","ERROR");
     // Router.instance.regAll();
-    this.init(SocketClient.__url);
+    //this.init(SocketClient.__url);
   };
 
   WSonError=()=> {

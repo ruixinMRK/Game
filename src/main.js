@@ -69,15 +69,46 @@ class Main extends React.Component{
 
 
     // 创建一个舞台，参数为画布
-    var stage=new createjs.Stage(this.refs.myCan);
+    this.stage=new createjs.Stage(this.refs.myCan);
     //createjs创建的舞台刷新才能显示，下面通过计时器设置为30毫秒刷新一次的帧频
-    Timer.add(e=>{stage.update();},30,0);
+    Timer.add(e=>{this.stage.update();},30,0);
     //添加到舞台显示，可以添加多个
     // stage.addChild(testS,txt,flash,this.woody);
 
-    var planeG=new PlaneGame();
-    stage.addChild(planeG);
+    //显示帧频 默认createjs刷新20
+    // createjs.Ticker.framerate = 60;
+    // var FPS = {};
+    // FPS.time = 0;
+    // FPS.FPS = 0;
+    // FPS.startFPS = function (stage){
+    //   FPS.shape = new createjs.Shape();
+    //   FPS.shape.graphics.beginFill("#000000").drawRect(0, 0, 200, 50);
+    //   stage.addChild(FPS.shape);
+    //   FPS.txt =new createjs.Text("", "40px Arial", "#ffffff");
+    //   stage.addChild(FPS.txt);
+    //   createjs.Ticker.addEventListener("tick", FPS.TickerFPS);
+    // }
+    // FPS.TickerFPS = function (event)
+    // {
+    //   FPS.date = new Date();
+    //   FPS.currentTime = FPS.date.getTime();
+    //   if(FPS.time!=0)
+    //   {
+    //     FPS.FPS = Math.ceil(1000/(FPS.currentTime -  FPS.time));
+    //   }
+    //   FPS.time = FPS.currentTime;
+    //   FPS.txt.text = "FPS: "+FPS.FPS;
+    // }
+    // FPS.startFPS(stage);
   }
+
+  plane=(userName)=>{
+    PlaneGame.Name=userName;
+    console.log(PlaneGame.Name);
+    var planeG=new PlaneGame();
+    this.stage.addChild(planeG);
+  }
+
 
   /**
    * 键盘事件
@@ -121,13 +152,12 @@ class Main extends React.Component{
   render(){
     return(
       <div>
-        {
-          //<Test></Test>
-          //<h1>A左 D右 W跳 J攻击 K技能</h1>
+          {/*//<Test></Test>*/}
+          {/*//<h1>A左 D右 W跳 J攻击 K技能</h1>*/}
           <h1>A左 D右 J攻击</h1>
-          //<div ref='ajaxDiv'>即将获取来自nodejs的数据</div>
-        }
-        <Login></Login>
+          <p>登陆功能不能用，随便输入一个用户名点击登陆可以玩</p>
+          {/*//<div ref='ajaxDiv'>即将获取来自nodejs的数据</div>*/}
+        <Login fn={this.plane}></Login>
         <canvas ref='myCan' width='800px' height='300px'></canvas>
       </div>
     );
