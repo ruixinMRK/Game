@@ -51,8 +51,11 @@ class Plane extends createjs.Container{
      * @type {boolean}
      */
     this.frameHitB=false;
-
-
+    /**
+     * 没有帧频链接次数 掉线
+     * @type {number}
+     */
+    this.noLinkNum=0;
     this.init();
   }
 
@@ -102,7 +105,15 @@ class Plane extends createjs.Container{
       }
     }
     //敌机结束不需要这些下面功能
-    if(this.enemyB)return;
+    if(this.enemyB){
+      this.noLinkNum++;
+      if(this.noLinkNum>60){
+        if(!this.parent)return ;
+          this.parent.removeChild(this);
+        this.mc=null;
+      }
+      return;
+    }
     //移动
     let angle=Tools.getHD(this.rotation);
     let vx=Math.cos(angle)*this.speed;

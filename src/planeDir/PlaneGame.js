@@ -196,7 +196,6 @@ class PlaneGame extends createjs.Container{
           p.bulletArr.map((b)=>{
             if(b.bulletId==s){
               b.remove();
-              console.log('结束数据子弹移除')
             }
           })
         }
@@ -205,7 +204,13 @@ class PlaneGame extends createjs.Container{
     this.enemyPDataArr=[];
     //敌机帧频
     for(let s in this.enemyP){
-      this.enemyP[s].onFrame();
+      if(this.enemyP[s].mc==null){
+        delete this.enemyP[s];
+      }
+      else {
+        this.enemyP[s].onFrame();
+      }
+
     }
   }
 

@@ -84,7 +84,7 @@ class Bullet extends createjs.Container{
    */
   remove(){
     if(!this.parent)return ;
-    this.parent.removeChild(this);
+      this.parent.removeChild(this);
     this.mc=null;
   }
 
