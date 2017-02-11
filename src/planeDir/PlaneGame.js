@@ -311,7 +311,7 @@ class PSData{
      */
     this.Name='';
     //数据名
-    this.name='planWalk';
+    this.KPI='planWalk';
     /**
      * x位置
      * @type {number}
