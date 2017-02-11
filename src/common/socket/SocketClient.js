@@ -50,7 +50,9 @@ class SocketClient{
     // console.log('socketsExist',this.socketsExist);
 
     //与上次相同的数据不再发送
+
     data = JSON.stringify(data);
+    console.log(data);
     if (this.prevSendStr!=data&&this.socketsExist) {
       let str = 'start' + data + 'end';
       this.socket.send(str);
@@ -79,7 +81,7 @@ class SocketClient{
   WSonMessage=(event)=>{
     //大数据量 需多次 message
 
-    //this.Log(event.data,"OK");
+    this.Log(event.data,"OK");
 
     var orgJsonData;
     if (!event.data) return;
