@@ -104,7 +104,6 @@ class Main extends React.Component{
 
   plane=(userName)=>{
     PlaneGame.Name=userName;
-    console.log(PlaneGame.Name);
     var planeG=new PlaneGame();
     this.stage.addChild(planeG);
   }

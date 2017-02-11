@@ -74,6 +74,7 @@ class SocketClient{
     //大数据量 需多次 message
     // this.Log(eval("'"+event.data+"'"));
     // this.Log(JSON.stringify(event.data));
+    // this.Log('成功接收数据','OK');
 
     var orgJsonData;
 
@@ -126,6 +127,6 @@ class SocketClient{
 
 SocketClient.__instance = null;
 SocketClient.__host = "60.205.222.103";//"localhost";
-SocketClient.__url = "ws://" + SocketClient.__host + ":8080";
+SocketClient.__url = "ws://" + SocketClient.__host + ":8080/user";
 
 export default SocketClient;

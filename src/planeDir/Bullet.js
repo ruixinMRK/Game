@@ -37,6 +37,11 @@ class Bullet extends createjs.Container{
      * @type {number}
      */
     this.vy=Math.sin(angle)*speed;
+    /**
+     * 子弹id
+     * @type {number}
+     */
+    this.bulletId=0;
 
     this.init();
   }
@@ -78,6 +83,7 @@ class Bullet extends createjs.Container{
    * 移除
    */
   remove(){
+    if(!this.parent)return ;
     this.parent.removeChild(this);
     this.mc=null;
   }

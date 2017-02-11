@@ -14,8 +14,13 @@ import Timer from '../common/Timer';
  */
 class Plane extends createjs.Container{
 
-  constructor(){
+  constructor(enemy=false){
     super();
+    /**
+     * 是否是敌机
+     * @type {boolean}
+     */
+    this.enemyB=enemy;
     /**
      * 速度
      * @type {number}
@@ -35,7 +40,18 @@ class Plane extends createjs.Container{
      * 用户名
      * @type {string}
      */
-    this.Name='tudouhu';
+    this.Name='';
+    /**
+     * 子弹数量id
+     * @type {number}
+     */
+    this.bulletNumId=0;
+    /**
+     * 帧频被子弹击中
+     * @type {boolean}
+     */
+    this.frameHitB=false;
+
 
     this.init();
   }
@@ -74,11 +90,7 @@ class Plane extends createjs.Container{
    * @param e
    */
   onFrame=(e)=>{
-    //移动
-    let angle=Tools.getHD(this.rotation);
-    let vx=Math.cos(angle)*this.speed;
-    let vy=Math.sin(angle)*this.speed;
-    this.move(vx,vy);
+    this.frameHitB=false;
     //子弹移动
     for(let i=this.bulletArr.length-1;i>=0;i--){
       let bullet=this.bulletArr[i];
@@ -87,6 +99,29 @@ class Plane extends createjs.Container{
       }
       else{
         bullet.onFrame();
+      }
+    }
+    //敌机结束不需要这些下面功能
+    if(this.enemyB)return;
+    //移动
+    let angle=Tools.getHD(this.rotation);
+    let vx=Math.cos(angle)*this.speed;
+    let vy=Math.sin(angle)*this.speed;
+    this.move(vx,vy);
+    //子弹检测碰撞
+    for(let i=this.bulletArr.length-1;i>=0;i--){
+      let bullet=this.bulletArr[i];
+      let r1=Plane.rectGlobal(bullet);
+      for(let s in e.enemyP){
+        if(e.enemyP[s].frameHitB) break;
+        let r2=Plane.rectGlobal(e.enemyP[s]);
+        if(r1.intersects(r2)){
+          e.enemyP[s].frameHitB=true;
+          e.psd.hitObj[bullet.bulletId]=s;
+          bullet.remove();
+          e.enemyP[s].remove();
+          e.hitText(this.Name+'的子弹'+bullet.bulletId+'击中'+s);
+        }
       }
     }
     // console.log('子弹',this.bulletArr.length);
@@ -100,10 +135,33 @@ class Plane extends createjs.Container{
     let bullet=new Bullet(500,8,Tools.getHD(this.rotation));
     bullet.x=this.x;
     bullet.y=this.y;
+    bullet.bulletId=this.bulletNumId;
+    this.bulletNumId++;
     this.parent.addChild(bullet);
     this.bulletArr.push(bullet);
   }
 
+
+  /**
+   * 移除
+   */
+  remove(){
+    this.x = 100;
+    this.y = 100;
+    this.rotation=0;
+    this.frameHitB=true;
+  }
+
+  /**
+   * 获得对象父级坐标的矩形框 返回矩形框
+   * @param spr 对象
+   */
+  static rectGlobal(spr){
+    let rect=spr.getBounds();
+    rect.x+=spr.x;
+    rect.y+=spr.y;
+    return rect;
+  }
 
 }
 

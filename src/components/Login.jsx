@@ -77,13 +77,12 @@ class Login extends React.Component{
 
     let d = {name:this.refs.name.value,password:this.refs.password.value,type:this.state.type};
 
-    Tools.ajax({data:d,url:'http://60.205.222.103:8000',mothed:'get',async:true,timeout:10000,
+    Tools.ajax({data:d,url:'http://60.205.222.103:8000/user',mothed:'get',async:true,timeout:10000,
       callback:(d)=>{
 
         //{"data":"0"}  //已存在
         //{"data":"1"}  // 注册成功
         //{'data':'err'} //数据库错误
-        console.log(d);
 
         try{
 
@@ -99,7 +98,6 @@ class Login extends React.Component{
           else{
             if(str=='0') alert('用户名或者密码错误');
             else if(str =='1') {
-              alert('登陆成功');
               this.refs.formDiv.innerHTML = '欢迎你'+this.refs.name.value;
               this.refs.tijiao.style.display = 'none';
             }
