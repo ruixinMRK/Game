@@ -8,6 +8,7 @@ import Timer from '../common/Timer';
 import Plane from './Plane';
 import Router from '../common/socket/Router';
 import SocketClient from '../common/socket/SocketClient';
+import ObjectPool from '../common/ObjectPool';
 
 /**
  * 飞机大战游戏主类
@@ -151,7 +152,7 @@ class PlaneGame extends createjs.Container{
     }
     if(this.key_J){
       this.plane.attack();
-      this.psd.attack=true;
+      this.psd.attack=1;
     }
     this.plane.onFrame(this);
 
@@ -192,7 +193,7 @@ class PlaneGame extends createjs.Container{
         }
         //碰撞处理
         for(let s in obj.hitObj){
-          this.hitText(obj.Name+'的子弹'+obj.hitObj[s]+'击中'+obj.hitObj[s]);
+          this.hitText(obj.Name+'的子弹'+s+'击中'+obj.hitObj[s]);
           if(this.plane.Name==obj.hitObj[s])
             this.plane.remove();
           else
@@ -296,10 +297,20 @@ class PSData{
 
   constructor(){
 
+    for(let s in PSData.PSDataIndex){
+      PSData.ObjIndex[PSData.PSDataIndex[s]]=s;
+    }
+
+    this.init();
   }
 
   init(){
 
+    /**
+     * 是否需要发送数据
+     * @type {boolean}
+     */
+    this.send=false;
     /**
      * 类型 move-帧频移动 create-创建
      * @type {string}
@@ -328,14 +339,79 @@ class PSData{
      */
     this.rot=0;
     /**
-     * 攻击
-     * @type {boolean}
+     * 攻击 1-攻击 0-未攻击
+     * @type {number}
      */
-    this.attack=false;
+    this.attack=0;
     /**
-     * 碰撞对象 hitObj[子弹id]=飞机name
-     * @type {Array}
+     * 碰撞对象 Obj.子弹id=飞机name
+     * @type {{}}
      */
     this.hitObj={};
   }
+
+  /**
+   * 获得将PSData解析字符串最少的obj
+   */
+  getObj=()=>{
+    let obj={};
+    obj[PSData.PSDataIndex['type']]=this.type;
+    obj[PSData.PSDataIndex['Name']]=this.Name;
+    obj[PSData.PSDataIndex['KPI']]=this.KPI;
+    obj[PSData.PSDataIndex['x']]=Math.round(this.x);
+    obj[PSData.PSDataIndex['y']]=Math.round(this.y);
+    obj[PSData.PSDataIndex['rot']]=Math.round(this.rot);
+    obj[PSData.PSDataIndex['attack']]=Math.round(this.attack);
+    obj[PSData.PSDataIndex['hitObj']]=this.hitObj;
+  }
+
+  /**
+   * 将一个obj转换成PSData
+   * @param obj
+   */
+  static shiftObj(obj){
+    let pd=new PSData();
+    for(let s in obj){
+      pd[PSData.ObjIndex[s]]=obj[s];
+    }
+  }
+
+
+  static findSet(){
+
+  }
+
 }
+/**
+ *上传数据索引  obj.上传数据属性名=PSData属性名
+ * @type {{}}
+ */
+PSData.ObjIndex=null;
+/**
+ * PSData索引，obj.PSData属性名=上传数据属性名
+ * @type {{}}
+ */
+PSData.PSDataIndex={};
+PSData.PSDataIndex.type='t';
+PSData.PSDataIndex.Name='n';
+PSData.PSDataIndex.KPI='KPI';
+PSData.PSDataIndex.x='x';
+PSData.PSDataIndex.y='y';
+PSData.PSDataIndex.rot='r';
+PSData.PSDataIndex.attack='a';
+PSData.PSDataIndex.hitObj='h';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

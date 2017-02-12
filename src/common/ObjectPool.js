@@ -11,8 +11,9 @@ class ObjectPool {
     }
     static objPool = {};
     static mapObj = {'txt':'Text',
-    'shape':'Shape',
-    'con':'Container'
+      'shape':'Shape',
+      'con':'Container',
+      'p':'Plane'
     };
     //static mapObj = 'txt shape con'.split(' ');
     //获取对象
