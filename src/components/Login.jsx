@@ -68,7 +68,7 @@ class Login extends React.Component{
    * 登录
    */
   toggle = e=>{
-    this.props.fn(this.refs.name.value);
+
 
     if(this.refs.name.value==''||this.refs.password.value=='') {
       alert('请输入完整的账户和密码');
@@ -77,7 +77,7 @@ class Login extends React.Component{
 
     let d = {name:this.refs.name.value,password:this.refs.password.value,type:this.state.type};
 
-    Tools.ajax({data:d,url:'http://60.205.222.103:8000/user',mothed:'get',async:true,timeout:10000,
+    Tools.ajax({data:d,url:'http://60.205.222.103:8000/user',mothed:'get',async:true,timeout:5000,
       callback:(d)=>{
 
         //{"data":"0"}  //已存在
@@ -97,8 +97,7 @@ class Login extends React.Component{
           else{
             if(str=='0') alert('用户名或者密码错误');
             else if(str =='1') {
-              this.refs.formDiv.innerHTML = '欢迎你'+this.refs.name.value;
-              this.refs.tijiao.style.display = 'none';
+              this.props.fn(this.refs.name.value);
             }
           }
 
@@ -106,7 +105,11 @@ class Login extends React.Component{
         catch(e){
 
         }
-      }}
+      },
+      error:e=>{
+        alert('服务器错误,请稍后重新尝试!!')
+      }
+  }
     )
 
 

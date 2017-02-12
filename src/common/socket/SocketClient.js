@@ -1,5 +1,6 @@
 ﻿
 import Router from "./Router";
+import UserData from 'manager/UserData';
 
 class SocketClient{
 
@@ -50,7 +51,9 @@ class SocketClient{
     // console.log('socketsExist',this.socketsExist);
 
     //与上次相同的数据不再发送
+
     data = JSON.stringify(data);
+    //console.log(data);
     if (this.prevSendStr!=data&&this.socketsExist) {
       let str = 'start' + data + 'end';
       this.socket.send(str);
@@ -64,8 +67,8 @@ class SocketClient{
     this.socketsExist=false;
   }
   Log(Text, MessageType){
-    let color = MessageType == "OK"?'green':'red';
 
+    let color = MessageType == "OK"?'green':'red';
     console.log('%c ' + Text,'color:'+color);
 
   }
@@ -73,6 +76,7 @@ class SocketClient{
   WSonOpen=()=>{
     this.Log("WebSocket连接已经建立。","OK");
     this.socketsExist=true;
+    this.send({KPI:'goLive',name:UserData.id});
     // Router.instance.regAll();
   };
 
@@ -110,8 +114,6 @@ class SocketClient{
     var start = this.respone.indexOf("start")+5;
     var end =  this.respone.indexOf("end");
     var imageData = this.respone.substring(start, end);
-
-
 
     if(this.respone.indexOf("start") != -1 && this.respone.indexOf("end") != -1){
       if(start > end) return;
