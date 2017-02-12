@@ -8,6 +8,7 @@ import PlaneGame from './PlaneGame';
 import Tools from '../common/Tools';
 import Bullet from './Bullet';
 import Timer from '../common/Timer';
+import ObjectPool from '../common/ObjectPool';
 
 /**
  * 飞机类
@@ -95,8 +96,9 @@ class Plane extends createjs.Container{
     //子弹移动
     for(let i=this.bulletArr.length-1;i>=0;i--){
       let bullet=this.bulletArr[i];
-      if(bullet.mc==null){
+      if(bullet.parent==null){
         this.bulletArr.splice(i,1);
+        ObjectPool.returnObj(bullet);
       }
       else{
         bullet.onFrame();
@@ -115,10 +117,13 @@ class Plane extends createjs.Container{
     for(let i=this.bulletArr.length-1;i>=0;i--){
       let bullet=this.bulletArr[i];
       let r1=Plane.rectGlobal(bullet);
+
       for(let s in e.enemyP){
         if(e.enemyP[s].frameHitB) break;
         let r2=Plane.rectGlobal(e.enemyP[s]);
+
         if(r1.intersects(r2)){
+          //子弹击中了
           e.enemyP[s].frameHitB=true;
           e.psd.hitObj[bullet.bulletId]=s;
           bullet.remove();
@@ -134,10 +139,10 @@ class Plane extends createjs.Container{
    * 攻击 发射子弹
    */
   attack(){
-    let bullet=new Bullet(500,8,Tools.getHD(this.rotation));
+    let bullet=ObjectPool.getObj('Bullet')
     bullet.x=this.x;
     bullet.y=this.y;
-    bullet.bulletId=this.bulletNumId;
+    bullet.setData(500,8,Tools.getHD(this.rotation),this.bulletNumId);
     this.bulletNumId++;
     this.parent.addChild(bullet);
     this.bulletArr.push(bullet);

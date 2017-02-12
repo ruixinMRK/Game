@@ -8,7 +8,7 @@ import Timer from '../common/Timer';
 import Plane from './Plane';
 import Router from '../common/socket/Router';
 import SocketClient from '../common/socket/SocketClient';
-import UserData from 'manager/UserData';
+import UserData from '../manager/UserData';
 /**
  * 飞机大战游戏主类
  */
@@ -88,7 +88,7 @@ class PlaneGame extends createjs.Container{
 
   //接受服务器的数据q
   socketD = (data)=>{
-
+    data=PSData.shiftObj(data);
     if(data.Name!=this.plane.Name){
       //不是自己的数据
       if(data.type=='move'){
@@ -145,26 +145,32 @@ class PlaneGame extends createjs.Container{
 
     if(this.key_A){
       this.plane.rotation-=this.plane.rotationSpeed;
+      this.psd.send=true;
     }
     else if(this.key_D){
       this.plane.rotation+=this.plane.rotationSpeed;
+      this.psd.send=true;
     }
     if(this.key_J){
       this.plane.attack();
       this.psd.attack=1;
+      this.psd.send=true;
     }
     this.plane.onFrame(this);
 
     this.planeScroll();
 
 
-    this.psd.Name=this.plane.Name;
-    this.psd.x=this.plane.x;
-    this.psd.y=this.plane.y;
-    this.psd.rot=this.plane.rotation;
     //发送飞机信息-移动
-    //SocketClient.instance.send(this.psd);
-    this.psd.init();
+    if(this.psd.send){
+      this.psd.Name=this.plane.Name;
+      this.psd.x=this.plane.x;
+      this.psd.y=this.plane.y;
+      this.psd.rot=this.plane.rotation;
+
+      SocketClient.instance.send(PSData.getObj(this.psd));
+      this.psd.init();
+    }
   }
 
   /**
@@ -187,7 +193,7 @@ class PlaneGame extends createjs.Container{
         p.x=obj.x;
         p.y=obj.y;
         p.rotation=obj.rot;
-        if(obj.attack){
+        if(obj.attack==1){
           p.attack();
         }
         //碰撞处理
@@ -353,17 +359,21 @@ class PSData{
 
   /**
    * 获得将PSData解析字符串最少的obj
+   * @param psdata psdata数据
+   * @returns {{}}
    */
-  getObj=()=>{
+  static getObj=(psdata)=>{
     let obj={};
-    obj[PSData.PSDataIndex['type']]=this.type;
-    obj[PSData.PSDataIndex['Name']]=this.Name;
-    obj[PSData.PSDataIndex['KPI']]=this.KPI;
-    obj[PSData.PSDataIndex['x']]=Math.round(this.x);
-    obj[PSData.PSDataIndex['y']]=Math.round(this.y);
-    obj[PSData.PSDataIndex['rot']]=Math.round(this.rot);
-    obj[PSData.PSDataIndex['attack']]=Math.round(this.attack);
-    obj[PSData.PSDataIndex['hitObj']]=this.hitObj;
+    obj[PSData.PSDataIndex['type']]=psdata.type;
+    obj[PSData.PSDataIndex['Name']]=psdata.Name;
+    obj[PSData.PSDataIndex['KPI']]=psdata.KPI;
+    obj[PSData.PSDataIndex['x']]=Math.round(psdata.x);
+    obj[PSData.PSDataIndex['y']]=Math.round(psdata.y);
+    obj[PSData.PSDataIndex['rot']]=Math.round(psdata.rot);
+    if(psdata.attack==1)
+      obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
+    if(JSON.stringify(psdata.hitObj).length>2)
+      obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
     return obj;
   }
 

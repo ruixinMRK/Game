@@ -13,30 +13,27 @@ class Bullet extends createjs.Container{
 
   /**
    * 子弹构造函数
-   * @param dis 距离
-   * @param speed 速度
-   * @param angle 弧度
    */
-  constructor(dis,speed,angle){
+  constructor(){
     super();
     /**
      * 距离
      */
-    this.dis=dis;
+    this.dis=500;
     /**
      * 角速度
      */
-    this.speed=speed;
+    this.speed=8;
     /**
      * x速度
      * @type {number}
      */
-    this.vx=Math.cos(angle)*speed;
+    this.vx=0;
     /**
      * y速度
      * @type {number}
      */
-    this.vy=Math.sin(angle)*speed;
+    this.vy=0;
     /**
      * 子弹id
      * @type {number}
@@ -57,7 +54,23 @@ class Bullet extends createjs.Container{
     this.addChild(this.mc);
   }
 
+
   /**
+   * 设置数据
+   * @param dis 距离
+   * @param speed 速度
+   * @param angle 弧度
+   * @param id  子弹id
+   */
+  setData(dis=500,speed=8,angle=0,id=0) {
+    this.dis = dis;
+    this.speed = speed;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+    this.bulletId = id;
+  }
+
+    /**
    * 移动
    * @param x x速度
    * @param y y速度
@@ -85,7 +98,7 @@ class Bullet extends createjs.Container{
   remove(){
     if(!this.parent)return ;
       this.parent.removeChild(this);
-    this.mc=null;
+    // this.mc=null;
   }
 
 }
