@@ -8,6 +8,7 @@ import Timer from '../common/Timer';
 import Plane from './Plane';
 import Router from '../common/socket/Router';
 import SocketClient from '../common/socket/SocketClient';
+import UserData from 'manager/UserData';
 
 /**
  * 飞机大战游戏主类
@@ -51,7 +52,7 @@ class PlaneGame extends createjs.Container{
     this.hitText('sss');
     //飞机
     this.plane=new Plane();
-    this.plane.Name=PlaneGame.Name;
+    this.plane.Name=UserData.id;
     this.plane.x=100;
     this.plane.y=100;
     this.addChild(this.plane);
@@ -163,7 +164,7 @@ class PlaneGame extends createjs.Container{
     this.psd.y=this.plane.y;
     this.psd.rot=this.plane.rotation;
     //发送飞机信息-移动
-    SocketClient.instance.send(this.psd);
+    //SocketClient.instance.send(this.psd);
     this.psd.init();
   }
 
@@ -286,7 +287,6 @@ PlaneGame.mapW=1000;
  */
 PlaneGame.mapH=1000;
 
-PlaneGame.Name='';
 export default PlaneGame;
 
 /**

@@ -1,5 +1,6 @@
 ﻿
 import Router from "./Router";
+import UserData from 'manager/UserData';
 
 class SocketClient{
 
@@ -52,7 +53,7 @@ class SocketClient{
     //与上次相同的数据不再发送
 
     data = JSON.stringify(data);
-    console.log(data);
+    //console.log(data);
     if (this.prevSendStr!=data&&this.socketsExist) {
       let str = 'start' + data + 'end';
       this.socket.send(str);
@@ -66,8 +67,8 @@ class SocketClient{
     this.socketsExist=false;
   }
   Log(Text, MessageType){
-    let color = MessageType == "OK"?'green':'red';
 
+    let color = MessageType == "OK"?'green':'red';
     console.log('%c ' + Text,'color:'+color);
 
   }
@@ -75,13 +76,14 @@ class SocketClient{
   WSonOpen=()=>{
     this.Log("WebSocket连接已经建立。","OK");
     this.socketsExist=true;
+    this.send({KPI:'goLive',name:UserData.id});
     // Router.instance.regAll();
   };
 
   WSonMessage=(event)=>{
     //大数据量 需多次 message
 
-    this.Log(event.data,"OK");
+    //this.Log(event.data,"OK");
 
     var orgJsonData;
     if (!event.data) return;

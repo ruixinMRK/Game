@@ -133,7 +133,7 @@ class Plane extends createjs.Container{
           e.enemyP[s].frameHitB=true;
           e.psd.hitObj[bullet.bulletId]=s;
           bullet.remove();
-          e.enemyP[s].remove();
+          //e.enemyP[s].remove();
           e.hitText(this.Name+'的子弹'+bullet.bulletId+'击中'+s);
         }
       }
