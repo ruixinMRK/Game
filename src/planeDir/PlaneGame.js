@@ -48,7 +48,7 @@ class PlaneGame extends createjs.Container{
     this.hittxt.y = 30;
     this.addChild(this.hittxt);
     this.hittxt.visible=false;
-    this.hitText('sss');
+    this.hitText(UserData.id+'加入游戏');
     //飞机
     this.plane=new Plane();
     this.plane.Name=UserData.id;
@@ -60,8 +60,12 @@ class PlaneGame extends createjs.Container{
     document.addEventListener('keyup',this.onKeyUp);
     //帧频
     Timer.add(this.onFrame,30,0);
-    //接受数据
+    //接受移动数据
     Router.instance.reg('planWalk',this.socketD);
+    //接受玩家掉线数据
+    Router.instance.reg('goDie',this.socketD);
+    //接受玩家加入数据
+    Router.instance.reg('goLive',this.socketD);
 
     this.key_A=false;
     this.key_D=false;
@@ -83,21 +87,41 @@ class PlaneGame extends createjs.Container{
      */
     this.enemyPDataArr=[];
 
-    //Timer.add(e=>{SocketClient.instance.send({a:123})},3000,1);
+    this.sendData();
   }
 
-  //接受服务器的数据q
+  //接受服务器的数据 移动数据
   socketD = (data)=>{
-    data=PSData.shiftObj(data);
-    if(data.Name!=this.plane.Name){
-      //不是自己的数据
-      if(data.type=='move'){
-        this.enemyPDataArr.push(data);
+    if(data.KPI=='planWalk'){
+      //移动
+      data=PSData.shiftObj(data);
+      if(data.Name!=this.plane.Name){
+        //不是自己的数据
+        if(data.type=='move'){
+          this.enemyPDataArr.push(data);
+        }
+      }
+    }
+    else if(data.KPI=='goLive'){
+      //加入
+      if(data.name!=this.plane.Name){
+        //不是自己的数据
+        this.sendData();
+        this.psd.init();
+        this.hitText(data.name+'加入了游戏');
+      }
+    }
+    else if(data.KPI=='goDie'){
+      //退出
+      if(data.name!=this.plane.Name){
+        //不是自己的数据
+        this.removeChild(this.enemyP[data.name]);
+        delete this.enemyP[data.name];
+        this.hitText(data.name+'退出了游戏');
       }
     }
 
     // console.log('接收的数据：',data,data.Name);
-
   }
 
 
@@ -163,14 +187,21 @@ class PlaneGame extends createjs.Container{
 
     //发送飞机信息-移动
     if(this.psd.send){
-      this.psd.Name=this.plane.Name;
-      this.psd.x=this.plane.x;
-      this.psd.y=this.plane.y;
-      this.psd.rot=this.plane.rotation;
-
-      SocketClient.instance.send(PSData.getObj(this.psd));
-      this.psd.init();
+      this.sendData();
     }
+  }
+
+  /**
+   * 发送数据
+   */
+  sendData=()=>{
+    this.psd.Name=this.plane.Name;
+    this.psd.x=this.plane.x;
+    this.psd.y=this.plane.y;
+    this.psd.rot=this.plane.rotation;
+
+    SocketClient.instance.send(PSData.getObj(this.psd));
+    this.psd.init();
   }
 
   /**
