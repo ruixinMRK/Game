@@ -87,7 +87,15 @@ class PlaneGame extends createjs.Container{
      */
     this.enemyPDataArr=[];
 
-    this.sendData();
+    this.psd.Name=this.plane.Name;
+    this.psd.x=this.plane.x;
+    this.psd.y=this.plane.y;
+    this.psd.rot=this.plane.rotation;
+    UserData.planInfo = PSData.getObj(this.psd);
+
+
+
+    // this.sendData();
   }
 
   //接受服务器的数据 移动数据
@@ -107,7 +115,6 @@ class PlaneGame extends createjs.Container{
       if(data.name!=this.plane.Name){
         //不是自己的数据
         this.sendData();
-        this.psd.init();
         this.hitText(data.name+'加入了游戏');
       }
     }
@@ -120,7 +127,8 @@ class PlaneGame extends createjs.Container{
         this.hitText(data.name+'退出了游戏');
       }
     }
-
+    if(this.key_J)
+      console.log(data);
     // console.log('接收的数据：',data,data.Name);
   }
 

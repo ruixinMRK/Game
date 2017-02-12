@@ -77,6 +77,7 @@ class SocketClient{
     this.Log("WebSocket连接已经建立。","OK");
     this.socketsExist=true;
     this.send({KPI:'goLive',name:UserData.id});
+    this.send(UserData.planInfo);
     // Router.instance.regAll();
   };
 

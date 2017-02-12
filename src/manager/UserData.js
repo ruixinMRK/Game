@@ -16,5 +16,6 @@ class UserData{
 }
 
 UserData.id='';
+UserData.planInfo = {};
 export default UserData;
 
