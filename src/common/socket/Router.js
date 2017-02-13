@@ -63,15 +63,17 @@ class Router{
       //console.log(kpiName);
       if(typeof orgJsonData == "object"&&this.containKpiForOther(kpiName)){
 
-          //异步处理 非阻塞
-          (function(d,w){
+        //异步处理 非阻塞
+        //(function(d,w){
+        //
+        //  setTimeout(function () {
+        //    //发消息
+        //    Pubsub.instance.publish(w, d);
+        //  }, 100);
+        //
+        //})(orgJsonData,kpiName);
+        Pubsub.instance.publish(kpiName, orgJsonData);
 
-            setTimeout(function () {
-              //发消息
-              Pubsub.instance.publish(w, d);
-            }, 100);
-
-          })(orgJsonData,kpiName);
 
       }
     }catch(ex){

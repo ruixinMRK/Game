@@ -61,11 +61,11 @@ class PlaneGame extends createjs.Container{
     //帧频
     Timer.add(this.onFrame,30,0);
     //接受移动数据
-    Router.instance.reg('planWalk',this.socketD);
+    Router.instance.reg('planWalk',this.socketPW);
     //接受玩家掉线数据
-    Router.instance.reg('goDie',this.socketD);
+    Router.instance.reg('goDie',this.socketDie);
     //接受玩家加入数据
-    Router.instance.reg('goLive',this.socketD);
+    Router.instance.reg('goLive',this.socketLive);
 
     this.key_A=false;
     this.key_D=false;
@@ -98,37 +98,34 @@ class PlaneGame extends createjs.Container{
     // this.sendData();
   }
 
-  //接受服务器的数据 移动数据
-  socketD = (data)=>{
-    if(data.KPI=='planWalk'){
-      //移动
-      data=PSData.shiftObj(data);
-      if(data.Name!=this.plane.Name){
-        //不是自己的数据
-        if(data.type=='move'){
-          this.enemyPDataArr.push(data);
-        }
-      }
+  //接受服务器的planWalk数据 移动
+  socketPW = (data)=>{
+    //移动
+    // console.log('接收的数据：',data);
+    data=PSData.shiftObj(data);
+      //不是自己的数据
+    this.enemyPDataArr.push(data);
+    // console.log('接收的数据：',data,data.Name);
+  }
+  //接受服务器的goDie数据 退出
+  socketDie = (data)=>{
+    //退出
+    if(data.name!=this.plane.Name){
+      //不是自己的数据
+      this.removeChild(this.enemyP[data.name]);
+      delete this.enemyP[data.name];
+      this.hitText(data.name+'退出了游戏');
     }
-    else if(data.KPI=='goLive'){
+    // console.log('接收的数据：',data,data.Name);
+  }
+  //接受服务器的goLive数据 加入
+  socketLive = (data)=>{
       //加入
       if(data.name!=this.plane.Name){
         //不是自己的数据
         this.sendData();
         this.hitText(data.name+'加入了游戏');
       }
-    }
-    else if(data.KPI=='goDie'){
-      //退出
-      if(data.name!=this.plane.Name){
-        //不是自己的数据
-        this.removeChild(this.enemyP[data.name]);
-        delete this.enemyP[data.name];
-        this.hitText(data.name+'退出了游戏');
-      }
-    }
-    if(this.key_J)
-      console.log(data);
     // console.log('接收的数据：',data,data.Name);
   }
 
@@ -229,8 +226,8 @@ class PlaneGame extends createjs.Container{
       }
       else {
         let p=this.enemyP[obj.Name];
-        p.x=obj.x;
-        p.y=obj.y;
+        // p.x=obj.x;
+        // p.y=obj.y;
         p.rotation=obj.rot;
         if(obj.attack==1){
           p.attack();
@@ -357,11 +354,11 @@ class PSData{
      * @type {boolean}
      */
     this.send=false;
-    /**
-     * 类型 move-帧频移动 create-创建
-     * @type {string}
-     */
-    this.type="move";
+    // /**
+    //  * 类型 move-帧频移动 create-创建
+    //  * @type {string}
+    //  */
+    // this.type="move";
     /**
      * 用户名
      * @type {string}
@@ -441,7 +438,7 @@ PSData.ObjIndex=null;
  * @type {{}}
  */
 PSData.PSDataIndex={};
-PSData.PSDataIndex.type='t';
+// PSData.PSDataIndex.type='t';
 PSData.PSDataIndex.Name='n';
 PSData.PSDataIndex.KPI='KPI';
 PSData.PSDataIndex.x='x';
