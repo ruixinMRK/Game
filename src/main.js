@@ -14,7 +14,6 @@ import PlaneGame from 'planeDir/PlaneGame';
 import SocketClient from 'common/socket/SocketClient';
 import UserData from 'manager/UserData';
 
-
 /**
  * 继承React.Component类 React组件类继承可以写成html写法  1366x768
  */
@@ -44,6 +43,8 @@ class Main extends React.Component{
    * 渲染完成执行
    */
   componentDidMount(){
+
+
 
     //显示帧频 默认createjs刷新20
     // createjs.Ticker.framerate = 60;
@@ -95,6 +96,7 @@ class Main extends React.Component{
     return(
       <div>
         <h1>A左 D右 J攻击</h1>
+        <p ref='ping'></p>
         {this.state.loginState==1?
           <canvas ref='myCan' width='800px' height='300px'/>:
           <Login fn={this.loginSuccess}/>

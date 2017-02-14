@@ -86,6 +86,15 @@ class Plane extends createjs.Container{
     else if(this.y>PlaneGame.mapH)this.y=PlaneGame.mapH;
   }
 
+  /**
+   * 飞机旋转
+   * @param r 增加的角度
+   */
+  planeRot=(r)=>{
+    this.rotation+=r;
+    this.rotation=this.rotation%360;
+    PlaneGame.send=true;
+  }
 
   /**
    * 帧频函数
@@ -93,6 +102,8 @@ class Plane extends createjs.Container{
    */
   onFrame=(e)=>{
     this.frameHitB=false;
+    if(this.bulletArr.length==0)
+      this.bulletNumId=0;
     //子弹移动
     for(let i=this.bulletArr.length-1;i>=0;i--){
       let bullet=this.bulletArr[i];
