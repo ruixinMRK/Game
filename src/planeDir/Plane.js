@@ -15,13 +15,8 @@ import ObjectPool from '../common/ObjectPool';
  */
 class Plane extends createjs.Container{
 
-  constructor(enemy=false){
+  constructor(){
     super();
-    /**
-     * 是否是敌机
-     * @type {boolean}
-     */
-    this.enemyB=enemy;
     /**
      * 速度
      * @type {number}
@@ -47,11 +42,6 @@ class Plane extends createjs.Container{
      * @type {number}
      */
     this.bulletNumId=0;
-    /**
-     * 帧频被子弹击中
-     * @type {boolean}
-     */
-    this.frameHitB=false;
     this.init();
   }
 
@@ -64,9 +54,6 @@ class Plane extends createjs.Container{
     this.mc.x = -bound.width / 2;
     this.mc.y = -bound.height / 2;
     this.addChild(this.mc);
-
-
-    //Timer.add(e=>{SocketClient.instance.send({name:'planWalk',d:12});},500,1);
 
   }
 
@@ -96,12 +83,13 @@ class Plane extends createjs.Container{
     PlaneGame.send=true;
   }
 
+
+
   /**
    * 帧频函数
    * @param e
    */
   onFrame=(e)=>{
-    this.frameHitB=false;
     if(this.bulletArr.length==0)
       this.bulletNumId=0;
     //子弹移动
@@ -120,10 +108,6 @@ class Plane extends createjs.Container{
     let vx=Math.cos(angle)*this.speed;
     let vy=Math.sin(angle)*this.speed;
     this.move(vx,vy);
-    //敌机结束不需要这些下面功能
-    if(this.enemyB){
-      return;
-    }
     //子弹检测碰撞
     for(let i=this.bulletArr.length-1;i>=0;i--){
       let bullet=this.bulletArr[i];
@@ -167,7 +151,6 @@ class Plane extends createjs.Container{
     this.x = 100;
     this.y = 100;
     this.rotation=0;
-    this.frameHitB=true;
   }
 
   /**

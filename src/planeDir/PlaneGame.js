@@ -6,6 +6,7 @@
 import 'createjs';
 import Timer from '../common/Timer';
 import Plane from './Plane';
+import EnemyPlane from './EnemyPlane';
 import Router from '../common/socket/Router';
 import SocketClient from '../common/socket/SocketClient';
 import UserData from '../manager/UserData';
@@ -103,6 +104,17 @@ class PlaneGame extends createjs.Container{
      * @type {number}
      */
     this.pingFSet=3;
+    /**
+     * 移动数据发送帧间隔 位置矫正
+     * @type {number}
+     */
+    this.moveF=3;
+    /**
+     * 移动数据发送帧间隔设置 位置矫正
+     * @type {number}
+     */
+    this.moveFSet=3;
+
 
     //进入游戏发送数据
     this.psd.Name=this.plane.Name;
@@ -129,6 +141,7 @@ class PlaneGame extends createjs.Container{
   }
   //接受服务器的goDie数据 退出
   socketDie = (data)=>{
+    console.log(data.name);
     this.removeChild(this.enemyP[data.name]);
     delete this.enemyP[data.name];
     this.hitText(data.name+'退出了游戏');
@@ -213,11 +226,7 @@ class PlaneGame extends createjs.Container{
 
     this.planeScroll();
 
-
-    //发送飞机信息-移动
-    if(PlaneGame.send){
-      this.sendData();
-    }
+    this.sendData();
     this.sendPing();
     PlaneGame.send=false;
   }
@@ -241,6 +250,12 @@ class PlaneGame extends createjs.Container{
    * 发送状态数据
    */
   sendData=()=>{
+    this.moveF--;
+    if(this.moveF<=0){
+      this.moveF=this.moveFSet;
+      PlaneGame.send=true;
+    }
+    if(PlaneGame.send==false) return;
     this.psd.Name=this.plane.Name;
     this.psd.x=this.plane.x;
     this.psd.y=this.plane.y;
@@ -258,7 +273,7 @@ class PlaneGame extends createjs.Container{
     for(let i=this.enemyPDataArr.length-1;i>=0;i--){
       let obj=this.enemyPDataArr[i];
       if(this.enemyP[obj.Name]==null){
-        this.enemyP[obj.Name]=new Plane(true);
+        this.enemyP[obj.Name]=new EnemyPlane();
         this.enemyP[obj.Name].x=obj.x;
         this.enemyP[obj.Name].y=obj.y;
         this.enemyP[obj.Name].rotation=obj.rot;
@@ -267,13 +282,14 @@ class PlaneGame extends createjs.Container{
       }
       else {
         let p=this.enemyP[obj.Name];
-        p.x=obj.x;
-        p.y=obj.y;
-        p.rotation=obj.rot;
-        if(obj.attack==1){
-          p.attack();
-        }
-        //碰撞处理
+        p.dataDispose(obj);
+        // p.x=obj.x;
+        // p.y=obj.y;
+        // p.rotation=obj.rot;
+        // if(obj.attack==1){
+        //   p.attack();
+        // }
+        //碰撞数据处理
         for(let s in obj.hitObj){
           this.hitText(obj.Name+'的子弹'+s+'击中'+obj.hitObj[s]);
           if(this.plane.Name==obj.hitObj[s]){
@@ -481,9 +497,6 @@ PSData.PSDataIndex.y='y';
 PSData.PSDataIndex.rot='r';
 PSData.PSDataIndex.attack='a';
 PSData.PSDataIndex.hitObj='h';
-
-
-
 
 
 
