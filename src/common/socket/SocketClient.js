@@ -84,8 +84,8 @@ class SocketClient{
   WSonMessage=(event)=>{
     //大数据量 需多次 message
 
-    this.Log(event.data,"OK");
-
+    // this.Log(event.data,"OK");
+    // console.log('接收的数据：',event.data);
 
     var orgJsonData;
     if (!event.data) return;

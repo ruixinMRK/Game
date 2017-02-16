@@ -6,6 +6,7 @@
 import 'createjs';
 import Timer from '../common/Timer';
 import Plane from './Plane';
+import EnemyPlane from './EnemyPlane';
 import Router from '../common/socket/Router';
 import SocketClient from '../common/socket/SocketClient';
 import UserData from '../manager/UserData';
@@ -42,22 +43,27 @@ class PlaneGame extends createjs.Container{
         this.addChild(txt);
       }
     }
-    //击中文本
-    this.hittxt=new createjs.Text('',"bold 30px Arial",'#000000');
-    this.hittxt.x = 100;
-    this.hittxt.y = 30;
-    this.addChild(this.hittxt);
-    this.hittxt.visible=false;
-    this.hitText(UserData.id+'加入游戏');
     //飞机
     this.plane=new Plane();
     this.plane.Name=UserData.id;
     this.plane.x=100;
     this.plane.y=100;
     this.addChild(this.plane);
+    //击中文本
+    this.hittxt=new createjs.Text('',"bold 30px Arial",'#000000');
+    this.hittxt.x = 100;
+    this.hittxt.y = 30;
+    this.hittxt.visible=false;
+    this.hitText(UserData.id+'加入游戏');
+    //ping文本
+    this.pingTxt=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
+    this.pingTxt.x = 720;
+    this.pingTxt.text='ping:';
     //添加键盘事件
     document.addEventListener('keydown',this.onKeyDown);
     document.addEventListener('keyup',this.onKeyUp);
+    //添加到舞台
+    this.addEventListener('added',this.addInit);
     //帧频
     Timer.add(this.onFrame,30,0);
     //接受移动数据
@@ -66,6 +72,8 @@ class PlaneGame extends createjs.Container{
     Router.instance.reg('goDie',this.socketDie);
     //接受玩家加入数据
     Router.instance.reg('goLive',this.socketLive);
+    //接受ping数据
+    Router.instance.reg('ping',this.socketPing);
 
     this.key_A=false;
     this.key_D=false;
@@ -86,47 +94,78 @@ class PlaneGame extends createjs.Container{
      * @type {Array}
      */
     this.enemyPDataArr=[];
+    /**
+     * ping数据发送帧间隔
+     * @type {number}
+     */
+    this.pingF=3;
+    /**
+     * ping数据发送帧间隔设置
+     * @type {number}
+     */
+    this.pingFSet=3;
+    /**
+     * 移动数据发送帧间隔 位置矫正
+     * @type {number}
+     */
+    this.moveF=3;
+    /**
+     * 移动数据发送帧间隔设置 位置矫正
+     * @type {number}
+     */
+    this.moveFSet=3;
 
+
+    //进入游戏发送数据
     this.psd.Name=this.plane.Name;
     this.psd.x=this.plane.x;
     this.psd.y=this.plane.y;
     this.psd.rot=this.plane.rotation;
     UserData.planInfo = PSData.getObj(this.psd);
+  }
 
-
-
-    // this.sendData();
+  /**
+   * 添加到舞台
+   */
+  addInit=()=>{
+    this.parent.addChild(this.hittxt);
+    this.parent.addChild(this.pingTxt);
   }
 
   //接受服务器的planWalk数据 移动
   socketPW = (data)=>{
-    //移动
-    // console.log('接收的数据：',data);
+    // console.log('接收移动数据：',data);
     data=PSData.shiftObj(data);
-      //不是自己的数据
-    this.enemyPDataArr.push(data);
-    // console.log('接收的数据：',data,data.Name);
+    this.enemyPDataArr.unshift(data);
+    // console.log('接收移动数据：',data,data.Name);
   }
   //接受服务器的goDie数据 退出
   socketDie = (data)=>{
-    //退出
-    if(data.name!=this.plane.Name){
-      //不是自己的数据
-      this.removeChild(this.enemyP[data.name]);
-      delete this.enemyP[data.name];
-      this.hitText(data.name+'退出了游戏');
-    }
-    // console.log('接收的数据：',data,data.Name);
+    console.log(data.name);
+    this.removeChild(this.enemyP[data.name]);
+    delete this.enemyP[data.name];
+    this.hitText(data.name+'退出了游戏');
+    // console.log('接收退出数据：',data,data.Name);
   }
   //接受服务器的goLive数据 加入
   socketLive = (data)=>{
-      //加入
-      if(data.name!=this.plane.Name){
-        //不是自己的数据
-        this.sendData();
-        this.hitText(data.name+'加入了游戏');
-      }
-    // console.log('接收的数据：',data,data.Name);
+    this.sendData();
+    this.hitText(data.name+'加入了游戏');
+    // console.log('接收加入数据：',data,data.Name);
+  }
+  //接受服务器的ping数据 延迟
+  socketPing = (data)=>{
+    // console.log('接收延迟数据：',data);
+    let t=(new Date().getTime()%10000)-data.t;
+    if(t<0) return;
+    if(t<100){
+      this.pingFSet=3;
+    }
+    else{
+      this.pingFSet=1;
+    }
+    this.pingTxt.text='ping:'+t;
+
   }
 
 
@@ -173,33 +212,50 @@ class PlaneGame extends createjs.Container{
     this.enemyPDataDispose();
 
     if(this.key_A){
-      this.plane.rotation-=this.plane.rotationSpeed;
-      this.psd.send=true;
+      this.plane.planeRot(-this.plane.rotationSpeed);
     }
     else if(this.key_D){
-      this.plane.rotation+=this.plane.rotationSpeed;
-      this.psd.send=true;
+      this.plane.planeRot(this.plane.rotationSpeed);
     }
     if(this.key_J){
       this.plane.attack();
       this.psd.attack=1;
-      this.psd.send=true;
+      PlaneGame.send=true;
     }
     this.plane.onFrame(this);
 
     this.planeScroll();
 
-
-    //发送飞机信息-移动
-    if(this.psd.send){
-      this.sendData();
-    }
+    this.sendData();
+    this.sendPing();
+    PlaneGame.send=false;
   }
 
   /**
-   * 发送数据
+   * 发送ping数据
+   */
+  sendPing=()=>{
+    this.pingF--;
+    if(this.pingF<=0){
+      this.pingF=this.pingFSet;
+      let obj={};
+      obj.KPI='ping';
+      obj.t=new Date().getTime()%10000;//获取10秒的毫秒
+      SocketClient.instance.send(obj);
+    }
+
+  }
+
+  /**
+   * 发送状态数据
    */
   sendData=()=>{
+    this.moveF--;
+    if(this.moveF<=0){
+      this.moveF=this.moveFSet;
+      PlaneGame.send=true;
+    }
+    if(PlaneGame.send==false) return;
     this.psd.Name=this.plane.Name;
     this.psd.x=this.plane.x;
     this.psd.y=this.plane.y;
@@ -217,7 +273,7 @@ class PlaneGame extends createjs.Container{
     for(let i=this.enemyPDataArr.length-1;i>=0;i--){
       let obj=this.enemyPDataArr[i];
       if(this.enemyP[obj.Name]==null){
-        this.enemyP[obj.Name]=new Plane(true);
+        this.enemyP[obj.Name]=new EnemyPlane();
         this.enemyP[obj.Name].x=obj.x;
         this.enemyP[obj.Name].y=obj.y;
         this.enemyP[obj.Name].rotation=obj.rot;
@@ -226,17 +282,20 @@ class PlaneGame extends createjs.Container{
       }
       else {
         let p=this.enemyP[obj.Name];
+        p.dataDispose(obj);
         // p.x=obj.x;
         // p.y=obj.y;
-        p.rotation=obj.rot;
-        if(obj.attack==1){
-          p.attack();
-        }
-        //碰撞处理
+        // p.rotation=obj.rot;
+        // if(obj.attack==1){
+        //   p.attack();
+        // }
+        //碰撞数据处理
         for(let s in obj.hitObj){
           this.hitText(obj.Name+'的子弹'+s+'击中'+obj.hitObj[s]);
-          if(this.plane.Name==obj.hitObj[s])
+          if(this.plane.Name==obj.hitObj[s]){
             this.plane.remove();
+            PlaneGame.send=true;
+          }
           else
             this.enemyP[obj.hitObj[s]].remove();
           p.bulletArr.map((b)=>{
@@ -308,6 +367,11 @@ class PlaneGame extends createjs.Container{
 
 }
 /**
+ * 是否需要发送数据
+ * @type {boolean}
+ */
+PlaneGame.send=false;
+/**
  * 舞台宽
  * @type {number}
  */
@@ -348,17 +412,6 @@ class PSData{
   }
 
   init(){
-
-    /**
-     * 是否需要发送数据
-     * @type {boolean}
-     */
-    this.send=false;
-    // /**
-    //  * 类型 move-帧频移动 create-创建
-    //  * @type {string}
-    //  */
-    // this.type="move";
     /**
      * 用户名
      * @type {string}
@@ -400,7 +453,6 @@ class PSData{
    */
   static getObj=(psdata)=>{
     let obj={};
-    obj[PSData.PSDataIndex['type']]=psdata.type;
     obj[PSData.PSDataIndex['Name']]=psdata.Name;
     obj[PSData.PSDataIndex['KPI']]=psdata.KPI;
     obj[PSData.PSDataIndex['x']]=Math.round(psdata.x);
@@ -438,7 +490,6 @@ PSData.ObjIndex=null;
  * @type {{}}
  */
 PSData.PSDataIndex={};
-// PSData.PSDataIndex.type='t';
 PSData.PSDataIndex.Name='n';
 PSData.PSDataIndex.KPI='KPI';
 PSData.PSDataIndex.x='x';
@@ -446,9 +497,6 @@ PSData.PSDataIndex.y='y';
 PSData.PSDataIndex.rot='r';
 PSData.PSDataIndex.attack='a';
 PSData.PSDataIndex.hitObj='h';
-
-
-
 
 
 
