@@ -179,22 +179,12 @@ class PlaneGame extends createjs.Container{
       this.enemyP[obj.Name].Name=obj.Name;
       this.addChild(this.enemyP[obj.Name]);
     }
-
-    //创建飞机
-    // let obj=PSData.shiftObj(data.data);
-    // this.enemyP[obj.Name]=new EnemyPlane();
-    // this.enemyP[obj.Name].x=obj.x;
-    // this.enemyP[obj.Name].y=obj.y;
-    // this.enemyP[obj.Name].rotation=obj.rot;
-    // this.enemyP[obj.Name].Name=obj.Name;
-    // this.addChild(this.enemyP[obj.Name]);
-    // this.hitText(data.name+'加入了游戏');
   }
   //接受服务器的ping数据 延迟
   socketPing = (data)=>{
     // console.log('接收延迟数据：',data);
 
-    if(data.t < this.currentPingTime||data.n !=UserData.id) return;
+    if(data.t < this.currentPingTime) return;
 
     let t=new Date().getTime()-data.t;
     if(t<0) return;
@@ -282,7 +272,6 @@ class PlaneGame extends createjs.Container{
       let obj={};
       obj.KPI='ping';
       obj.t=new Date().getTime();//获取10秒的毫秒
-      obj.n = UserData.id;
       SocketClient.instance.send(obj);
     }
 
