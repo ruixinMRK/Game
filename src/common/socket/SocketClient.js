@@ -86,6 +86,7 @@ class SocketClient{
 
     this.Log(event.data,"OK");
 
+
     var orgJsonData;
     if (!event.data) return;
     this.respone += event.data;
@@ -103,12 +104,14 @@ class SocketClient{
 
   WSonClose=()=> {
     this.Log("WebSocket连接关闭！","ERROR");
+    this.socketsExist = false;
     // Router.instance.regAll();
     //this.init(SocketClient.__url);
   };
 
   WSonError=()=> {
     this.Log("WebSocket连接中断。","ERROR");
+    this.socketsExist = false;
   };
 
   parseData(){
@@ -131,12 +134,13 @@ class SocketClient{
       if(this.respone.length <=0){
         this.len = 0;
       }
+
     }
   }
 }
 
 SocketClient.__instance = null;
 SocketClient.__host = "60.205.222.103";//"localhost";
-SocketClient.__url = "ws://" + SocketClient.__host + ":8080/user";
+SocketClient.__url = "ws://" + SocketClient.__host + ":8080";
 
 export default SocketClient;
