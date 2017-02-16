@@ -79,7 +79,6 @@ class Plane extends createjs.Container{
    */
   planeRot=(r)=>{
     this.rotation+=r;
-    this.rotation=this.rotation%360;
     PlaneGame.send=true;
   }
 
@@ -111,11 +110,11 @@ class Plane extends createjs.Container{
     //子弹检测碰撞
     for(let i=this.bulletArr.length-1;i>=0;i--){
       let bullet=this.bulletArr[i];
-      let r1=Plane.rectGlobal(bullet);
+      let r1=this.rectGlobal(bullet);
 
       for(let s in e.enemyP){
         if(e.enemyP[s].frameHitB) break;
-        let r2=Plane.rectGlobal(e.enemyP[s]);
+        let r2=this.rectGlobal(e.enemyP[s]);
 
         if(r1.intersects(r2)){
           //子弹击中了
@@ -157,7 +156,7 @@ class Plane extends createjs.Container{
    * 获得对象父级坐标的矩形框 返回矩形框
    * @param spr 对象
    */
-  static rectGlobal(spr){
+  rectGlobal(spr){
     let rect=spr.getBounds();
     rect.x+=spr.x;
     rect.y+=spr.y;

@@ -83,6 +83,11 @@ class EnemyPlane extends createjs.Container{
      * @type {number}
      */
     this.moveNum=-1;
+    /**
+     * 当前最大时间
+     * @type {number}
+     */
+    this.currentTime=0;
     this.init();
   }
 
@@ -116,28 +121,31 @@ class EnemyPlane extends createjs.Container{
    * 数据处理
    * @param data
    */
-  dataDispose=(obj)=>{
-    if(obj.attack==1) this.attackNum++;
+  dataDispose=(obj)=> {
+    if (obj.attack == 1) this.attackNum++;
 
-    this.targetX=obj.x;
-    this.targetY=obj.y;
-    let dx=obj.x-this.x;
-    let dy=obj.y-this.y;
-    let dis=Math.sqrt(dx*dx+dy*dy);
-    if(dis>3){
-      let angle=Math.atan2(dy,dx);
-      this.moveNum=Math.floor(dis/this.speed);
-      this.mx=Math.cos(angle)*this.speed;
-      this.my=Math.sin(angle)*this.speed;
+    if (obj.time < this.currentTime) return;
+
+    this.targetX = obj.x;
+    this.targetY = obj.y;
+    let dx = obj.x - this.x;
+    let dy = obj.y - this.y;
+    let dis = Math.sqrt(dx * dx + dy * dy);
+    if (dis > 3 && dis <= 30) {
+      let angle = Math.atan2(dy, dx);
+      this.moveNum = Math.floor(dis / this.speed);
+      this.mx = Math.cos(angle) * this.speed;
+      this.my = Math.sin(angle) * this.speed;
     }
-    else if(dis>30){
-      this.x=obj.x;
-      this.y=obj.y;
+    else if (dis > 30) {
+      this.x = obj.x;
+      this.y = obj.y;
     }
 
     //为了防止本地角度360 服务器传来为0，导致计算出现问题，每次计算角度
-    this.targetRot=obj.rot;
-    this.rotation=this.rotation%360;
+    this.targetRot = obj.rot
+    if (Math.abs(this.targetRot - this.rotation) > 30)
+      this.rotation = obj.rot;
   }
 
   /**
@@ -165,19 +173,18 @@ class EnemyPlane extends createjs.Container{
       }
     }
     //旋转  本地和服务器角度大于旋转速度按旋转速度旋转，小于直接赋值
-    // if(this.rotation!=this.targetRot){
-    //   if(Math.abs(this.targetRot-this.rotation)>this.rotationSpeed){
-    //     if(this.targetRot>this.rotation)
-    //       this.rotation+=this.rotationSpeed;
-    //     else
-    //       this.rotation-=this.rotationSpeed;
-    //   }
-    //   else
-    //     this.rotation=this.targetRot;
-    // }
+    if(this.rotation!=this.targetRot){
+      if(Math.abs(this.targetRot-this.rotation)>this.rotationSpeed){
+        if(this.targetRot>this.rotation)
+          this.rotation+=this.rotationSpeed;
+        else
+          this.rotation-=this.rotationSpeed;
+      }
+      else
+        this.rotation=this.targetRot;
+    }
     //移动
-
-    this.rotation=this.targetRot;
+    // this.rotation=this.targetRot;
     if(this.moveNum>=0){
       this.moveNum--;
       this.move(this.mx, this.my);
@@ -197,28 +204,28 @@ class EnemyPlane extends createjs.Container{
   }
 
 
-  /**
-   * 攻击 发射子弹
-   */
-  attack(){
-    let bullet=ObjectPool.getObj('Bullet')
-    bullet.x=this.x;
-    bullet.y=this.y;
-    bullet.setData(500,8,Tools.getHD(this.rotation),this.bulletNumId);
-    this.bulletNumId++;
-    this.parent.addChild(bullet);
-    this.bulletArr.push(bullet);
-  }
+    /**
+     * 攻击 发射子弹
+     */
+    attack(){
+      let bullet=ObjectPool.getObj('Bullet');
+      bullet.x=this.x;
+      bullet.y=this.y;
+      bullet.setData(500,8,Tools.getHD(this.rotation),this.bulletNumId);
+      this.bulletNumId++;
+      this.parent.addChild(bullet);
+      this.bulletArr.push(bullet);
+    }
 
 
-  /**
-   * 移除
-   */
-  remove(){
-    this.x = 100;
-    this.y = 100;
-    this.rotation=0;
-  }
+    /**
+     * 移除
+     */
+    remove(){
+      this.x = 100;
+      this.y = 100;
+      this.rotation=0;
+    }
 
 
 }

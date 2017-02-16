@@ -115,6 +115,7 @@ class PlaneGame extends createjs.Container{
      */
     this.moveFSet=3;
 
+    this.currentPingTime = 0;
 
     //进入游戏发送数据
     this.psd.Name=this.plane.Name;
@@ -155,8 +156,11 @@ class PlaneGame extends createjs.Container{
   }
   //接受服务器的ping数据 延迟
   socketPing = (data)=>{
-    // console.log('接收延迟数据：',data);
-    let t=(new Date().getTime()%10000)-data.t;
+    console.log('接收延迟数据：',data);
+
+    if(data.t < this.currentPingTime||data.n !=UserData.id) return;
+    
+    let t=new Date().getTime()-data.t;
     if(t<0) return;
     if(t<100){
       this.pingFSet=3;
@@ -165,6 +169,7 @@ class PlaneGame extends createjs.Container{
       this.pingFSet=1;
     }
     this.pingTxt.text='ping:'+t;
+    this.currentPingTime = data.t;
 
   }
 
@@ -240,7 +245,8 @@ class PlaneGame extends createjs.Container{
       this.pingF=this.pingFSet;
       let obj={};
       obj.KPI='ping';
-      obj.t=new Date().getTime()%10000;//获取10秒的毫秒
+      obj.t=new Date().getTime();//获取10秒的毫秒
+      obj.n = UserData.id;
       SocketClient.instance.send(obj);
     }
 
@@ -260,6 +266,7 @@ class PlaneGame extends createjs.Container{
     this.psd.x=this.plane.x;
     this.psd.y=this.plane.y;
     this.psd.rot=this.plane.rotation;
+    this.psd.time=new Date().getTime();
 
     SocketClient.instance.send(PSData.getObj(this.psd));
     this.psd.init();
@@ -435,6 +442,11 @@ class PSData{
      */
     this.rot=0;
     /**
+     * 时间毫秒
+     * @type {number}
+     */
+    this.time=0;
+    /**
      * 攻击 1-攻击 0-未攻击
      * @type {number}
      */
@@ -458,6 +470,7 @@ class PSData{
     obj[PSData.PSDataIndex['x']]=Math.round(psdata.x);
     obj[PSData.PSDataIndex['y']]=Math.round(psdata.y);
     obj[PSData.PSDataIndex['rot']]=Math.round(psdata.rot);
+    obj[PSData.PSDataIndex['time']]=psdata.time;
     if(psdata.attack==1)
       obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
     if(JSON.stringify(psdata.hitObj).length>2)
@@ -495,6 +508,7 @@ PSData.PSDataIndex.KPI='KPI';
 PSData.PSDataIndex.x='x';
 PSData.PSDataIndex.y='y';
 PSData.PSDataIndex.rot='r';
+PSData.PSDataIndex.time='t';
 PSData.PSDataIndex.attack='a';
 PSData.PSDataIndex.hitObj='h';
 
