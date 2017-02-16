@@ -149,9 +149,36 @@ class PlaneGame extends createjs.Container{
   }
   //接受服务器的goLive数据 加入
   socketLive = (data)=>{
-    this.sendData();
-    this.hitText(data.name+'加入了游戏');
-    // console.log('接收加入数据：',data,data.Name);
+    console.log('接收加入数据：',data);
+    if(data.name!=null){
+      this.psd.Name=this.plane.Name;
+      this.psd.x=this.plane.x;
+      this.psd.y=this.plane.y;
+      this.psd.rot=this.plane.rotation;
+      UserData.planInfo = PSData.getObj(this.psd);
+      SocketClient.instance.send({KPI:'goLive',data:UserData.planInfo});
+      //创建飞机
+      let obj=PSData.shiftObj(data.data);
+      this.enemyP[obj.Name]=new EnemyPlane();
+      this.enemyP[obj.Name].x=obj.x;
+      this.enemyP[obj.Name].y=obj.y;
+      this.enemyP[obj.Name].rotation=obj.rot;
+      this.enemyP[obj.Name].Name=obj.Name;
+      this.addChild(this.enemyP[obj.Name]);
+      this.hitText(data.name+'加入了游戏');
+    }
+    else {
+      //创建飞机
+      let obj=PSData.shiftObj(data.data);
+      if(this.enemyP[obj.Name]!=null)return;
+      this.enemyP[obj.Name]=new EnemyPlane();
+      this.enemyP[obj.Name].x=obj.x;
+      this.enemyP[obj.Name].y=obj.y;
+      this.enemyP[obj.Name].rotation=obj.rot;
+      this.enemyP[obj.Name].Name=obj.Name;
+      this.addChild(this.enemyP[obj.Name]);
+    }
+
   }
   //接受服务器的ping数据 延迟
   socketPing = (data)=>{
@@ -273,15 +300,7 @@ class PlaneGame extends createjs.Container{
     //敌机数据赋值
     for(let i=this.enemyPDataArr.length-1;i>=0;i--){
       let obj=this.enemyPDataArr[i];
-      if(this.enemyP[obj.Name]==null){
-        this.enemyP[obj.Name]=new EnemyPlane();
-        this.enemyP[obj.Name].x=obj.x;
-        this.enemyP[obj.Name].y=obj.y;
-        this.enemyP[obj.Name].rotation=obj.rot;
-        this.enemyP[obj.Name].Name=obj.Name;
-        this.addChild(this.enemyP[obj.Name]);
-      }
-      else {
+      if(this.enemyP[obj.Name]!=null){
         let p=this.enemyP[obj.Name];
         p.dataDispose(obj);
         // p.x=obj.x;
