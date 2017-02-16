@@ -4,6 +4,7 @@
 /**
  * 飞机传输数据类
  */
+
 class PSData{
 
   constructor(){
@@ -65,22 +66,22 @@ class PSData{
    */
   static getObj=(psdata)=>{
     let obj={};
-    //for(let str in psdata){
-    //  if(str == 'attack'&&psdata.attack==1) obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
-    //  else if(str == 'hitObj'&&JSON.stringify(psdata.hitObj).length>2) obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
-    //  else obj[PSData.PSDataIndex[str]]=typeof psdata[str] == 'number'?parseInt(psdata[str]):psdata[str];
-    //
-    //}
-    obj[PSData.PSDataIndex['Name']]=psdata.Name;
-    obj[PSData.PSDataIndex['KPI']]=psdata.KPI;
-    obj[PSData.PSDataIndex['x']]=Math.round(psdata.x);
-    obj[PSData.PSDataIndex['y']]=Math.round(psdata.y);
-    obj[PSData.PSDataIndex['rot']]=Math.round(psdata.rot);
-    obj[PSData.PSDataIndex['time']]=psdata.time;
-    if(psdata.attack==1)
-      obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
-    if(JSON.stringify(psdata.hitObj).length>2)
-      obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
+    for(let str in psdata){
+      if(str == 'attack'&&psdata.attack==1) obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
+      else if(str == 'hitObj'&&JSON.stringify(psdata.hitObj).length>2) obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
+      else obj[PSData.PSDataIndex[str]]=typeof psdata[str] == 'number'?parseInt(psdata[str]):psdata[str];
+
+    }
+    //obj[PSData.PSDataIndex['Name']]=psdata.Name;
+    //obj[PSData.PSDataIndex['KPI']]=psdata.KPI;
+    //obj[PSData.PSDataIndex['x']]=Math.round(psdata.x);
+    //obj[PSData.PSDataIndex['y']]=Math.round(psdata.y);
+    //obj[PSData.PSDataIndex['rot']]=Math.round(psdata.rot);
+    //obj[PSData.PSDataIndex['time']]=psdata.time;
+    //if(psdata.attack==1)
+    //  obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
+    //if(JSON.stringify(psdata.hitObj).length>2)
+    //  obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
     return obj;
   }
 
@@ -109,3 +110,5 @@ PSData.ObjIndex=null;
  * @type {{}}
  */
 PSData.PSDataIndex={Name:'n',KPI:'KPI',x:'x',y:'y',rot:'r',time:'t',attack:'a',hitObj:'h'};
+
+export default PSData;

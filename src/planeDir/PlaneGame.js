@@ -46,26 +46,26 @@ class PlaneGame extends createjs.Container{
         this.addChild(txt);
       }
     }
-    ////飞机
+    //飞机
     this.HeroPlane=new HeroPlane();
     this.HeroPlane.Name=UserData.id;
     this.HeroPlane.x=100;
     this.HeroPlane.y=100;
     this.addChild(this.HeroPlane);
-    ////击中文本
+    //击中文本
     this.hittxt=new createjs.Text('',"bold 30px Arial",'#000000');
     this.hittxt.x = 100;
     this.hittxt.y = 30;
     this.hittxt.visible=false;
     this.hitText(UserData.id+'加入游戏');
-    ////ping文本
+    //ping文本
     this.pingTxt=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
     this.pingTxt.x = 720;
     this.pingTxt.text='ping:';
-    ////添加键盘事件
+    //添加键盘事件
     document.addEventListener('keydown',this.onKeyDown);
     document.addEventListener('keyup',this.onKeyUp);
-    ////添加到舞台
+    //添加到舞台
     this.addEventListener('added',this.addInit);
 
     //接受移动数据
@@ -161,7 +161,6 @@ class PlaneGame extends createjs.Container{
   }
   //接受服务器的ping数据 延迟
   socketPing = (data)=>{
-    console.log('接收延迟数据：',data);
 
     if(data.t < this.currentPingTime) return;
 
@@ -251,7 +250,6 @@ class PlaneGame extends createjs.Container{
       let obj={};
       obj.KPI='ping';
       obj.t=new Date().getTime();//获取10秒的毫秒
-      //obj.n = UserData.id;
       SocketClient.instance.send(obj);
     }
 
@@ -372,10 +370,6 @@ class PlaneGame extends createjs.Container{
         this.hittxt.visible=false;
     },3000,1);
   }
-
-
-
-
 
 }
 
