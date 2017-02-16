@@ -4,14 +4,9 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import '../vendors/createjs';
-import Other from 'Other';
-import Test from 'Test';
 import Login from 'components/Login';
 import Timer from 'common/Timer';
-import Lib from 'res/Lib';
-import Woody from 'components/Woody';
 import PlaneGame from 'planeDir/PlaneGame';
-import SocketClient from 'common/socket/SocketClient';
 import UserData from 'manager/UserData';
 
 /**
@@ -35,7 +30,7 @@ class Main extends React.Component{
    * 页面卸载移除
    */
   componentWillUnMount(){
-    alert("页面卸载移除");
+
   }
 
 
@@ -44,33 +39,6 @@ class Main extends React.Component{
    */
   componentDidMount(){
 
-
-
-    //显示帧频 默认createjs刷新20
-    // createjs.Ticker.framerate = 60;
-    // var FPS = {};
-    // FPS.time = 0;
-    // FPS.FPS = 0;
-    // FPS.startFPS = function (stage){
-    //   FPS.shape = new createjs.Shape();
-    //   FPS.shape.graphics.beginFill("#000000").drawRect(0, 0, 200, 50);
-    //   stage.addChild(FPS.shape);
-    //   FPS.txt =new createjs.Text("", "40px Arial", "#ffffff");
-    //   stage.addChild(FPS.txt);
-    //   createjs.Ticker.addEventListener("tick", FPS.TickerFPS);
-    // }
-    // FPS.TickerFPS = function (event)
-    // {
-    //   FPS.date = new Date();
-    //   FPS.currentTime = FPS.date.getTime();
-    //   if(FPS.time!=0)
-    //   {
-    //     FPS.FPS = Math.ceil(1000/(FPS.currentTime -  FPS.time));
-    //   }
-    //   FPS.time = FPS.currentTime;
-    //   FPS.txt.text = "FPS: "+FPS.FPS;
-    // }
-    // FPS.startFPS(stage);
   }
 
   //state 更新后

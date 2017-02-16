@@ -3,7 +3,7 @@
  */
 
 import 'createjs';
-import BaseSkill from '../container/BaseSkill';
+import BaseSkill from '../example/BaseSkill';
 
 /**
  * 鬼气斩技能继承弹道技能基类

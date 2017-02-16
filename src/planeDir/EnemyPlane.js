@@ -4,50 +4,16 @@
  */
 
 import 'createjs';
-import NameSpr from '../common/NameSpr';
-import PlaneGame from './PlaneGame';
 import Tools from '../common/Tools';
-import Bullet from './Bullet';
-import Timer from '../common/Timer';
-import ObjectPool from '../common/ObjectPool';
+import BasePlane from '../container/BasePlane';
 
 /**
  * 敌机类
  */
-class EnemyPlane extends createjs.Container{
+class EnemyPlane extends BasePlane{
 
   constructor(){
     super();
-    /**
-     * 速度
-     * @type {number}
-     */
-    this.speed=3;
-    /**
-     * 旋转速度
-     * @type {number}
-     */
-    this.rotationSpeed=3;
-    /**
-     * 目标角度
-     * @type {number}
-     */
-    this.targetRot=0;
-    /**
-     * 子弹数组
-     * @type {Array}
-     */
-    this.bulletArr=[];
-    /**
-     * 用户名
-     * @type {string}
-     */
-    this.Name='';
-    /**
-     * 子弹数量id
-     * @type {number}
-     */
-    this.bulletNumId=0;
     /**
      * 帧频被子弹击中
      * @type {boolean}
@@ -92,32 +58,6 @@ class EnemyPlane extends createjs.Container{
   }
 
   /**
-   * 初始化
-   */
-  init() {
-    this.mc = NameSpr.getInstance().getSpr('plane', 'plane');
-    let bound = this.mc.getBounds();
-    this.mc.x = -bound.width / 2;
-    this.mc.y = -bound.height / 2;
-    this.addChild(this.mc);
-  }
-
-
-  /**
-   * 移动
-   * @param x x速度
-   * @param y y速度
-   */
-  move(x,y){
-    this.x+=x;
-    this.y+=y;
-    //飞机限制
-    if(this.x<0)this.x=0;
-    else if(this.x>PlaneGame.mapW)this.x=PlaneGame.mapW;
-    if(this.y<0)this.y=0;
-    else if(this.y>PlaneGame.mapH)this.y=PlaneGame.mapH;
-  }
-  /**
    * 数据处理
    * @param data
    */
@@ -161,17 +101,7 @@ class EnemyPlane extends createjs.Container{
       this.attackNum--;
       this.attack();
     }
-    //子弹移动
-    for(let i=this.bulletArr.length-1;i>=0;i--){
-      let bullet=this.bulletArr[i];
-      if(bullet.parent==null){
-        this.bulletArr.splice(i,1);
-        ObjectPool.returnObj(bullet);
-      }
-      else{
-        bullet.onFrame();
-      }
-    }
+    this.moveBullet();
     //旋转  本地和服务器角度大于旋转速度按旋转速度旋转，小于直接赋值
     if(this.rotation!=this.targetRot){
       if(Math.abs(this.targetRot-this.rotation)>this.rotationSpeed){
@@ -202,30 +132,6 @@ class EnemyPlane extends createjs.Container{
     }
     // console.log('子弹',this.bulletArr.length);
   }
-
-
-    /**
-     * 攻击 发射子弹
-     */
-    attack(){
-      let bullet=ObjectPool.getObj('Bullet');
-      bullet.x=this.x;
-      bullet.y=this.y;
-      bullet.setData(500,8,Tools.getHD(this.rotation),this.bulletNumId);
-      this.bulletNumId++;
-      this.parent.addChild(bullet);
-      this.bulletArr.push(bullet);
-    }
-
-
-    /**
-     * 移除
-     */
-    remove(){
-      this.x = 100;
-      this.y = 100;
-      this.rotation=0;
-    }
 
 
 }
