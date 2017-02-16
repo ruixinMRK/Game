@@ -67,7 +67,7 @@ class PlaneGame extends createjs.Container{
     document.addEventListener('keyup',this.onKeyUp);
     ////添加到舞台
     this.addEventListener('added',this.addInit);
-    
+
     //接受移动数据
     Router.instance.reg('planWalk',this.socketPW);
     //接受玩家掉线数据
