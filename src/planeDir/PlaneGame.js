@@ -5,11 +5,13 @@
 
 import 'createjs';
 import Timer from '../common/Timer';
-import Plane from './Plane';
+import HeroPlane from './HeroPlane';
 import EnemyPlane from './EnemyPlane';
 import Router from '../common/socket/Router';
 import SocketClient from '../common/socket/SocketClient';
 import UserData from '../manager/UserData';
+import GameData from '../manager/GameData';
+
 /**
  * 飞机大战游戏主类
  */
@@ -44,11 +46,11 @@ class PlaneGame extends createjs.Container{
       }
     }
     //飞机
-    this.plane=new Plane();
-    this.plane.Name=UserData.id;
-    this.plane.x=100;
-    this.plane.y=100;
-    this.addChild(this.plane);
+    this.HeroPlane=new HeroPlane();
+    this.HeroPlane.Name=UserData.id;
+    this.HeroPlane.x=100;
+    this.HeroPlane.y=100;
+    this.addChild(this.HeroPlane);
     //击中文本
     this.hittxt=new createjs.Text('',"bold 30px Arial",'#000000');
     this.hittxt.x = 100;
@@ -118,10 +120,10 @@ class PlaneGame extends createjs.Container{
     this.currentPingTime = 0;
 
     //进入游戏发送数据
-    this.psd.Name=this.plane.Name;
-    this.psd.x=this.plane.x;
-    this.psd.y=this.plane.y;
-    this.psd.rot=this.plane.rotation;
+    this.psd.Name=this.HeroPlane.Name;
+    this.psd.x=this.HeroPlane.x;
+    this.psd.y=this.HeroPlane.y;
+    this.psd.rot=this.HeroPlane.rotation;
     UserData.planInfo = PSData.getObj(this.psd);
   }
 
@@ -186,6 +188,11 @@ class PlaneGame extends createjs.Container{
 
     if(data.t < this.currentPingTime) return;
 
+<<<<<<< HEAD
+=======
+    if(data.t < this.currentPingTime||data.n !=UserData.id) return;
+
+>>>>>>> extend
     let t=new Date().getTime()-data.t;
     if(t<0) return;
     if(t<100){
@@ -243,23 +250,23 @@ class PlaneGame extends createjs.Container{
     this.enemyPDataDispose();
 
     if(this.key_A){
-      this.plane.planeRot(-this.plane.rotationSpeed);
+      this.HeroPlane.planeRot(-this.HeroPlane.rotationSpeed);
     }
     else if(this.key_D){
-      this.plane.planeRot(this.plane.rotationSpeed);
+      this.HeroPlane.planeRot(this.HeroPlane.rotationSpeed);
     }
     if(this.key_J){
-      this.plane.attack();
+      this.HeroPlane.attack();
       this.psd.attack=1;
-      PlaneGame.send=true;
+      GameData.send=true;
     }
-    this.plane.onFrame(this);
+    this.HeroPlane.onFrame(this);
 
     this.planeScroll();
 
     this.sendData();
     this.sendPing();
-    PlaneGame.send=false;
+    GameData.send=false;
   }
 
   /**
@@ -284,13 +291,13 @@ class PlaneGame extends createjs.Container{
     this.moveF--;
     if(this.moveF<=0){
       this.moveF=this.moveFSet;
-      PlaneGame.send=true;
+      GameData.send=true;
     }
-    if(PlaneGame.send==false) return;
-    this.psd.Name=this.plane.Name;
-    this.psd.x=this.plane.x;
-    this.psd.y=this.plane.y;
-    this.psd.rot=this.plane.rotation;
+    if(GameData.send==false) return;
+    this.psd.Name=this.HeroPlane.Name;
+    this.psd.x=this.HeroPlane.x;
+    this.psd.y=this.HeroPlane.y;
+    this.psd.rot=this.HeroPlane.rotation;
     this.psd.time=new Date().getTime();
 
     SocketClient.instance.send(PSData.getObj(this.psd));
@@ -316,9 +323,9 @@ class PlaneGame extends createjs.Container{
         //碰撞数据处理
         for(let s in obj.hitObj){
           this.hitText(obj.Name+'的子弹'+s+'击中'+obj.hitObj[s]);
-          if(this.plane.Name==obj.hitObj[s]){
-            this.plane.remove();
-            PlaneGame.send=true;
+          if(this.HeroPlane.Name==obj.hitObj[s]){
+            this.HeroPlane.remove();
+            GameData.send=true;
           }
           else
             this.enemyP[obj.hitObj[s]].remove();
@@ -349,13 +356,13 @@ class PlaneGame extends createjs.Container{
    * 飞机滚屏
    */
   planeScroll=()=>{
-    let spx=this.x+this.plane.x;
-    let spy=this.y+this.plane.y;
+    let spx=this.x+this.HeroPlane.x;
+    let spy=this.y+this.HeroPlane.y;
     let rect={t:100,b:200,l:100,r:700};
 
     if(spx>rect.r){
       this.x-=spx-rect.r;
-      if(this.x<-(PlaneGame.mapW-PlaneGame.stageW))this.x=-(PlaneGame.mapW-PlaneGame.stageW);
+      if(this.x<-(PlaneGame.mapW-PlaneGame.stageW)) this.x=-(PlaneGame.mapW-PlaneGame.stageW);
     }
     else if(spx<rect.l){
       this.x+=rect.l-spx;
@@ -364,7 +371,7 @@ class PlaneGame extends createjs.Container{
 
     if(spy>rect.b){
       this.y-=spy-rect.b;
-      if(this.y<-(PlaneGame.mapH-PlaneGame.stageH))this.y=-(PlaneGame.mapH-PlaneGame.stageH);
+      if(this.y<-(PlaneGame.mapH-PlaneGame.stageH)) this.y=-(PlaneGame.mapH-PlaneGame.stageH);
     }
     else if(spy<rect.t){
       this.y+=rect.t-spy;
@@ -390,31 +397,7 @@ class PlaneGame extends createjs.Container{
 
 
 }
-/**
- * 是否需要发送数据
- * @type {boolean}
- */
-PlaneGame.send=false;
-/**
- * 舞台宽
- * @type {number}
- */
-PlaneGame.stageW=800;
-/**
- * 舞台高
- * @type {number}
- */
-PlaneGame.stageH=300;
-/**
- * 地图宽
- * @type {number}
- */
-PlaneGame.mapW=1000;
-/**
- * 地图高
- * @type {number}
- */
-PlaneGame.mapH=1000;
+
 
 export default PlaneGame;
 

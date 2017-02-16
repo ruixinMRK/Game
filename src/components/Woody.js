@@ -2,7 +2,7 @@
  * Created by tudouhu on 2017/1/30.
  */
 
-import BasePeople from  '../container/BasePeople';
+import BasePeople from  '../example/BasePeople';
 import Guiqizhan from '../components/Guiqizhan';
 /**
  * 人物woody类 继承人物基类
