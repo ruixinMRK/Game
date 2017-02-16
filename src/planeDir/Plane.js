@@ -79,7 +79,6 @@ class Plane extends createjs.Container{
    */
   planeRot=(r)=>{
     this.rotation+=r;
-    this.rotation=this.rotation%360;
     PlaneGame.send=true;
   }
 
