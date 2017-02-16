@@ -11,6 +11,7 @@ import Router from '../common/socket/Router';
 import SocketClient from '../common/socket/SocketClient';
 import UserData from '../manager/UserData';
 import GameData from '../manager/GameData';
+import PSData from '../manager/PSData';
 
 /**
  * 飞机大战游戏主类
@@ -45,29 +46,28 @@ class PlaneGame extends createjs.Container{
         this.addChild(txt);
       }
     }
-    //飞机
+    ////飞机
     this.HeroPlane=new HeroPlane();
     this.HeroPlane.Name=UserData.id;
     this.HeroPlane.x=100;
     this.HeroPlane.y=100;
     this.addChild(this.HeroPlane);
-    //击中文本
+    ////击中文本
     this.hittxt=new createjs.Text('',"bold 30px Arial",'#000000');
     this.hittxt.x = 100;
     this.hittxt.y = 30;
     this.hittxt.visible=false;
     this.hitText(UserData.id+'加入游戏');
-    //ping文本
+    ////ping文本
     this.pingTxt=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
     this.pingTxt.x = 720;
     this.pingTxt.text='ping:';
-    //添加键盘事件
+    ////添加键盘事件
     document.addEventListener('keydown',this.onKeyDown);
     document.addEventListener('keyup',this.onKeyUp);
-    //添加到舞台
+    ////添加到舞台
     this.addEventListener('added',this.addInit);
-    //帧频
-    Timer.add(this.onFrame,30,0);
+    
     //接受移动数据
     Router.instance.reg('planWalk',this.socketPW);
     //接受玩家掉线数据
@@ -125,6 +125,9 @@ class PlaneGame extends createjs.Container{
     this.psd.y=this.HeroPlane.y;
     this.psd.rot=this.HeroPlane.rotation;
     UserData.planInfo = PSData.getObj(this.psd);
+
+    //帧频
+    Timer.add(this.onFrame,30,0);
   }
 
   /**
@@ -160,7 +163,7 @@ class PlaneGame extends createjs.Container{
   socketPing = (data)=>{
     console.log('接收延迟数据：',data);
 
-    if(data.t < this.currentPingTime||data.n !=UserData.id) return;
+    if(data.t < this.currentPingTime) return;
 
     let t=new Date().getTime()-data.t;
     if(t<0) return;
@@ -248,7 +251,7 @@ class PlaneGame extends createjs.Container{
       let obj={};
       obj.KPI='ping';
       obj.t=new Date().getTime();//获取10秒的毫秒
-      obj.n = UserData.id;
+      //obj.n = UserData.id;
       SocketClient.instance.send(obj);
     }
 
@@ -340,7 +343,7 @@ class PlaneGame extends createjs.Container{
 
     if(spx>rect.r){
       this.x-=spx-rect.r;
-      if(this.x<-(PlaneGame.mapW-PlaneGame.stageW)) this.x=-(PlaneGame.mapW-PlaneGame.stageW);
+      if(this.x<-(GameData.mapW-GameData.stageW)) this.x=-(GameData.mapW-GameData.stageW);
     }
     else if(spx<rect.l){
       this.x+=rect.l-spx;
@@ -349,7 +352,7 @@ class PlaneGame extends createjs.Container{
 
     if(spy>rect.b){
       this.y-=spy-rect.b;
-      if(this.y<-(PlaneGame.mapH-PlaneGame.stageH)) this.y=-(PlaneGame.mapH-PlaneGame.stageH);
+      if(this.y<-(GameData.mapH-GameData.stageH)) this.y=-(GameData.mapH-GameData.stageH);
     }
     else if(spy<rect.t){
       this.y+=rect.t-spy;
@@ -379,116 +382,7 @@ class PlaneGame extends createjs.Container{
 
 export default PlaneGame;
 
-/**
- * 飞机传输数据类
- */
-class PSData{
 
-  constructor(){
-
-    if(PSData.ObjIndex==null){
-      PSData.ObjIndex={};
-      for(let s in PSData.PSDataIndex){
-        PSData.ObjIndex[PSData.PSDataIndex[s]]=s;
-      }
-    }
-
-    this.init();
-  }
-
-  init(){
-    /**
-     * 用户名
-     * @type {string}
-     */
-    this.Name='';
-    //数据名
-    this.KPI='planWalk';
-    /**
-     * x位置
-     * @type {number}
-     */
-    this.x=0;
-    /**
-     * y位置
-     * @type {number}
-     */
-    this.y=0;
-    /**
-     * 角度
-     * @type {number}
-     */
-    this.rot=0;
-    /**
-     * 时间毫秒
-     * @type {number}
-     */
-    this.time=0;
-    /**
-     * 攻击 1-攻击 0-未攻击
-     * @type {number}
-     */
-    this.attack=0;
-    /**
-     * 碰撞对象 Obj.子弹id=飞机name
-     * @type {{}}
-     */
-    this.hitObj={};
-  }
-
-  /**
-   * 获得将PSData解析字符串最少的obj
-   * @param psdata psdata数据
-   * @returns {{}}
-   */
-  static getObj=(psdata)=>{
-    let obj={};
-    obj[PSData.PSDataIndex['Name']]=psdata.Name;
-    obj[PSData.PSDataIndex['KPI']]=psdata.KPI;
-    obj[PSData.PSDataIndex['x']]=Math.round(psdata.x);
-    obj[PSData.PSDataIndex['y']]=Math.round(psdata.y);
-    obj[PSData.PSDataIndex['rot']]=Math.round(psdata.rot);
-    obj[PSData.PSDataIndex['time']]=psdata.time;
-    if(psdata.attack==1)
-      obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
-    if(JSON.stringify(psdata.hitObj).length>2)
-      obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
-    return obj;
-  }
-
-  /**
-   * 将一个obj转换成PSData
-   * @param obj
-   */
-  static shiftObj(obj){
-    let pd=new PSData();
-    for(let s in obj){
-      pd[PSData.ObjIndex[s]]=obj[s];
-    }
-    return pd;
-  }
-
-
-
-}
-/**
- *上传数据索引  obj.上传数据属性名=PSData属性名
- * @type {{}}
- */
-PSData.ObjIndex=null;
-/**
- * PSData索引，obj.PSData属性名=上传数据属性名
- * @type {{}}
- */
-PSData.PSDataIndex={};
-PSData.PSDataIndex.Name='n';
-PSData.PSDataIndex.KPI='KPI';
-PSData.PSDataIndex.x='x';
-PSData.PSDataIndex.y='y';
-PSData.PSDataIndex.rot='r';
-PSData.PSDataIndex.time='t';
-PSData.PSDataIndex.attack='a';
-PSData.PSDataIndex.hitObj='h';
 
 
 
