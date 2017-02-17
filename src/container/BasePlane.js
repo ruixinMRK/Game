@@ -46,13 +46,13 @@ class BasePlane extends createjs.Container{
 
     /**
      * 移动
-     * @param x x速度
-     * @param y y速度
+     * @param vx x速度
+     * @param vy y速度
      */
-    move(x,y){
+    move(vx,vy){
 
-      this.x+=x;
-      this.y+=y;
+      this.x+=vx;
+      this.y+=vy;
       //飞机限制
       if(this.x<0)this.x=0;
       else if(this.x>GameData.mapW)this.x=GameData.mapW;
@@ -99,5 +99,13 @@ class BasePlane extends createjs.Container{
       this.bulletArr.push(bullet);
     }
 
+  /**
+   * 移除
+   */
+  remove(){
+    this.x = 100;
+    this.y = 100;
+    this.rotation=0;
+  }
 }
 export default BasePlane;

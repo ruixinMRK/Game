@@ -11,11 +11,12 @@ import Router from '../common/socket/Router';
 import SocketClient from '../common/socket/SocketClient';
 import UserData from '../manager/UserData';
 import GameData from '../manager/GameData';
+import PSData from '../manager/PSData';
 
 /**
  * 飞机大战游戏主类
  */
-class GameData extends createjs.Container{
+class PlaneGame extends createjs.Container{
 
 
   constructor(){
@@ -66,8 +67,7 @@ class GameData extends createjs.Container{
     document.addEventListener('keyup',this.onKeyUp);
     //添加到舞台
     this.addEventListener('added',this.addInit);
-    //帧频
-    Timer.add(this.onFrame,30,0);
+
     //接受移动数据
     Router.instance.reg('planWalk',this.socketPW);
     //接受玩家掉线数据
@@ -125,6 +125,9 @@ class GameData extends createjs.Container{
     this.psd.y=this.HeroPlane.y;
     this.psd.rot=this.HeroPlane.rotation;
     UserData.planInfo = PSData.getObj(this.psd);
+
+    //帧频
+    Timer.add(this.onFrame,30,0);
   }
 
   /**
@@ -137,7 +140,7 @@ class GameData extends createjs.Container{
 
   //接受服务器的planWalk数据 移动
   socketPW = (data)=>{
-    // console.log('接收移动数据：',data);
+     // console.log('接收移动数据：',data);
     data=PSData.shiftObj(data);
     this.enemyPDataArr.unshift(data);
     // console.log('接收移动数据：',data,data.Name);
@@ -310,18 +313,23 @@ class GameData extends createjs.Container{
         p.dataDispose(obj);
         //碰撞数据处理
         for(let s in obj.hitObj){
+
           this.hitText(obj.Name+'的子弹'+s+'击中'+obj.hitObj[s]);
+          let ep;
           if(this.HeroPlane.Name==obj.hitObj[s]){
-            this.HeroPlane.remove();
+            ep=this.HeroPlane;
             GameData.send=true;
           }
-          else
-            this.enemyP[obj.hitObj[s]].remove();
-          p.bulletArr.map((b)=>{
+          else{
+            ep=this.enemyP[obj.hitObj[s]];
+          }
+          ep.remove();
+          ep.bulletArr.forEach((b)=>{
             if(b.bulletId==s){
               b.remove();
             }
-          })
+          });
+
         }
       }
     }
@@ -336,6 +344,8 @@ class GameData extends createjs.Container{
       }
 
     }
+
+
   }
 
 
@@ -380,134 +390,7 @@ class GameData extends createjs.Container{
     },3000,1);
   }
 
-
-
-
-
 }
 
 
-export default GameData;
-
-/**
- * 飞机传输数据类
- */
-class PSData{
-
-  constructor(){
-
-    if(PSData.ObjIndex==null){
-      PSData.ObjIndex={};
-      for(let s in PSData.PSDataIndex){
-        PSData.ObjIndex[PSData.PSDataIndex[s]]=s;
-      }
-    }
-
-    this.init();
-  }
-
-  init(){
-    /**
-     * 用户名
-     * @type {string}
-     */
-    this.Name='';
-    //数据名
-    this.KPI='planWalk';
-    /**
-     * x位置
-     * @type {number}
-     */
-    this.x=0;
-    /**
-     * y位置
-     * @type {number}
-     */
-    this.y=0;
-    /**
-     * 角度
-     * @type {number}
-     */
-    this.rot=0;
-    /**
-     * 时间毫秒
-     * @type {number}
-     */
-    this.time=0;
-    /**
-     * 攻击 1-攻击 0-未攻击
-     * @type {number}
-     */
-    this.attack=0;
-    /**
-     * 碰撞对象 Obj.子弹id=飞机name
-     * @type {{}}
-     */
-    this.hitObj={};
-  }
-
-  /**
-   * 获得将PSData解析字符串最少的obj
-   * @param psdata psdata数据
-   * @returns {{}}
-   */
-  static getObj=(psdata)=>{
-    let obj={};
-    obj[PSData.PSDataIndex['Name']]=psdata.Name;
-    obj[PSData.PSDataIndex['KPI']]=psdata.KPI;
-    obj[PSData.PSDataIndex['x']]=Math.round(psdata.x);
-    obj[PSData.PSDataIndex['y']]=Math.round(psdata.y);
-    obj[PSData.PSDataIndex['rot']]=Math.round(psdata.rot);
-    obj[PSData.PSDataIndex['time']]=psdata.time;
-    if(psdata.attack==1)
-      obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
-    if(JSON.stringify(psdata.hitObj).length>2)
-      obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
-    return obj;
-  }
-
-  /**
-   * 将一个obj转换成PSData
-   * @param obj
-   */
-  static shiftObj(obj){
-    let pd=new PSData();
-    for(let s in obj){
-      pd[PSData.ObjIndex[s]]=obj[s];
-    }
-    return pd;
-  }
-
-
-
-}
-/**
- *上传数据索引  obj.上传数据属性名=PSData属性名
- * @type {{}}
- */
-PSData.ObjIndex=null;
-/**
- * PSData索引，obj.PSData属性名=上传数据属性名
- * @type {{}}
- */
-PSData.PSDataIndex={};
-PSData.PSDataIndex.Name='n';
-PSData.PSDataIndex.KPI='KPI';
-PSData.PSDataIndex.x='x';
-PSData.PSDataIndex.y='y';
-PSData.PSDataIndex.rot='r';
-PSData.PSDataIndex.time='t';
-PSData.PSDataIndex.attack='a';
-PSData.PSDataIndex.hitObj='h';
-
-
-
-
-
-
-
-
-
-
-
-
+export default PlaneGame;

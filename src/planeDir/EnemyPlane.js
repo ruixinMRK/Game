@@ -93,6 +93,8 @@ class EnemyPlane extends BasePlane{
    * @param e
    */
   onFrame=(e)=>{
+    window.console.log(1,this.Name,this.x,this.y);
+
     this.frameHitB=false;
     if(this.bulletArr.length==0)
       this.bulletNumId=0;
@@ -102,6 +104,7 @@ class EnemyPlane extends BasePlane{
       this.attack();
     }
     this.moveBullet();
+    window.console.log(2,this.Name,this.x,this.y);
     //旋转  本地和服务器角度大于旋转速度按旋转速度旋转，小于直接赋值
     if(this.rotation!=this.targetRot){
       if(Math.abs(this.targetRot-this.rotation)>this.rotationSpeed){
@@ -116,6 +119,7 @@ class EnemyPlane extends BasePlane{
     //移动
     // this.rotation=this.targetRot;
     if(this.moveNum>=0){
+      window.console.log(4,this.Name,this.x,this.y);
       this.moveNum--;
       this.move(this.mx, this.my);
       if(this.moveNum==0){
@@ -125,11 +129,13 @@ class EnemyPlane extends BasePlane{
 
     }
     else {
+      window.console.log(5,this.Name,this.x,this.y);
       let angle=Tools.getHD(this.rotation);
       let vx=Math.cos(angle)*this.speed;
       let vy=Math.sin(angle)*this.speed;
       this.move(vx,vy);
     }
+    window.console.log(3,this.Name,this.x,this.y);
     // console.log('子弹',this.bulletArr.length);
   }
 
@@ -137,11 +143,3 @@ class EnemyPlane extends BasePlane{
 }
 
 export default EnemyPlane;
-
-
-
-
-
-
-
-
