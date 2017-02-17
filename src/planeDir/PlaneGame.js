@@ -282,37 +282,43 @@ class PlaneGame extends createjs.Container{
     //敌机数据赋值
     for(let i=this.enemyPDataArr.length-1;i>=0;i--){
       let obj=this.enemyPDataArr[i];
-      if(this.enemyP[obj.Name]==null){
-        this.enemyP[obj.Name]=new EnemyPlane();
-        this.enemyP[obj.Name].x=obj.x;
-        this.enemyP[obj.Name].y=obj.y;
-        this.enemyP[obj.Name].rotation=obj.rot;
-        this.enemyP[obj.Name].Name=obj.Name;
-        this.addChild(this.enemyP[obj.Name]);
+      let enemeyPlan = this.enemyP[obj.Name];
+
+      if(!enemeyPlan){
+        enemeyPlan =new EnemyPlane();
+        enemeyPlan.x=obj.x;
+        enemeyPlan.y=obj.y;
+        enemeyPlan.rotation=obj.rot;
+        enemeyPlan.Name=obj.Name;
+        this.addChild(enemeyPlan);
+
+        this.enemyP[obj.Name] = enemeyPlan;
+
       }
       else {
-        let p=this.enemyP[obj.Name];
-        p.dataDispose(obj);
-        // p.x=obj.x;
-        // p.y=obj.y;
-        // p.rotation=obj.rot;
-        // if(obj.attack==1){
-        //   p.attack();
-        // }
+
+        enemeyPlan.dataDispose(obj);
+
         //碰撞数据处理
         for(let s in obj.hitObj){
+
           this.hitText(obj.Name+'的子弹'+s+'击中'+obj.hitObj[s]);
           if(this.HeroPlane.Name==obj.hitObj[s]){
             this.HeroPlane.remove();
             GameData.send=true;
           }
-          else
+          else{
+
             this.enemyP[obj.hitObj[s]].remove();
-          p.bulletArr.map((b)=>{
-            if(b.bulletId==s){
-              b.remove();
-            }
-          })
+            enemeyPlan.bulletArr.forEach((b)=>{
+              if(b.bulletId==s){
+                b.remove();
+              }
+            })
+
+          }
+
+
         }
       }
     }
@@ -327,6 +333,8 @@ class PlaneGame extends createjs.Container{
       }
 
     }
+
+
   }
 
 
@@ -375,17 +383,3 @@ class PlaneGame extends createjs.Container{
 
 
 export default PlaneGame;
-
-
-
-
-
-
-
-
-
-
-
-
-
-

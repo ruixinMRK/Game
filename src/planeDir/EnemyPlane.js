@@ -137,11 +137,3 @@ class EnemyPlane extends BasePlane{
 }
 
 export default EnemyPlane;
-
-
-
-
-
-
-
-
