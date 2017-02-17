@@ -77,7 +77,7 @@ class EnemyPlane extends BasePlane{
       this.mx = Math.cos(angle) * this.speed;
       this.my = Math.sin(angle) * this.speed;
     }
-    else if (dis > 30) {
+    else{
       this.x = obj.x;
       this.y = obj.y;
     }
@@ -133,6 +133,7 @@ class EnemyPlane extends BasePlane{
       let angle=Tools.getHD(this.rotation);
       let vx=Math.cos(angle)*this.speed;
       let vy=Math.sin(angle)*this.speed;
+      window.console.log(angle,vx,vy,this.rotation);
       this.move(vx,vy);
     }
     window.console.log(3,this.Name,this.x,this.y);
