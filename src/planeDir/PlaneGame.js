@@ -15,7 +15,7 @@ import GameData from '../manager/GameData';
 /**
  * 飞机大战游戏主类
  */
-class PlaneGame extends createjs.Container{
+class GameData extends createjs.Container{
 
 
   constructor(){
@@ -154,10 +154,10 @@ class PlaneGame extends createjs.Container{
   socketLive = (data)=>{
     console.log('接收加入数据：',data);
     if(data.name!=null){
-      this.psd.Name=this.plane.Name;
-      this.psd.x=this.plane.x;
-      this.psd.y=this.plane.y;
-      this.psd.rot=this.plane.rotation;
+      this.psd.Name=this.HeroPlane.Name;
+      this.psd.x=this.HeroPlane.x;
+      this.psd.y=this.HeroPlane.y;
+      this.psd.rot=this.HeroPlane.rotation;
       UserData.planInfo = PSData.getObj(this.psd);
       SocketClient.instance.send({KPI:'goLive',data:UserData.planInfo});
       //创建飞机
@@ -187,12 +187,6 @@ class PlaneGame extends createjs.Container{
     // console.log('接收延迟数据：',data);
 
     if(data.t < this.currentPingTime) return;
-
-<<<<<<< HEAD
-=======
-    if(data.t < this.currentPingTime||data.n !=UserData.id) return;
-
->>>>>>> extend
     let t=new Date().getTime()-data.t;
     if(t<0) return;
     if(t<100){
@@ -314,12 +308,6 @@ class PlaneGame extends createjs.Container{
       if(this.enemyP[obj.Name]!=null){
         let p=this.enemyP[obj.Name];
         p.dataDispose(obj);
-        // p.x=obj.x;
-        // p.y=obj.y;
-        // p.rotation=obj.rot;
-        // if(obj.attack==1){
-        //   p.attack();
-        // }
         //碰撞数据处理
         for(let s in obj.hitObj){
           this.hitText(obj.Name+'的子弹'+s+'击中'+obj.hitObj[s]);
@@ -362,7 +350,7 @@ class PlaneGame extends createjs.Container{
 
     if(spx>rect.r){
       this.x-=spx-rect.r;
-      if(this.x<-(PlaneGame.mapW-PlaneGame.stageW)) this.x=-(PlaneGame.mapW-PlaneGame.stageW);
+      if(this.x<-(GameData.mapW-GameData.stageW)) this.x=-(GameData.mapW-GameData.stageW);
     }
     else if(spx<rect.l){
       this.x+=rect.l-spx;
@@ -371,7 +359,7 @@ class PlaneGame extends createjs.Container{
 
     if(spy>rect.b){
       this.y-=spy-rect.b;
-      if(this.y<-(PlaneGame.mapH-PlaneGame.stageH)) this.y=-(PlaneGame.mapH-PlaneGame.stageH);
+      if(this.y<-(GameData.mapH-GameData.stageH)) this.y=-(GameData.mapH-GameData.stageH);
     }
     else if(spy<rect.t){
       this.y+=rect.t-spy;
@@ -399,7 +387,7 @@ class PlaneGame extends createjs.Container{
 }
 
 
-export default PlaneGame;
+export default GameData;
 
 /**
  * 飞机传输数据类
