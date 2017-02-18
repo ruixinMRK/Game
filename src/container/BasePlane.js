@@ -37,6 +37,8 @@ class BasePlane extends createjs.Container{
      * 初始化
      */
     init() {
+
+
       this.mc = NameSpr.getInstance().getSpr('plane', 'plane');
       let bound = this.mc.getBounds();
       this.mc.regX = bound.width / 2;

@@ -6,6 +6,7 @@ import 'createjs';
 import Tools from '../common/Tools';
 import BasePlane from '../container/BasePlane';
 import GameData from '../manager/GameData';
+import DataShow from './DataShow';
 
 /**
  * 飞机类
@@ -32,6 +33,17 @@ class Plane extends BasePlane{
    * @param e
    */
   onFrame=(e)=>{
+    if(GameData.key_A){
+      this.planeRot(-this.rotationSpeed);
+    }
+    else if(GameData.key_D){
+      this.planeRot(this.rotationSpeed);
+    }
+    if(GameData.key_J){
+      this.attack();
+      e.psd.attack=1;
+      GameData.send=true;
+    }
 
     this.bulletArr.length==0&&(this.bulletNumId=0);
 
@@ -56,7 +68,7 @@ class Plane extends BasePlane{
           e.enemyP[s].frameHitB=true;
           e.psd.hitObj[bullet.bulletId]=s;
           bullet.remove();
-          e.hitText(this.Name+'的子弹'+bullet.bulletId+'击中'+s);
+          DataShow.getInstance().hitText(this.Name+'的子弹'+bullet.bulletId+'击中'+s);
         }
       }
     }
