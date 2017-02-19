@@ -35,6 +35,11 @@ export default {
    *  @type {PlaneControl}
    */
   planeControl:null,
+  /**
+   * FPS ping显示
+   * @type {DataShow}
+   */
+  dataShow:null,
 
   //按键
   key_A:false,

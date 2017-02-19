@@ -25,16 +25,6 @@ class EnemyPlane extends BasePlane{
      */
     this.attackNum=0;
     /**
-     * 移动x加值
-     * @type {number}
-     */
-    this.mx=0;
-    /**
-     * 移动y加值
-     * @type {number}
-     */
-    this.my=0;
-    /**
      * 目标x
      * @type {number}
      */
@@ -44,11 +34,6 @@ class EnemyPlane extends BasePlane{
      * @type {number}
      */
     this.targetY=0;
-    /**
-     * 移动次数
-     * @type {number}
-     */
-    this.moveNum=-1;
     /**
      * 当前最大时间
      * @type {number}
@@ -68,21 +53,8 @@ class EnemyPlane extends BasePlane{
 
     this.targetX = obj.x;
     this.targetY = obj.y;
-    let dx = obj.x - this.x;
-    let dy = obj.y - this.y;
-    let dis = Math.sqrt(dx * dx + dy * dy);
-    if (dis > 3 && dis <= 30) {
-      let angle = Math.atan2(dy, dx);
-      this.moveNum = Math.floor(dis / this.speed);
-      this.mx = Math.cos(angle) * this.speed;
-      this.my = Math.sin(angle) * this.speed;
-    }
-    else{
-      this.x = obj.x;
-      this.y = obj.y;
-    }
 
-    //为了防止本地角度360 服务器传来为0，导致计算出现问题，每次计算角度
+
     this.targetRot = obj.rot
     if (Math.abs(this.targetRot - this.rotation) > 30)
       this.rotation = obj.rot;
@@ -115,24 +87,11 @@ class EnemyPlane extends BasePlane{
         this.rotation=this.targetRot;
     }
     //移动
-    // this.rotation=this.targetRot;
-    // if(this.moveNum>=0){
-    //   this.moveNum--;
-    //   this.move(this.mx, this.my);
-    //   if(this.moveNum==0){
-    //     this.x=this.targetX;
-    //     this.y=this.targetY;
-    //   }
-    //
-    // }
-    // else {
-    //   let angle=Tools.getHD(this.rotation);
-    //   let vx=Math.cos(angle)*this.speed;
-    //   let vy=Math.sin(angle)*this.speed;
-    //   this.move(vx,vy);
-    // }
-    this.x=this.targetX;
-    this.y=this.targetY;
+
+    // this.x=this.targetX;
+    // this.y=this.targetY;
+    this.x += (this.targetX - this.x)　* 0.92;
+    this.y += (this.targetY - this.y)　* 0.92;
     // console.log('子弹',this.bulletArr.length);
   }
 

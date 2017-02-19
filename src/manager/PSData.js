@@ -60,42 +60,43 @@ class PSData{
   }
 
   /**
-   * 获得将PSData解析字符串最少的obj
-   * @param psdata psdata数据
+   * PSData数据 更简洁PSData的obj 互转
+   * @param psdata {PSData} psdata数据
    * @returns {{}}
    */
   static getObj=(psdata)=>{
     let obj={};
-    // for(let str in psdata){
-    //   if(str == 'attack'&&psdata.attack==1) obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
-    //   else if(str == 'hitObj'&&JSON.stringify(psdata.hitObj).length>2) obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
-    //   else obj[PSData.PSDataIndex[str]]=typeof psdata[str] == 'number'?parseInt(psdata[str]):psdata[str];
-    //
-    // }
-    obj[PSData.PSDataIndex['Name']]=psdata.Name;
-    obj[PSData.PSDataIndex['KPI']]=psdata.KPI;
-    obj[PSData.PSDataIndex['x']]=Math.round(psdata.x);
-    obj[PSData.PSDataIndex['y']]=Math.round(psdata.y);
-    obj[PSData.PSDataIndex['rot']]=Math.round(psdata.rot);
-    obj[PSData.PSDataIndex['time']]=psdata.time;
-    if(psdata.attack==1)
-     obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
-    if(JSON.stringify(psdata.hitObj).length>2)
-     obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
-    return obj;
+    if(psdata.Name!=null){
+      // for(let str in psdata){
+      //   if(str == 'attack'&&psdata.attack==1) obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
+      //   else if(str == 'hitObj'&&JSON.stringify(psdata.hitObj).length>2) obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
+      //   else obj[PSData.PSDataIndex[str]]=typeof psdata[str] == 'number'?parseInt(psdata[str]):psdata[str];
+      //
+      // }
+      obj[PSData.PSDataIndex['Name']]=psdata.Name;
+      obj[PSData.PSDataIndex['KPI']]=psdata.KPI;
+      obj[PSData.PSDataIndex['x']]=Math.round(psdata.x);
+      obj[PSData.PSDataIndex['y']]=Math.round(psdata.y);
+      obj[PSData.PSDataIndex['rot']]=Math.round(psdata.rot);
+      obj[PSData.PSDataIndex['time']]=psdata.time;
+      if(psdata.attack==1)
+        obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
+      if(JSON.stringify(psdata.hitObj).length>2)
+        obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
+      return obj;
+    }
+    else {
+      obj=psdata;
+      let pd=new PSData();
+      for(let s in obj){
+        pd[PSData.ObjIndex[s]]=obj[s];
+      }
+      return pd;
+    }
+
   }
 
-  /**
-   * 将一个obj转换成PSData
-   * @param obj
-   */
-  static shiftObj(obj){
-    let pd=new PSData();
-    for(let s in obj){
-      pd[PSData.ObjIndex[s]]=obj[s];
-    }
-    return pd;
-  }
+
 
 
 

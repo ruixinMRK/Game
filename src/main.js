@@ -50,7 +50,7 @@ class Main extends React.Component{
     Timer.add(e=>{this.stage.update();},30,0);
 
     var planeG=new PlaneGame();
-    this.stage.addChild(planeG);
+    this.stage.addChildAt(planeG,0);
   }
 
   //登陆成功时

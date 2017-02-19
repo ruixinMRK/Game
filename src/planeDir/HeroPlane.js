@@ -68,7 +68,7 @@ class Plane extends BasePlane{
           e.enemyP[s].frameHitB=true;
           e.psd.hitObj[bullet.bulletId]=s;
           bullet.remove();
-          DataShow.getInstance().hitText(this.Name+'的子弹'+bullet.bulletId+'击中'+s);
+          GameData.dataShow.hitText(this.Name+'的子弹'+bullet.bulletId+'击中'+s);
         }
       }
     }

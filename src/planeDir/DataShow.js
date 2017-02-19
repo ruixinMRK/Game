@@ -6,6 +6,8 @@
 import GameData from '../manager/GameData';
 import UserData from '../manager/UserData';
 import Timer from '../common/Timer';
+import Router from '../common/socket/Router';
+import SocketClient from '../common/socket/SocketClient';
 
 /**
  * 数据显示 FPS ping
@@ -29,6 +31,24 @@ class DataShow{
     this.FPSTxt.x = 650;
     this.FPSTxt.text='FPS:';
     GameData.stage.addChild(this.FPSTxt);
+    //接受ping数据
+    Router.instance.reg('ping',this.socketPing);
+
+    /**
+     * ping数据发送帧间隔
+     * @type {number}
+     */
+    this.pingF=3;
+    /**
+     * ping数据发送帧间隔设置
+     * @type {number}
+     */
+    this.pingFSet=3;
+    /**
+     * 当前ping时间
+     * @type {number}
+     */
+    this.currentPingTime = 0;
   }
 
   /**
@@ -36,10 +56,42 @@ class DataShow{
    * @param e
    */
   onFrame=(e)=>{
+    this.sendPing();
     this.FPSTxt.text='FPS:'+Timer.FPS;
   }
 
+//接受服务器的ping数据 延迟
+  socketPing = (data)=>{
+    // console.log('接收延迟数据：',data);
 
+    if(data.t < this.currentPingTime) return;
+    let t=new Date().getTime()-data.t;
+    if(t<0) return;
+    if(t<100){
+      this.pingFSet=3;
+    }
+    else{
+      this.pingFSet=1;
+    }
+    this.pingTxt.text='ping:'+t;
+    this.currentPingTime = data.t;
+
+  }
+
+  /**
+   * 发送ping数据
+   */
+  sendPing=()=>{
+    this.pingF--;
+    if(this.pingF<=0){
+      this.pingF=this.pingFSet;
+      let obj={};
+      obj.KPI='ping';
+      obj.t=new Date().getTime();//获取10秒的毫秒
+      SocketClient.instance.send(obj);
+    }
+
+  }
 
 
   /**
@@ -54,20 +106,6 @@ class DataShow{
         this.hittxt.visible=false;
     },3000,1);
   }
-
-
-  /**
-   * 获得实例
-   * @returns {DataShow}
-   */
-  static getInstance() {
-    if (!DataShow.instance) {
-      DataShow.instance = new DataShow();
-    }
-    return DataShow.instance;
-  }
-
-
 
 
 }
