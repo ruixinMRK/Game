@@ -14,12 +14,18 @@ import GameData from '../manager/GameData';
 import PSData from '../manager/PSData';
 import PlaneControl from './PlaneControl';
 import DataShow from './DataShow';
+import PlaneMap from './PlaneMap';
 
 /**
  * 飞机大战游戏主类
  */
 class PlaneGame extends createjs.Container{
 
+  /**
+   * 飞机地图
+   * @type {PlaneMap}
+   */
+  map=null;
 
   constructor(){
     super();
@@ -30,24 +36,9 @@ class PlaneGame extends createjs.Container{
    * 初始化
    */
   init(){
-    /**
-     * 地图
-     */
-    this.mapS=new createjs.Shape();
-    this.mapS.graphics.beginFill('#D0D0D0');
-    this.mapS.graphics.drawRect(0,0,1000,1000);
-    this.mapS.graphics.endFill();
-    this.addChild(this.mapS);
-    //坐标
-    for(let x1=0;x1<10;x1++){
-      for(let y1=0;y1<10;y1++){
-
-        let txt=new createjs.Text(String(x1*100)+','+String(y1*100),"bold 14px Arial",'#ff0000');
-        txt.x=x1*100;
-        txt.y=y1*100;
-        this.addChild(txt);
-      }
-    }
+    this.map=new PlaneMap();
+    this.addChild(this.map);
+    GameData.planeMap=this.map;
     /**
      * 飞机管理
      * @type {PlaneControl}
@@ -86,6 +77,9 @@ class PlaneGame extends createjs.Container{
     else if(keyCode==74){//J
       GameData.key_J=true;
     }
+    else if(keyCode==75){//K
+      GameData.key_K=true;
+    }
   }
 
   /**
@@ -103,6 +97,9 @@ class PlaneGame extends createjs.Container{
     else if(keyCode==74){//J
       GameData.key_J=false;
     }
+    else if(keyCode==75){//K
+      GameData.key_K=false;
+    }
 
   }
 
@@ -111,9 +108,17 @@ class PlaneGame extends createjs.Container{
    * @param e
    */
   onFrame=(e)=>{
+    //帧频时间计算
+    if(GameData.lastTime==0){
+      GameData.lastTime=new Date().getTime();
+      return;
+    }
+    GameData.timeDiff=new Date().getTime()-GameData.lastTime;
+    GameData.lastTime+=GameData.timeDiff;
+    //游戏内容帧频
     this.planeControl.onFrame(e);
     this.dataShow.onFrame(e);
-
+    this.map.onFrame(e);
     this.planeScroll(this.planeControl.HeroPlane);
   }
 

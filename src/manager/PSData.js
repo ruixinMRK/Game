@@ -28,6 +28,11 @@ class PSData{
     //数据名
     this.KPI='planWalk';
     /**
+     * 生命值
+     * @type {number}
+     */
+    this.life=0;
+    /**
      * x位置
      * @type {number}
      */
@@ -75,6 +80,7 @@ class PSData{
       // }
       obj[PSData.PSDataIndex['Name']]=psdata.Name;
       obj[PSData.PSDataIndex['KPI']]=psdata.KPI;
+      obj[PSData.PSDataIndex['life']]=psdata.life;
       obj[PSData.PSDataIndex['x']]=Math.round(psdata.x);
       obj[PSData.PSDataIndex['y']]=Math.round(psdata.y);
       obj[PSData.PSDataIndex['rot']]=Math.round(psdata.rot);
@@ -110,6 +116,6 @@ PSData.ObjIndex=null;
  * PSData索引，obj.PSData属性名=上传数据属性名
  * @type {{}}
  */
-PSData.PSDataIndex={Name:'n',KPI:'KPI',x:'x',y:'y',rot:'r',time:'t',attack:'a',hitObj:'h'};
+PSData.PSDataIndex={Name:'n',KPI:'KPI',life:'l',x:'x',y:'y',rot:'r',time:'t',attack:'a',hitObj:'h'};
 
 export default PSData;

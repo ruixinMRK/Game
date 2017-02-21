@@ -17,7 +17,12 @@ class NameSpr extends createjs.Container{
    * 初始化
    */
   init(){
-    let planeArr=[["plane",0,0,48,58],["bullet",48,0,20,20]];
+    let planeArr=[["plane",0,0,48,58],
+      ["p_bullet",48,0,40,40],
+      ["p_gasoline",88,0,40,40],
+      ["p_life",128,0,40,40],
+      ["bullet",168,0,20,20]
+    ];
     this.setSheet('plane',['assets/img/plane.png'],planeArr);
   }
 
@@ -74,6 +79,16 @@ class NameSpr extends createjs.Container{
   }
 
 
+  /**
+   * 获得对象父级坐标的矩形框 返回矩形框
+   * @param spr 对象
+   */
+  static rectGlobal(spr){
+    let rect=spr.getBounds();
+    rect.x+=spr.x;
+    rect.y+=spr.y;
+    return rect;
+  }
 
 
 }

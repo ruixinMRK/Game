@@ -13,6 +13,11 @@ import SocketClient from '../common/socket/SocketClient';
  * 数据显示 FPS ping
  */
 class DataShow{
+  /**
+   * 敌机
+   * @type {EnemyPlane}
+   */
+  enemyPlane=null;
 
   constructor(){
     //击中文本
@@ -31,6 +36,30 @@ class DataShow{
     this.FPSTxt.x = 650;
     this.FPSTxt.text='FPS:';
     GameData.stage.addChild(this.FPSTxt);
+    //人物信息
+    this.lifeT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
+    this.lifeT.x = 350;
+    this.lifeT.y=240;
+    this.lifeT.text='生命:';
+    GameData.stage.addChild(this.lifeT);
+    this.gasolineT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
+    this.gasolineT.x = 350;
+    this.gasolineT.y=260
+    this.gasolineT.text='汽油:';
+    GameData.stage.addChild(this.gasolineT);
+    this.bulletNumT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
+    this.bulletNumT.x = 350;
+    this.bulletNumT.y=280;
+    this.bulletNumT.text='子弹:';
+    GameData.stage.addChild(this.bulletNumT);
+    //敌机信息
+    this.ENameT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
+    this.ENameT.text='飞机:';
+    GameData.stage.addChild(this.ENameT);
+    this.ELifeT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
+    this.ELifeT.y=20;
+    this.ELifeT.text='生命:';
+    GameData.stage.addChild(this.ELifeT);
     //接受ping数据
     Router.instance.reg('ping',this.socketPing);
 
@@ -58,6 +87,20 @@ class DataShow{
   onFrame=(e)=>{
     this.sendPing();
     this.FPSTxt.text='FPS:'+Timer.FPS;
+    if(this.enemyPlane!=null){
+      this.ENameT.text='飞机:'+this.enemyPlane.Name;
+      this.ELifeT.text='生命:'+this.enemyPlane.life;
+    }
+  }
+
+  /**
+   * 飞机信息显示
+   * @param plane {HeroPlane} 飞机
+   */
+  planeTxt(plane){
+    this.lifeT.text='生命:'+plane.life+'/'+plane.lifeSet;
+    this.gasolineT.text='汽油:'+Math.round(plane.gasoline)+'/'+plane.gasolineSet;
+    this.bulletNumT.text='子弹:'+plane.bulletNum+'/'+plane.bulletNumSet;
   }
 
 //接受服务器的ping数据 延迟

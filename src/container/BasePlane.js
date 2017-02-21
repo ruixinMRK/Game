@@ -9,6 +9,29 @@ import GameData from '../manager/GameData';
 import ObjectPool from '../common/ObjectPool';
 
 class BasePlane extends createjs.Container{
+
+  /**
+   * 生命值
+   * @type {number}
+   */
+  life=100;
+  /**
+   * 设置生命值
+   * @type {number}
+   */
+  lifeSet=100;
+  /**
+   * 汽油值
+   * @type {number}
+   */
+  gasoline=100;
+  /**
+   * 子弹值 数量
+   * @type {number}
+   */
+  bulletNum=100;
+
+
     constructor() {
       super();
       /**
@@ -108,6 +131,7 @@ class BasePlane extends createjs.Container{
     this.x = 100;
     this.y = 100;
     this.rotation=0;
+    this.life=this.lifeSet;
   }
 }
 export default BasePlane;

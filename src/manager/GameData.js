@@ -29,12 +29,25 @@ export default {
    * 是否需要发送数据
    */
   send:false,
+  /**
+   * 上帧时间
+   */
+  lastTime:0,
+  /**
+   * 帧频时间差
+   */
+  timeDiff:0,
 
   /**
    * 飞机管理实例
    *  @type {PlaneControl}
    */
   planeControl:null,
+  /**
+   * 飞机地图实例
+   *  @type {PlaneMap}
+   */
+  planeMap:null,
   /**
    * FPS ping显示
    * @type {DataShow}
@@ -44,7 +57,8 @@ export default {
   //按键
   key_A:false,
   key_D:false,
-  key_J:false
+  key_J:false,
+  key_K:false
 
 
 

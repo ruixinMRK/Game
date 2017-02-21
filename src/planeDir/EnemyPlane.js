@@ -44,16 +44,17 @@ class EnemyPlane extends BasePlane{
 
   /**
    * 数据处理
-   * @param data
+   * @param obj {PSData}
    */
   dataDispose=(obj)=> {
     if (obj.attack == 1) this.attackNum++;
 
     if (obj.time < this.currentTime) return;
 
+    this.life=obj.life;
+
     this.targetX = obj.x;
     this.targetY = obj.y;
-
 
     this.targetRot = obj.rot
     if (Math.abs(this.targetRot - this.rotation) > 30)

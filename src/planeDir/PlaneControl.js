@@ -119,6 +119,7 @@ class PlaneControl extends createjs.Container{
     }
     if(GameData.send==false) return;
     this.psd.Name=this.HeroPlane.Name;
+    this.psd.life=this.HeroPlane.life;
     this.psd.x=this.HeroPlane.x;
     this.psd.y=this.HeroPlane.y;
     this.psd.rot=this.HeroPlane.rotation;
@@ -178,9 +179,11 @@ class PlaneControl extends createjs.Container{
           else{
             ep=this.enemyP[obj.hitObj[s]];
           }
-          ep.remove();
-          ep.bulletArr.forEach((b)=>{
+          p.bulletArr.map((b)=>{
             if(b.bulletId==s){
+              ep.life-=b.atk;
+              if(ep.life<=0)
+                ep.remove();
               b.remove();
             }
           });
