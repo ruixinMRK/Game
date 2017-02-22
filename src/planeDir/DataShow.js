@@ -61,7 +61,7 @@ class DataShow{
     this.ELifeT.text='生命:';
     GameData.stage.addChild(this.ELifeT);
     //接受ping数据
-    Router.instance.reg('ping',this.socketPing);
+    Router.instance.reg(Router.KPI.ping,this.socketPing);
 
     /**
      * ping数据发送帧间隔
@@ -78,6 +78,30 @@ class DataShow{
      * @type {number}
      */
     this.currentPingTime = 0;
+
+    //fps
+    var FPS = {};
+    FPS.time = 0;
+    FPS.FPS = 0;
+    FPS.startFPS = function (stage){
+      FPS.txt =new createjs.Text("", "18px Arial", "#ffffff");
+      FPS.txt.x=580;
+      stage.addChild(FPS.txt);
+      createjs.Ticker.addEventListener("tick", FPS.TickerFPS);
+    }
+    FPS.TickerFPS = function (event)
+    {
+      FPS.date = new Date();
+      FPS.currentTime = FPS.date.getTime();
+      if(FPS.time!=0)
+      {
+        FPS.FPS = Math.ceil(1000/(FPS.currentTime -  FPS.time));
+      }
+      FPS.time = FPS.currentTime;
+      FPS.txt.text = "cjs: "+FPS.FPS;
+    }
+    createjs.Ticker.framerate=60;
+    FPS.startFPS(GameData.stage);
   }
 
   /**

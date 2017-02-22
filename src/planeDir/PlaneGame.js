@@ -77,8 +77,11 @@ class PlaneGame extends createjs.Container{
     else if(keyCode==74){//J
       GameData.key_J=true;
     }
-    else if(keyCode==75){//K
-      GameData.key_K=true;
+    else if(keyCode==87){//W
+      GameData.key_W=true;
+    }
+    else if(keyCode==83){//S
+      GameData.key_S=true;
     }
   }
 
@@ -97,8 +100,11 @@ class PlaneGame extends createjs.Container{
     else if(keyCode==74){//J
       GameData.key_J=false;
     }
-    else if(keyCode==75){//K
-      GameData.key_K=false;
+    else if(keyCode==87){//W
+      GameData.key_W=false;
+    }
+    else if(keyCode==83){//S
+      GameData.key_S=false;
     }
 
   }

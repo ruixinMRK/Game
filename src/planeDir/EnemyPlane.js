@@ -35,6 +35,11 @@ class EnemyPlane extends BasePlane{
      */
     this.targetY=0;
     /**
+     * 目标角度
+     * @type {number}
+     */
+    this.targetRot=0;
+    /**
      * 当前最大时间
      * @type {number}
      */
@@ -76,6 +81,20 @@ class EnemyPlane extends BasePlane{
       this.attack();
     }
     this.moveBullet();
+    //移动
+    // this.x=this.targetX;
+    // this.y=this.targetY;
+    if(this.rotation!=this.targetRot)
+    {
+      this.x += (this.targetX - this.x)　* 0.92;
+      this.y += (this.targetY - this.y)　* 0.92;
+    }
+    else {
+      let angle=Tools.getHD(this.rotation);
+      let vx=Math.cos(angle)*this.speed;
+      let vy=Math.sin(angle)*this.speed;
+      this.move(vx,vy);
+    }
     //旋转  本地和服务器角度大于旋转速度按旋转速度旋转，小于直接赋值
     if(this.rotation!=this.targetRot){
       if(Math.abs(this.targetRot-this.rotation)>this.rotationSpeed){
@@ -87,12 +106,6 @@ class EnemyPlane extends BasePlane{
       else
         this.rotation=this.targetRot;
     }
-    //移动
-
-    // this.x=this.targetX;
-    // this.y=this.targetY;
-    this.x += (this.targetX - this.x)　* 0.92;
-    this.y += (this.targetY - this.y)　* 0.92;
     // console.log('子弹',this.bulletArr.length);
   }
 

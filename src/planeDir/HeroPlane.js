@@ -33,12 +33,12 @@ class HeroPlane extends BasePlane{
    * 攻击时间
    * @type {number}
    */
-  attackTime=100;
+  attackTime=0;
   /**
    * 设置攻击时间
    * @type {number}
    */
-  attackTimeSet=200;
+  attackTimeSet=300;
 
 
   constructor(){
@@ -81,14 +81,17 @@ class HeroPlane extends BasePlane{
       e.psd.attack=1;
       GameData.send=true;
     }
-    if(GameData.key_K){
+    if(GameData.key_W){
       this.speed*=2;
+    }
+    else if(GameData.key_S){
+      this.speed/=2;
     }
     //子弹移动
     this.moveBullet();
     //移动
     if(this.gasoline>0){
-      this.gasoline-=this.speed/50;
+      this.gasoline-=this.speed/100;
       let angle=Tools.getHD(this.rotation);
       let vx=Math.cos(angle)*this.speed;
       let vy=Math.sin(angle)*this.speed;

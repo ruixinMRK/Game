@@ -11,19 +11,19 @@ export default {
   /**
    * 舞台宽
    */
-  stageW:800,
+  stageW:1366,
   /**
    * 舞台宽
    */
-  stageH:300,
+  stageH:768,
   /**
    * 地图宽
    */
-  mapW:1000,
+  mapW:2000,
   /**
    * 地图宽
    */
-  mapH:1000,
+  mapH:2000,
 
   /**
    * 是否需要发送数据
@@ -57,8 +57,9 @@ export default {
   //按键
   key_A:false,
   key_D:false,
-  key_J:false,
-  key_K:false
+  key_W:false,
+  key_S:false,
+  key_J:false
 
 
 

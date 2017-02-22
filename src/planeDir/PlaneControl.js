@@ -28,11 +28,11 @@ class PlaneControl extends createjs.Container{
   init() {
 
     //接受移动数据
-    Router.instance.reg('planWalk',this.socketPW);
+    Router.instance.reg(Router.KPI.planeWalk,this.socketPW);
     //接受玩家掉线数据
-    Router.instance.reg('goDie',this.socketDie);
+    Router.instance.reg(Router.KPI.planeDie,this.socketDie);
     //接受玩家加入数据
-    Router.instance.reg('goLive',this.socketLive);
+    Router.instance.reg(Router.KPI.planeLive,this.socketLive);
     //飞机
     this.HeroPlane=new HeroPlane();
     this.HeroPlane.Name=UserData.id;

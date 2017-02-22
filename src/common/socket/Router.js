@@ -85,5 +85,6 @@ class Router{
 }
 
 Router.__instance = null;
+Router.KPI={planeWalk:'planWalk',planeDie:'goDie',planeLive:'goLive',ping:'ping',planHit:'planHit',planProp:'planProp'};
 
 export default Router;

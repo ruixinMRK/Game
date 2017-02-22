@@ -3,6 +3,7 @@
  */
 
 import 'createjs';
+import GameData from '../manager/GameData';
 import Prop from './Prop';
 import HeroPlane from './HeroPlane';
 import NameSpr from '../common/NameSpr';
@@ -37,12 +38,12 @@ class PlaneMap extends createjs.Container{
      */
     this.mapS=new createjs.Shape();
     this.mapS.graphics.beginFill('#D0D0D0');
-    this.mapS.graphics.drawRect(0,0,1000,1000);
+    this.mapS.graphics.drawRect(0,0,GameData.mapW,GameData.mapH);
     this.mapS.graphics.endFill();
     this.addChild(this.mapS);
     //坐标
-    for(let x1=0;x1<10;x1++){
-      for(let y1=0;y1<10;y1++){
+    for(let x1=0;x1<GameData.mapW/100;x1++){
+      for(let y1=0;y1<GameData.mapH/100;y1++){
 
         let txt=new createjs.Text(String(x1*100)+','+String(y1*100),"bold 14px Arial",'#ff0000');
         txt.x=x1*100;

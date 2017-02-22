@@ -6,7 +6,7 @@ import ReactDom from 'react-dom';
 import '../vendors/createjs';
 import Login from 'components/Login';
 import Timer from 'common/Timer';
-import PlaneGame from 'planeDir/PlaneGame';
+import PlaneGameSI from './planeDir/PlaneGameSI'
 import UserData from 'manager/UserData';
 import GameData from './manager/GameData';
 
@@ -49,8 +49,9 @@ class Main extends React.Component{
     //createjs创建的舞台刷新才能显示，下面通过计时器设置为30毫秒刷新一次的帧频
     Timer.add(e=>{this.stage.update();},30,0);
 
-    var planeG=new PlaneGame();
-    this.stage.addChildAt(planeG,0);
+
+    this.planeGameSI=new PlaneGameSI();
+    this.stage.addChild(this.planeGameSI);
   }
 
   //登陆成功时
@@ -65,10 +66,10 @@ class Main extends React.Component{
   render(){
     return(
       <div>
-        <h1>A左 D右 J攻击</h1>
+        <h1>A左 D右 W加速 S减速 J攻击</h1>
         <p ref='ping'></p>
         {this.state.loginState==1?
-          <canvas ref='myCan' width='800px' height='300px'/>:
+          <canvas ref='myCan' width='1366px' height='768px'/>:
           <Login fn={this.loginSuccess}/>
         }
       </div>
