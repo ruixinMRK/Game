@@ -6,6 +6,7 @@ import ReactDom from 'react-dom';
 import '../vendors/createjs';
 import Login from 'components/Login';
 import Timer from 'common/Timer';
+import Tools from './common/Tools';
 import PlaneGameSI from './planeDir/PlaneGameSI'
 import UserData from 'manager/UserData';
 import GameData from './manager/GameData';
@@ -49,7 +50,13 @@ class Main extends React.Component{
     //createjs创建的舞台刷新才能显示，下面通过计时器设置为30毫秒刷新一次的帧频
     Timer.add(e=>{this.stage.update();},30,0);
 
+    let oi=Tools.getInner();
+    let oc=Tools.getZoomByRate(oi.width,oi.height,GameData.stageW,GameData.stageH);
+    console.log(oi,oc.getWidth(),oc.getHeight());
+    this.refs.myCan.style.width=oc.getWidth()+'px';
+    this.refs.myCan.style.height=oc.getHeight()+'px';
 
+    //开始界面
     this.planeGameSI=new PlaneGameSI();
     this.stage.addChild(this.planeGameSI);
   }
@@ -66,8 +73,6 @@ class Main extends React.Component{
   render(){
     return(
       <div>
-        <h1>A左 D右 W加速 S减速 J攻击</h1>
-        <p ref='ping'></p>
         {this.state.loginState==1?
           <canvas ref='myCan' width='1366px' height='768px'/>:
           <Login fn={this.loginSuccess}/>

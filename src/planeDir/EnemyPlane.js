@@ -4,8 +4,8 @@
  */
 
 import 'createjs';
-import Tools from '../common/Tools';
 import BasePlane from '../container/BasePlane';
+import Tools from '../common/Tools';
 
 /**
  * 敌机类

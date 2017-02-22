@@ -17,9 +17,9 @@ import DataShow from './DataShow';
 import PlaneMap from './PlaneMap';
 
 /**
- * 飞机大战游戏PVP模式
+ * 飞机大战游戏多人模式
  */
-class PlaneGame extends createjs.Container{
+class PlaneGame2 extends createjs.Container{
 
   /**
    * 飞机地图
@@ -162,4 +162,4 @@ class PlaneGame extends createjs.Container{
 }
 
 
-export default PlaneGame;
+export default PlaneGame2;
