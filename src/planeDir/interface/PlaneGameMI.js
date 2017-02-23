@@ -88,6 +88,8 @@ class PlaneGameMI extends createjs.Container{
   //接受服务器的Router.KPI.matchPVP数据 匹配
   socketMatchPVP = (data)=>{
     console.log('接收匹配数据：',data);
+    GameData.room=data.room;
+    GameData.gameType='pvp';
     this.name2T.text='玩家：'+data.p;
 
     this.timer=3;

@@ -72,7 +72,8 @@ class PlaneControl extends createjs.Container{
     this.psd.rot=this.HeroPlane.rotation;
     UserData.planInfo = PSData.getObj(this.psd);
 
-    // this.send({KPI:'goLive',name:UserData.id,data:UserData.planInfo});
+    SocketClient.instance.send({KPI:'goLive',name:UserData.id,data:UserData.planInfo,
+      type:GameData.gameType,room:GameData.room});
   }
 
   //接受服务器的planWalk数据 移动
@@ -99,7 +100,7 @@ class PlaneControl extends createjs.Container{
       this.psd.y=this.HeroPlane.y;
       this.psd.rot=this.HeroPlane.rotation;
       UserData.planInfo = PSData.getObj(this.psd);
-      SocketClient.instance.send({KPI:'goLive',data:UserData.planInfo});
+      SocketClient.instance.send({KPI:'goLive',data:UserData.planInfo,type:GameData.gameType,room:GameData.room});
       this.createEP(data.data);
       GameData.dataShow.hitText(data.name+'加入了游戏');
     }

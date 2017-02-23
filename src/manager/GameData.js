@@ -30,6 +30,14 @@ export default {
    */
   send:false,
   /**
+   * 房间名
+   */
+  room:'',
+  /**
+   * 游戏类型
+   */
+  gameType:'',
+  /**
    * 上帧时间
    */
   lastTime:0,

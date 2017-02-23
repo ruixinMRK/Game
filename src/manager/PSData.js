@@ -25,6 +25,16 @@ class PSData{
      * @type {string}
      */
     this.Name='';
+    /**
+     * 游戏类型
+     * @type {string}
+     */
+    this.type='';
+    /**
+     * 房间名
+     * @type {string}
+     */
+    this.room='';
     //数据名
     this.KPI='planWalk';
     /**
@@ -72,13 +82,10 @@ class PSData{
   static getObj=(psdata)=>{
     let obj={};
     if(psdata.Name!=null){
-      // for(let str in psdata){
-      //   if(str == 'attack'&&psdata.attack==1) obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
-      //   else if(str == 'hitObj'&&JSON.stringify(psdata.hitObj).length>2) obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
-      //   else obj[PSData.PSDataIndex[str]]=typeof psdata[str] == 'number'?parseInt(psdata[str]):psdata[str];
-      //
-      // }
       obj[PSData.PSDataIndex['Name']]=psdata.Name;
+      obj[PSData.PSDataIndex['type']]=psdata.type;
+      obj[PSData.PSDataIndex['room']]=psdata.room;
+
       obj[PSData.PSDataIndex['KPI']]=psdata.KPI;
       obj[PSData.PSDataIndex['life']]=psdata.life;
       obj[PSData.PSDataIndex['x']]=Math.round(psdata.x);
@@ -116,6 +123,6 @@ PSData.ObjIndex=null;
  * PSData索引，obj.PSData属性名=上传数据属性名
  * @type {{}}
  */
-PSData.PSDataIndex={Name:'n',KPI:'KPI',life:'l',x:'x',y:'y',rot:'r',time:'t',attack:'a',hitObj:'h'};
+PSData.PSDataIndex={Name:'n',type:'ty',room:'ro',KPI:'KPI',life:'l',x:'x',y:'y',rot:'r',time:'t',attack:'a',hitObj:'h'};
 
 export default PSData;
