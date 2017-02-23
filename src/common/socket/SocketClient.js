@@ -53,7 +53,7 @@ class SocketClient{
     //与上次相同的数据不再发送
 
     data = JSON.stringify(data);
-    // console.log('发送数据',data);
+    console.log('发送数据',data);
     if (this.prevSendStr!=data&&this.socketsExist) {
       let str = 'start' + data + 'end';
       this.socket.send(str);
@@ -76,7 +76,8 @@ class SocketClient{
   WSonOpen=()=>{
     this.Log("WebSocket连接已经建立。","OK");
     this.socketsExist=true;
-    this.send({KPI:'goLive',name:UserData.id,data:UserData.planInfo});
+    // this.send({KPI:'goLive',name:UserData.id,data:UserData.planInfo});
+    // SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.id});
     // Router.instance.regAll();
   };
 
@@ -84,7 +85,7 @@ class SocketClient{
     //大数据量 需多次 message
 
     // this.Log(event.data,"OK");
-    // console.log('接收的数据：',event.data);
+    console.log('接收的数据：',event.data);
 
     var orgJsonData;
     if (!event.data) return;

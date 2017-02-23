@@ -8,6 +8,7 @@ import GameData from '../../manager/GameData';
 import NameSpr from '../../common/NameSpr';
 import PlaneGame from 'planeDir/PlaneGame';
 import PlaneGameMI from './PlaneGameMI';
+import SocketClient from '../../common/socket/SocketClient';
 
 /**
  * 飞机游戏开始界面
@@ -17,6 +18,7 @@ class PlaneGameSI extends createjs.Container{
 
 
   constructor() {
+    SocketClient.instance;
     super();
     this.init();
   }
