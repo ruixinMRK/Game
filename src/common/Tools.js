@@ -140,7 +140,7 @@ class Tools{
     } else {
       style = div.currentStyle;  // IE
     }
-    return style[att];
+    return att?style[att]:style;
   }
   //是否有对应的class
   static hasClass(dom, className) {
