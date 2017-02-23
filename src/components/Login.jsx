@@ -41,7 +41,6 @@ class Login extends React.Component{
    */
   render(){
       return(
-       <div className={style.bk}>
 
          <div ref='formDiv' className={style.bk}>
            <h1>用户{this.state.type}</h1>
@@ -57,9 +56,9 @@ class Login extends React.Component{
            <div  className={style.sign}>
              <u onClick={this.change}>用户注册</u>
            </div>
+           {this.state.type=='reg'?<SelectIcon  imgArr = {this.img}></SelectIcon>:null}
          </div>
-         {this.state.type=='reg'?<SelectIcon  imgArr = {this.img}></SelectIcon>:null}
-       </div>
+
       );
   }
 

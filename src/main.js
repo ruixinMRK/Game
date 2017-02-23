@@ -41,6 +41,18 @@ class Main extends React.Component{
    */
   componentDidMount(){
 
+
+
+  }
+
+  renderStage=e=>{
+    let oi=Tools.getInner();
+    let oc=Tools.getZoomByRate(GameData.stageW,GameData.stageH,oi.width,oi.height);
+    let newW = oc.getWidth();
+    let newH = oc.getHeight();
+    let styleObj = `width:${newW}px;height:${newH}px;position:absolute;top:${(oi.height - oc.getHeight())/2}px;left:${(oi.width - oc.getWidth())/2}px;max-width:1366px;max-height:768px`
+    this.refs.myCan.style.cssText = styleObj;
+
   }
 
   //state 更新后
@@ -50,13 +62,9 @@ class Main extends React.Component{
     //createjs创建的舞台刷新才能显示，下面通过计时器设置为30毫秒刷新一次的帧频
     Timer.add(e=>{this.stage.update();},30,0);
 
-    let oi=Tools.getInner();
-    let oc=Tools.getZoomByRate(GameData.stageW,GameData.stageH,oi.width,oi.height);
-    let newW = oc.getWidth();
-    let newH = oc.getHeight();
-    console.log(newW,newH)
-    let styleObj = `width:${newW}px;height:${newH};position:absolute;top:${(oi.height - oc.getHeight())/2}px;left:${(oi.width - oc.getWidth())/2}px`
-    this.refs.myCan.style.cssText = styleObj;
+    this.renderStage();
+    window.addEventListener("resize", e=> {this.renderStage();}, false);
+
     //开始界面
     this.planeGameSI=new PlaneGameSI();
     this.stage.addChild(this.planeGameSI);
