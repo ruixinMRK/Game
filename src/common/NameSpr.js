@@ -25,8 +25,11 @@ class NameSpr extends createjs.Container{
     ];
     this.setSheet('plane',['assets/img/plane.png'],planeArr);
 
-    let gameUIArr=[["pack",0,0,120,140],
-      ["combat",120,0,120,140]
+    let gameUIArr=[["people",0,0,150,150],
+      ["pvp",150,0,150,150],
+      ["warehouse",300,0,100,100],
+      ["shop",400,0,100,100],
+      ["start",500,0,100,80],
     ];
     this.setSheet('gameUI',['assets/img/gameUI.png'],gameUIArr);
   }

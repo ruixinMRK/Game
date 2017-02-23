@@ -7,7 +7,7 @@ import '../vendors/createjs';
 import Login from 'components/Login';
 import Timer from 'common/Timer';
 import Tools from './common/Tools';
-import PlaneGameSI from './planeDir/PlaneGameSI'
+import PlaneGameSI from './planeDir/interface/PlaneGameSI';
 import UserData from 'manager/UserData';
 import GameData from './manager/GameData';
 
@@ -51,11 +51,12 @@ class Main extends React.Component{
     Timer.add(e=>{this.stage.update();},30,0);
 
     let oi=Tools.getInner();
-    let oc=Tools.getZoomByRate(oi.width,oi.height,GameData.stageW,GameData.stageH);
-    console.log(oi,oc.getWidth(),oc.getHeight());
-    this.refs.myCan.style.width=oc.getWidth()+'px';
-    this.refs.myCan.style.height=oc.getHeight()+'px';
-
+    let oc=Tools.getZoomByRate(GameData.stageW,GameData.stageH,oi.width,oi.height);
+    let newW = oc.getWidth();
+    let newH = oc.getHeight();
+    console.log(newW,newH)
+    let styleObj = `width:${newW}px;height:${newH};position:absolute;top:${(oi.height - oc.getHeight())/2}px;left:${(oi.width - oc.getWidth())/2}px`
+    this.refs.myCan.style.cssText = styleObj;
     //开始界面
     this.planeGameSI=new PlaneGameSI();
     this.stage.addChild(this.planeGameSI);
