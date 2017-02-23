@@ -65,6 +65,7 @@ class SocketClient{
     this.socket.close();
     this.socket=null;
     this.socketsExist=false;
+    SocketClient.__instance = null;
   }
   Log(Text, MessageType){
 
@@ -85,7 +86,7 @@ class SocketClient{
     //大数据量 需多次 message
 
     // this.Log(event.data,"OK");
-    console.log('接收的数据：',event.data);
+    // console.log('接收的数据：',event.data);
 
     var orgJsonData;
     if (!event.data) return;

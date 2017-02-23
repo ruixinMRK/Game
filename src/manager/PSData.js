@@ -26,11 +26,6 @@ class PSData{
      */
     this.Name='';
     /**
-     * 游戏类型
-     * @type {string}
-     */
-    this.type='';
-    /**
      * 房间名
      * @type {string}
      */
@@ -83,7 +78,6 @@ class PSData{
     let obj={};
     if(psdata.Name!=null){
       obj[PSData.PSDataIndex['Name']]=psdata.Name;
-      obj[PSData.PSDataIndex['type']]=psdata.type;
       obj[PSData.PSDataIndex['room']]=psdata.room;
 
       obj[PSData.PSDataIndex['KPI']]=psdata.KPI;
@@ -123,6 +117,6 @@ PSData.ObjIndex=null;
  * PSData索引，obj.PSData属性名=上传数据属性名
  * @type {{}}
  */
-PSData.PSDataIndex={Name:'n',type:'ty',room:'ro',KPI:'KPI',life:'l',x:'x',y:'y',rot:'r',time:'t',attack:'a',hitObj:'h'};
+PSData.PSDataIndex={Name:'n',room:'ro',KPI:'KPI',life:'l',x:'x',y:'y',rot:'r',time:'t',attack:'a',hitObj:'h'};
 
 export default PSData;

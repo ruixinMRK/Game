@@ -34,10 +34,6 @@ export default {
    */
   room:'',
   /**
-   * 游戏类型
-   */
-  gameType:'',
-  /**
    * 上帧时间
    */
   lastTime:0,
