@@ -15,7 +15,7 @@ class PlaneMap extends createjs.Container{
 
   /**
    * 地图
-   * @type {createjs.Shape}
+   * @type {createjs.Sprite}
    */
   mapS;
   /**
@@ -33,24 +33,25 @@ class PlaneMap extends createjs.Container{
    * 初始化
    */
   init() {
+    let data={
+      images:['assets/img/gameBg.png'],
+      frames:[[0,0,2000,2000]]
+    }
     /**
      * 地图
      */
-    this.mapS=new createjs.Shape();
-    this.mapS.graphics.beginFill('#D0D0D0');
-    this.mapS.graphics.drawRect(0,0,GameData.mapW,GameData.mapH);
-    this.mapS.graphics.endFill();
+    this.mapS=new createjs.Sprite(new createjs.SpriteSheet(data),0);
     this.addChild(this.mapS);
     //坐标
-    for(let x1=0;x1<GameData.mapW/100;x1++){
-      for(let y1=0;y1<GameData.mapH/100;y1++){
-
-        let txt=new createjs.Text(String(x1*100)+','+String(y1*100),"bold 14px Arial",'#ff0000');
-        txt.x=x1*100;
-        txt.y=y1*100;
-        this.addChild(txt);
-      }
-    }
+    // for(let x1=0;x1<GameData.mapW/100;x1++){
+    //   for(let y1=0;y1<GameData.mapH/100;y1++){
+    //
+    //     let txt=new createjs.Text(String(x1*100)+','+String(y1*100),"bold 14px Arial",'#ff0000');
+    //     txt.x=x1*100;
+    //     txt.y=y1*100;
+    //     this.addChild(txt);
+    //   }
+    // }
     //创建道具
     let sprNameArr=['p_bullet','p_gasoline','p_life'];
     for(let i=sprNameArr.length-1;i>=0;i--){

@@ -8,6 +8,7 @@ import GameData from '../../manager/GameData';
 import NameSpr from '../../common/NameSpr';
 import PlaneGame from 'planeDir/PlaneGame';
 import PlaneGameMI from './PlaneGameMI';
+import GameOverIf from './GameOverIf';
 import SocketClient from '../../common/socket/SocketClient';
 
 /**

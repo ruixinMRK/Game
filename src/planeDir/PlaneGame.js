@@ -15,6 +15,7 @@ import PSData from '../manager/PSData';
 import PlaneControl from './PlaneControl';
 import DataShow from './DataShow';
 import PlaneMap from './PlaneMap';
+import GameOverIf from './interface/GameOverIf';
 
 /**
  * 飞机大战游戏PVP模式
@@ -114,6 +115,14 @@ class PlaneGame extends createjs.Container{
    * @param e
    */
   onFrame=(e)=>{
+    if(this.planeControl.HeroPlane.gasoline<=0){
+      if(this.gameOverIf==null){
+        this.gameOverIf=new GameOverIf();
+        this.addChild(this.gameOverIf);
+      }
+      else
+        this.gameOverIf.visible=true;
+    }
     //帧频时间计算
     if(GameData.lastTime==0){
       GameData.lastTime=new Date().getTime();
