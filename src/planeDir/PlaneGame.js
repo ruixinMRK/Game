@@ -15,6 +15,7 @@ import PSData from '../manager/PSData';
 import PlaneControl from './PlaneControl';
 import DataShow from './DataShow';
 import PlaneMap from './PlaneMap';
+import MyEvent from '../common/MyEvent';
 
 /**
  * 飞机大战游戏PVP模式
@@ -63,9 +64,14 @@ class PlaneGame extends createjs.Container{
     document.addEventListener('keyup',this.onKeyUp);
     //帧频
     this.timeId=Timer.add(this.onFrame,30,0);
-
+    Router.instance.reg(Router.KPI.destroyPvpRoom,this.socketDestroyPR);
   }
 
+  //接受服务器的destroyPvpRoom数据 退出房间
+  socketDestroyPR = (data)=>{
+    console.log('接收退出房间数据：',data);
+    MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'back');
+  }
 
   /**
    * 按键按下

@@ -23,6 +23,11 @@ class PlaneMap extends createjs.Container{
    * @type {Array}
    */
   propArr=[];
+  /**
+   * 道具类型
+   * @type Array
+   */
+  propTypeArr=['p_bullet','p_gasoline','p_life'];
 
   constructor() {
     super();
@@ -42,27 +47,23 @@ class PlaneMap extends createjs.Container{
      */
     this.mapS=new createjs.Sprite(new createjs.SpriteSheet(data),0);
     this.addChild(this.mapS);
-    //坐标
-    // for(let x1=0;x1<GameData.mapW/100;x1++){
-    //   for(let y1=0;y1<GameData.mapH/100;y1++){
-    //
-    //     let txt=new createjs.Text(String(x1*100)+','+String(y1*100),"bold 14px Arial",'#ff0000');
-    //     txt.x=x1*100;
-    //     txt.y=y1*100;
-    //     this.addChild(txt);
+
+    // for(let i=sprNameArr.length-1;i>=0;i--){
+    //   let sn=sprNameArr[i];
+    //   for(let n=0;n<2;n++){
+    //     let prop=new Prop();
+    //     prop.setMc(sn);
+    //     this.addChild(prop);
+    //     this.propArr.push(prop);
     //   }
     // }
-    //创建道具
-    let sprNameArr=['p_bullet','p_gasoline','p_life'];
-    for(let i=sprNameArr.length-1;i>=0;i--){
-      let sn=sprNameArr[i];
-      for(let n=0;n<2;n++){
-        let prop=new Prop();
-        prop.setMc(sn);
-        this.addChild(prop);
-        this.propArr.push(prop);
-      }
-    }
+    Router.instance.reg(Router.KPI.planProp,this.socketProp);
+  }
+
+  //接受服务器的socketProp数据 飞机道具
+  socketProp = (data)=>{
+    console.log('接收飞机道具数据：',data);
+
   }
 
 
