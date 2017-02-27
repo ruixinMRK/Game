@@ -14,6 +14,7 @@ class Router{
     if(!Router.__instance){
       Router.__instance=new Router();
     }
+
     return Router.__instance;
   }
 
@@ -43,8 +44,7 @@ class Router{
 
   //取消注册
   unreg(widgetUID){
-
-    this.routeTable.remove(widgterObj["id"]);
+    this.routeTable.remove(widgetUID);
   }
 
   dispatcher(orgData){
@@ -83,7 +83,6 @@ class Router{
   }
 
 }
-
 Router.__instance = null;
 Router.KPI={planeWalk:'planWalk',planeDie:'goDie',planeLive:'goLive',ping:'ping',planHit:'planHit',planProp:'planProp',
   joinPVP:'joinPVP',matchPVP:'matchPVP'};

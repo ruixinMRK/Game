@@ -6,6 +6,7 @@
 import 'createjs';
 import GameData from '../../manager/GameData';
 import NameSpr from '../../common/NameSpr';
+import MyEvent from '../../common/MyEvent';
 import PlaneGame from 'planeDir/PlaneGame';
 import PlaneGameMI from './PlaneGameMI';
 import GameOverIf from './GameOverIf';
@@ -16,7 +17,11 @@ import SocketClient from '../../common/socket/SocketClient';
  */
 class PlaneGameSI extends createjs.Container{
 
-
+  /**
+   * pvp选择界面
+   * @type {PlaneGameMI}
+   */
+  planeGameMI=null;
 
   constructor() {
     SocketClient.instance;
@@ -72,6 +77,17 @@ class PlaneGameSI extends createjs.Container{
     this.addChild(this.pvpS);
     //事件
     this.addEventListener('click',this.onClick);
+    MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
+  }
+
+  /**
+   * 自定义事件返回界面 清除游戏
+   * @param data
+   */
+  MyEventF=(data)=>{
+    if(data=='back'){
+      this.planeGameMI.remove();
+    }
   }
 
   /**
@@ -88,10 +104,16 @@ class PlaneGameSI extends createjs.Container{
       // this.addChild(planeG);
     }
     else if(targetS==this.peopleS){
+      if(this.gameOverIf==null){
+        this.gameOverIf=new GameOverIf();
+        this.addChild(this.gameOverIf);
+      }
     }
     else if(targetS==this.pvpS){
-      let pgmi=new PlaneGameMI();
-      this.addChild(pgmi);
+      if(this.planeGameMI==null){
+        this.planeGameMI=new PlaneGameMI();
+        this.addChild(this.planeGameMI);
+      }
     }
 
   }

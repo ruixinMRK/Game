@@ -89,5 +89,14 @@ class PlaneMap extends createjs.Container{
     }
   }
 
+  /**
+   * 移除
+   */
+  remove(){
+    if(this.parent!=null)
+      this.parent.removeChild(this);
+  }
+
+
 }
 export default PlaneMap;

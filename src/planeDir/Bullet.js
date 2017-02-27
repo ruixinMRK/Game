@@ -15,7 +15,7 @@ class Bullet extends createjs.Container{
    * 攻击力
    * @type {number}
    */
-  atk=10;
+  atk=20;
 
   /**
    * 子弹构造函数

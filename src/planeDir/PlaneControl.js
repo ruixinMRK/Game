@@ -84,10 +84,23 @@ class PlaneControl extends createjs.Container{
   }
   //接受服务器的goDie数据 退出
   socketDie = (data)=>{
-    console.log('接收退出数据：',data.name);
-    this.removeChild(this.enemyP[data.name]);
-    delete this.enemyP[data.name];
-    GameData.dataShow.hitText(data.name+'退出了游戏');
+    console.log('接收退出数据：',data);
+    if(data.type==0){//复活
+      this.enemyP[data.name].visible=true;
+      this.enemyP[data.name].rebirth();
+      GameData.dataShow.hitText(data.name+'复活了');
+    }
+    else if(data.type==1){//击杀
+      this.enemyP[data.name].visible=false;
+      GameData.dataShow.hitText(data.epn+'击杀'+data.name);
+    }
+    else if(data.type==2){//相撞
+      this.enemyP[data.name].visible=false;
+    }
+    else if(data.type==3){//坠机
+      this.enemyP[data.name].visible=false;
+      GameData.dataShow.hitText(data.name+'坠机了');
+    }
     // console.log('接收退出数据：',data,data.Name);
   }
   //接受服务器的goLive数据 加入
@@ -99,7 +112,7 @@ class PlaneControl extends createjs.Container{
       this.psd.y=this.HeroPlane.y;
       this.psd.rot=this.HeroPlane.rotation;
       UserData.planInfo = PSData.getObj(this.psd);
-      SocketClient.instance.send({KPI:'goLive',data:UserData.planInfo,room:GameData.room});
+      SocketClient.instance.send({KPI:Router.KPI.planeLive,data:UserData.planInfo,room:GameData.room});
       this.createEP(data.data);
       GameData.dataShow.hitText(data.name+'加入了游戏');
     }
@@ -119,7 +132,7 @@ class PlaneControl extends createjs.Container{
       this.moveF=this.moveFSet;
       GameData.send=true;
     }
-    if(GameData.send==false) return;
+    if(GameData.send==false||this.HeroPlane.visible==false) return;
     this.psd.Name=this.HeroPlane.Name;
     this.psd.room=GameData.room;
     this.psd.life=this.HeroPlane.life;
@@ -172,8 +185,6 @@ class PlaneControl extends createjs.Container{
         p.dataDispose(obj);
         //碰撞数据处理
         for(let s in obj.hitObj){
-
-          GameData.dataShow.hitText(obj.Name+'的子弹'+s+'击中'+obj.hitObj[s]);
           let ep;
           if(this.HeroPlane.Name==obj.hitObj[s]){
             ep=this.HeroPlane;
@@ -184,9 +195,12 @@ class PlaneControl extends createjs.Container{
           }
           p.bulletArr.map((b)=>{
             if(b.bulletId==s){
-              ep.life-=b.atk;
-              if(ep.life<=0)
-                ep.remove();
+              if(ep.life>0){
+                ep.life-=b.atk;
+                if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
+                  SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.id,epn:obj.Name,type:1,room:GameData.room});
+                }
+              }
               b.remove();
             }
           });
@@ -207,6 +221,25 @@ class PlaneControl extends createjs.Container{
     }
 
   }
+
+
+  /**
+   * 移除
+   */
+  remove(){
+    if(this.parent!=null)
+      this.parent.removeChild(this);
+    Router.instance.unreg(Router.KPI.planeWalk);
+    Router.instance.unreg(Router.KPI.planeDie);
+    Router.instance.unreg(Router.KPI.planeLive);
+    this.HeroPlane.remove();
+    for(let s in this.enemyP) {
+      this.enemyP[s].remove();
+    }
+    this.enemyP=null;
+
+  }
+
 
 }
 export default PlaneControl;

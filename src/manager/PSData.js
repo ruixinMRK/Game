@@ -117,6 +117,6 @@ PSData.ObjIndex=null;
  * PSData索引，obj.PSData属性名=上传数据属性名
  * @type {{}}
  */
-PSData.PSDataIndex={Name:'n',room:'ro',KPI:'KPI',life:'l',x:'x',y:'y',rot:'r',time:'t',attack:'a',hitObj:'h'};
+PSData.PSDataIndex={Name:'n',room:'room',KPI:'KPI',life:'l',x:'x',y:'y',rot:'r',time:'t',attack:'a',hitObj:'h'};
 
 export default PSData;

@@ -3,6 +3,7 @@
  */
 
 
+import 'createjs';
 import GameData from '../manager/GameData';
 import UserData from '../manager/UserData';
 import Timer from '../common/Timer';
@@ -12,7 +13,7 @@ import SocketClient from '../common/socket/SocketClient';
 /**
  * 数据显示 FPS ping
  */
-class DataShow{
+class DataShow extends createjs.Container{
   /**
    * 敌机
    * @type {EnemyPlane}
@@ -20,46 +21,47 @@ class DataShow{
   enemyPlane=null;
 
   constructor(){
+    super();
     //击中文本
-    this.hittxt=new createjs.Text('',"bold 30px Arial",'#000000');
-    this.hittxt.x = 100;
+    this.hittxt=new createjs.Text('',"bold 46px Arial",'#000000');
+    this.hittxt.x = 600;
     this.hittxt.y = 30;
-    GameData.stage.addChild(this.hittxt);
+    this.addChild(this.hittxt);
     this.hitText(UserData.id+'加入游戏');
     //ping文本
     this.pingTxt=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
     this.pingTxt.x = 720;
     this.pingTxt.text='ping:';
-    GameData.stage.addChild(this.pingTxt);
+    this.addChild(this.pingTxt);
     //FPS文本
     this.FPSTxt=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
     this.FPSTxt.x = 650;
     this.FPSTxt.text='FPS:';
-    GameData.stage.addChild(this.FPSTxt);
+    this.addChild(this.FPSTxt);
     //人物信息
     this.lifeT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
     this.lifeT.x = 350;
     this.lifeT.y=240;
     this.lifeT.text='生命:';
-    GameData.stage.addChild(this.lifeT);
+    this.addChild(this.lifeT);
     this.gasolineT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
     this.gasolineT.x = 350;
     this.gasolineT.y=260
     this.gasolineT.text='汽油:';
-    GameData.stage.addChild(this.gasolineT);
+    this.addChild(this.gasolineT);
     this.bulletNumT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
     this.bulletNumT.x = 350;
     this.bulletNumT.y=280;
     this.bulletNumT.text='子弹:';
-    GameData.stage.addChild(this.bulletNumT);
+    this.addChild(this.bulletNumT);
     //敌机信息
     this.ENameT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
     this.ENameT.text='飞机:';
-    GameData.stage.addChild(this.ENameT);
+    this.addChild(this.ENameT);
     this.ELifeT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
     this.ELifeT.y=20;
     this.ELifeT.text='生命:';
-    GameData.stage.addChild(this.ELifeT);
+    this.addChild(this.ELifeT);
     //接受ping数据
     Router.instance.reg(Router.KPI.ping,this.socketPing);
 
@@ -101,7 +103,9 @@ class DataShow{
       FPS.txt.text = "cjs: "+FPS.FPS;
     }
     createjs.Ticker.framerate=60;
-    FPS.startFPS(GameData.stage);
+    FPS.startFPS(this);
+
+    GameData.stage.addChild(this);
   }
 
   /**
@@ -174,6 +178,15 @@ class DataShow{
     },3000,1);
   }
 
+
+  /**
+   * 移除
+   */
+  remove(){
+    if(this.parent!=null)
+      this.parent.removeChild(this);
+    Router.instance.unreg(Router.KPI.ping);
+  }
 
 }
 

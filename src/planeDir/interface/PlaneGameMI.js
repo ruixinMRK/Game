@@ -135,7 +135,11 @@ class PlaneGameMI extends createjs.Container{
    * 移除
    */
   remove(){
-
+    if(this.parent!=null)
+      this.parent.removeChild(this);
+    this.game.remove();
+    this.removeEventListener('click',this.onClick);
+    Router.instance.unreg(Router.KPI.matchPVP);
   }
 }
 export default PlaneGameMI;

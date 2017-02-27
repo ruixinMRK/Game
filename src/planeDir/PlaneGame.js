@@ -15,7 +15,6 @@ import PSData from '../manager/PSData';
 import PlaneControl from './PlaneControl';
 import DataShow from './DataShow';
 import PlaneMap from './PlaneMap';
-import GameOverIf from './interface/GameOverIf';
 
 /**
  * 飞机大战游戏PVP模式
@@ -27,6 +26,17 @@ class PlaneGame extends createjs.Container{
    * @type {PlaneMap}
    */
   map=null;
+  /**
+   * FPS ping显示
+   * @type {DataShow}
+   */
+  dataShow=null;
+  /**
+  * 飞机管理
+  * @type {PlaneControl}
+  */
+  planeControl=null;
+
 
   constructor(){
     super();
@@ -37,28 +47,22 @@ class PlaneGame extends createjs.Container{
    * 初始化
    */
   init(){
+    //地图
     this.map=new PlaneMap();
     this.addChild(this.map);
     GameData.planeMap=this.map;
-    /**
-     * 飞机管理
-     * @type {PlaneControl}
-     */
+    //飞机管理
     this.planeControl=new PlaneControl();
     this.addChild(this.planeControl);
     GameData.planeControl=this.planeControl;
-    /**
-     * FPS ping显示
-     * @type {DataShow}
-     */
+    //数据显示
     this.dataShow=new DataShow();
     GameData.dataShow=this.dataShow;
     //添加键盘事件
     document.addEventListener('keydown',this.onKeyDown);
     document.addEventListener('keyup',this.onKeyUp);
-
     //帧频
-    Timer.add(this.onFrame,30,0);
+    this.timeId=Timer.add(this.onFrame,30,0);
 
   }
 
@@ -115,14 +119,6 @@ class PlaneGame extends createjs.Container{
    * @param e
    */
   onFrame=(e)=>{
-    if(this.planeControl.HeroPlane.gasoline<=0){
-      if(this.gameOverIf==null){
-        this.gameOverIf=new GameOverIf();
-        this.addChild(this.gameOverIf);
-      }
-      else
-        this.gameOverIf.visible=true;
-    }
     //帧频时间计算
     if(GameData.lastTime==0){
       GameData.lastTime=new Date().getTime();
@@ -166,7 +162,25 @@ class PlaneGame extends createjs.Container{
     }
   }
 
-
+  /**
+   * 移除
+   */
+  remove(){
+    if(this.parent!=null)
+      this.parent.removeChild(this);
+    document.removeEventListener('keydown',this.onKeyDown);
+    document.removeEventListener('keyup',this.onKeyUp);
+    Timer.clear(this.timeId);
+    this.map.remove();
+    this.map=null;
+    GameData.planeMap=null;
+    this.dataShow.remove();
+    this.dataShow=null;
+    GameData.dataShow=null;
+    this.planeControl.remove();
+    this.planeControl=null;
+    GameData.planeControl=null;
+  }
 
 }
 

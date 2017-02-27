@@ -124,14 +124,24 @@ class BasePlane extends createjs.Container{
       this.bulletArr.push(bullet);
     }
 
+
   /**
-   * 移除
+   * 复活
    */
-  remove(){
+  rebirth(){
+    this.visible=true;
     this.x = 100;
     this.y = 100;
     this.rotation=0;
     this.life=this.lifeSet;
+  }
+
+  /**
+   * 移除
+   */
+  remove(){
+    if(this.parent!=null)
+      this.parent.removeChild(this);
   }
 }
 export default BasePlane;

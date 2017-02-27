@@ -6,6 +6,7 @@
 import 'createjs';
 import GameData from '../../manager/GameData';
 import NameSpr from '../../common/NameSpr';
+import MyEvent from '../../common/MyEvent';
 import Timer from '../../common/Timer';
 import PlaneGame from 'planeDir/PlaneGame';
 import UserData from '../../manager/UserData'
@@ -15,7 +16,7 @@ import SocketClient from '../../common/socket/SocketClient';
 /**
  * 飞机游戏结束界面
  */
-class PlaneGameMI extends createjs.Container{
+class GameOverIf extends createjs.Container{
 
 
   constructor() {
@@ -69,10 +70,12 @@ class PlaneGameMI extends createjs.Container{
   onClick=(e)=>{
     let targetS=e.target;
     if(targetS==this.backS){
-      window.console.log(1)
+      MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'back');
+      this.visible=false;
     }
     else if(targetS==this.rebirthS){
-      window.console.log(2);
+      MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'rebirth');
+      this.visible=false;
     }
 
   }
@@ -84,7 +87,9 @@ class PlaneGameMI extends createjs.Container{
    * 移除
    */
   remove(){
-
+    if(this.parent!=null)
+      this.parent.removeChild(this);
+    this.removeEventListener('click',this.onClick);
   }
 }
-export default PlaneGameMI;
+export default GameOverIf;

@@ -5,8 +5,13 @@
 import 'createjs';
 import Tools from '../common/Tools';
 import BasePlane from '../container/BasePlane';
+import UserData from '../manager/UserData';
 import GameData from '../manager/GameData';
 import NameSpr from '../common/NameSpr';
+import MyEvent from '../common/MyEvent';
+import GameOverIf from './interface/GameOverIf';
+import Router from '../common/socket/Router';
+import SocketClient from '../common/socket/SocketClient';
 import DataShow from './DataShow';
 
 /**
@@ -44,6 +49,17 @@ class HeroPlane extends BasePlane{
   constructor(){
     super();
     this.init();
+    MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
+  }
+
+  /**
+   * 自定义事件移除 复活
+   * @param data
+   */
+  MyEventF=(data)=>{
+    if(data=='rebirth'){
+      this.rebirth();
+    }
   }
 
   /**
@@ -61,6 +77,18 @@ class HeroPlane extends BasePlane{
    * @param e
    */
   onFrame=(e)=>{
+    if(this.visible==false) return;
+    if(this.gasoline<=0||this.life<=0){
+      if(this.gameOverIf==null){
+        this.gameOverIf=new GameOverIf();
+        GameData.stage.addChild(this.gameOverIf);
+      }
+      else if(this.gameOverIf.visible==false)
+        this.gameOverIf.visible=true;
+      this.visible=false;
+      if(this.gasoline<=0)
+        SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.id,type:3,room:GameData.room});
+    }
     //帧频开始状态初始化
     this.bulletArr.length==0&&(this.bulletNumId=0);
     this.speed=this.speedSet;
@@ -91,8 +119,8 @@ class HeroPlane extends BasePlane{
     this.moveBullet();
     //移动
     if(this.gasoline>0){
-      // this.gasoline-=this.speed/100;
-      this.gasoline-=this.speed;
+      this.gasoline-=this.speed/100;
+      // this.gasoline-=this.speed;
       let angle=Tools.getHD(this.rotation);
       let vx=Math.cos(angle)*this.speed;
       let vy=Math.sin(angle)*this.speed;
@@ -114,13 +142,31 @@ class HeroPlane extends BasePlane{
           e.enemyP[s].frameHitB=true;
           e.psd.hitObj[bullet.bulletId]=s;
           bullet.remove();
-          GameData.dataShow.hitText(this.Name+'的子弹'+bullet.bulletId+'击中'+s);
         }
       }
     }
     //飞机数据显示
     GameData.dataShow.planeTxt(this);
     // console.log('子弹',this.bulletArr.length);
+  }
+
+  /**
+   * 复活
+   */
+  rebirth(){
+    super.rebirth();
+    this.gasoline=this.gasolineSet;
+    this.bulletNum=this.bulletNumSet;
+    SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.id,type:0,room:GameData.room});
+  }
+
+  /**
+   * 移除
+   */
+  remove(){
+    super.remove();
+    this.gameOverIf.remove();
+    MyEvent.removeEvent(MyEvent.ME_MyEvent,this.MyEventF);
   }
 
 

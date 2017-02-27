@@ -71,7 +71,7 @@ class EnemyPlane extends BasePlane{
    * @param e
    */
   onFrame=(e)=>{
-
+    if(this.visible==false) return;
     this.frameHitB=false;
     if(this.bulletArr.length==0)
       this.bulletNumId=0;
