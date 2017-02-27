@@ -16,6 +16,11 @@ class Prop extends createjs.Container{
    * @type {createjs.Sprite}
    */
   mc=null;
+  /**
+   * 道具id
+   * @type {number}
+   */
+  id=0;
 
   constructor() {
     super();
@@ -38,7 +43,7 @@ class Prop extends createjs.Container{
     this.mc.regX = bound.width / 2;
     this.mc.regY = bound.height / 2;
     this.addChild(this.mc);
-    this.randomPos();
+    // this.randomPos();
   }
 
   /**

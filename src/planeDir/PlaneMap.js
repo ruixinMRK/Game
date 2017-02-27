@@ -6,7 +6,9 @@ import 'createjs';
 import GameData from '../manager/GameData';
 import Prop from './Prop';
 import HeroPlane from './HeroPlane';
+import Router from '../common/socket/Router';
 import NameSpr from '../common/NameSpr';
+import SocketClient from '../common/socket/SocketClient';
 
 /**
  * 飞机游戏地图
@@ -63,7 +65,30 @@ class PlaneMap extends createjs.Container{
   //接受服务器的socketProp数据 飞机道具
   socketProp = (data)=>{
     console.log('接收飞机道具数据：',data);
-
+    if(this.propArr.length==0){
+      let pa=GameData.propArr;
+      let length=pa.length;
+      for(let i=0;i<length;i++){
+        let p=pa[i];
+        let prop=new Prop();
+        prop.setMc(this.propTypeArr[p.type]);
+        prop.x=p.x;
+        prop.y=p.y;
+        prop.id=p.id;
+        this.addChild(prop);
+        this.propArr.push(prop);
+      }
+    }
+    else {
+      let length=this.propArr.length;
+      for(let i=0;i<length;i++){
+        let prop=this.propArr[i];
+        if(prop.id==data.id){
+          prop.x=p.x;
+          prop.y=p.y;
+        }
+      }
+    }
   }
 
 
@@ -86,6 +111,8 @@ class PlaneMap extends createjs.Container{
       if(r1.intersects(r2)){
         //碰撞了
         this.propArr[i].planeHit(plane);
+        SocketClient.instance.send({KPI:Router.KPI.planProp,id:this.propArr[i].id});
+        break;
       }
     }
   }

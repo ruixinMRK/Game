@@ -83,6 +83,14 @@ class PlaneGameMI extends createjs.Container{
     Router.instance.reg(Router.KPI.matchPVP,this.socketMatchPVP);
 
     SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.id});
+    Router.instance.reg(Router.KPI.planProp,this.socketProp);
+  }
+
+  //接受服务器的socketProp数据 飞机道具
+  socketProp = (data)=>{
+    console.log('接收飞机道具数据：',data);
+    GameData.propArr=data.value;
+    Router.instance.unreg(Router.KPI.planProp);
   }
 
   //接受服务器的Router.KPI.matchPVP数据 匹配

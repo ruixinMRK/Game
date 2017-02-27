@@ -34,6 +34,11 @@ export default {
    */
   room:'',
   /**
+   * 道具数组
+   * @type {Array}
+   */
+  propArr:[],
+  /**
    * 上帧时间
    */
   lastTime:0,
