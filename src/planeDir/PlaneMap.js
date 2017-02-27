@@ -60,33 +60,29 @@ class PlaneMap extends createjs.Container{
     //   }
     // }
     Router.instance.reg(Router.KPI.planProp,this.socketProp);
+    let pa=GameData.propArr;
+    let length=pa.length;
+    for(let i=0;i<length;i++){
+      let p=pa[i];
+      let prop=new Prop();
+      prop.setMc(this.propTypeArr[p.type]);
+      prop.x=p.x;
+      prop.y=p.y;
+      prop.id=p.id;
+      this.addChild(prop);
+      this.propArr.push(prop);
+    }
   }
 
   //接受服务器的socketProp数据 飞机道具
   socketProp = (data)=>{
     console.log('接收飞机道具数据：',data);
-    if(this.propArr.length==0){
-      let pa=GameData.propArr;
-      let length=pa.length;
-      for(let i=0;i<length;i++){
-        let p=pa[i];
-        let prop=new Prop();
-        prop.setMc(this.propTypeArr[p.type]);
+    let length=this.propArr.length;
+    for(let i=0;i<length;i++){
+      let prop=this.propArr[i];
+      if(prop.id==data.id){
         prop.x=p.x;
         prop.y=p.y;
-        prop.id=p.id;
-        this.addChild(prop);
-        this.propArr.push(prop);
-      }
-    }
-    else {
-      let length=this.propArr.length;
-      for(let i=0;i<length;i++){
-        let prop=this.propArr[i];
-        if(prop.id==data.id){
-          prop.x=p.x;
-          prop.y=p.y;
-        }
       }
     }
   }
