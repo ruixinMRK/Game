@@ -6,9 +6,9 @@ import 'createjs';
 import GameData from '../manager/GameData';
 import Prop from './Prop';
 import HeroPlane from './HeroPlane';
-import Router from '../common/socket/Router';
 import NameSpr from '../common/NameSpr';
 import SocketClient from '../common/socket/SocketClient';
+import Router from '../common/socket/Router';
 
 /**
  * 飞机游戏地图
@@ -40,26 +40,23 @@ class PlaneMap extends createjs.Container{
    * 初始化
    */
   init() {
-    let data={
-      images:['assets/img/gameBg.png'],
-      frames:[[0,0,2000,2000]]
-    }
     /**
      * 地图
+     * @type {createjs.Sprite}
      */
-    this.mapS=new createjs.Sprite(new createjs.SpriteSheet(data),0);
+    this.mapS=NameSpr.getInstance().getSpr('gameBg','gameBg');
     this.addChild(this.mapS);
+    //坐标
+    for(let x1=0;x1<GameData.mapW/100;x1++){
+      for(let y1=0;y1<GameData.mapH/100;y1++) {
 
-    // for(let i=sprNameArr.length-1;i>=0;i--){
-    //   let sn=sprNameArr[i];
-    //   for(let n=0;n<2;n++){
-    //     let prop=new Prop();
-    //     prop.setMc(sn);
-    //     this.addChild(prop);
-    //     this.propArr.push(prop);
-    //   }
-    // }
-    Router.instance.reg(Router.KPI.planProp,this.socketProp);
+        let txt = new createjs.Text(String(x1 * 100) + ',' + String(y1 * 100), "bold 14px Arial", '#ff0000');
+        txt.x = x1 * 100;
+        txt.y = y1 * 100;
+        this.addChild(txt);
+      }
+    }
+    //道具
     let pa=GameData.propArr;
     let length=pa.length;
     for(let i=0;i<length;i++){
@@ -72,20 +69,27 @@ class PlaneMap extends createjs.Container{
       this.addChild(prop);
       this.propArr.push(prop);
     }
+
+    Router.instance.reg(Router.KPI.planProp,this.socketProp);
   }
 
   //接受服务器的socketProp数据 飞机道具
   socketProp = (data)=>{
-    console.log('接收飞机道具数据：',data);
-    let length=this.propArr.length;
-    for(let i=0;i<length;i++){
-      let prop=this.propArr[i];
-      if(prop.id==data.id){
-        prop.x=p.x;
-        prop.y=p.y;
+        console.log('接收飞机道具数据：',data);
+        let idArr=data.value;
+        let length=this.propArr.length;
+        for(let i=0;i<length;i++){
+          let prop=this.propArr[i];
+          for(let d=0;d<idArr.length;d++){
+            let p=idArr[d];
+            if(prop.id==p.id){
+              prop.x=p.x;
+              prop.y=p.y;
+              prop.visible=true;
+            }
+          }
+        }
       }
-    }
-  }
 
 
   /**
@@ -103,11 +107,12 @@ class PlaneMap extends createjs.Container{
   propHit(plane){
     let r1=NameSpr.rectGlobal(plane);
     for(let i=this.propArr.length-1;i>=0;i--){
+      if(this.propArr[i].visible==false) continue;
       let r2=NameSpr.rectGlobal(this.propArr[i]);
       if(r1.intersects(r2)){
         //碰撞了
+        SocketClient.instance.send({KPI:Router.KPI.planProp,id:this.propArr[i].id,room:GameData.room});
         this.propArr[i].planeHit(plane);
-        SocketClient.instance.send({KPI:Router.KPI.planProp,id:this.propArr[i].id});
         break;
       }
     }

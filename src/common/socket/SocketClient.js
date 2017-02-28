@@ -77,8 +77,8 @@ class SocketClient{
   WSonOpen=()=>{
     this.Log("WebSocket连接已经建立。","OK");
     this.socketsExist=true;
-    // this.send({KPI:'goLive',name:UserData.id,data:UserData.planInfo});
-    // SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.id});
+    // this.send({KPI:'goLive',name:UserData.Name,data:UserData.planInfo});
+    // SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.Name});
     // Router.instance.regAll();
   };
 

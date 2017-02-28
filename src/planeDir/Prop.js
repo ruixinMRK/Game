@@ -70,7 +70,7 @@ class Prop extends createjs.Container{
     else if(this.mc.sprName=='p_life'){
       plane.life=plane.lifeSet;
     }
-    this.randomPos();
+    this.visible=false;
   }
 
 

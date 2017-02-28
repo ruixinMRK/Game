@@ -44,6 +44,11 @@ class HeroPlane extends BasePlane{
    * @type {number}
    */
   attackTimeSet=300;
+  /**
+   * 结束界面
+   * @type {GameOverIf}
+   */
+  gameOverIf=null;
 
 
   constructor(){
@@ -87,7 +92,7 @@ class HeroPlane extends BasePlane{
         this.gameOverIf.visible=true;
       this.visible=false;
       if(this.gasoline<=0)
-        SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.id,type:3,room:GameData.room});
+        SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,type:3,room:GameData.room});
     }
     //帧频开始状态初始化
     this.bulletArr.length==0&&(this.bulletNumId=0);
@@ -157,7 +162,7 @@ class HeroPlane extends BasePlane{
     super.rebirth();
     this.gasoline=this.gasolineSet;
     this.bulletNum=this.bulletNumSet;
-    SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.id,type:0,room:GameData.room});
+    SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,type:0,room:GameData.room});
   }
 
   /**
@@ -165,7 +170,10 @@ class HeroPlane extends BasePlane{
    */
   remove(){
     super.remove();
-    this.gameOverIf.remove();
+    if(this.gameOverIf){
+      this.gameOverIf.remove();
+      this.gameOverIf=null;
+    }
     MyEvent.removeEvent(MyEvent.ME_MyEvent,this.MyEventF);
   }
 

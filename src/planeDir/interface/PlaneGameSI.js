@@ -5,6 +5,7 @@
 
 import 'createjs';
 import GameData from '../../manager/GameData';
+import UserData from '../../manager/UserData';
 import NameSpr from '../../common/NameSpr';
 import MyEvent from '../../common/MyEvent';
 import PlaneGame from 'planeDir/PlaneGame';
@@ -24,7 +25,6 @@ class PlaneGameSI extends createjs.Container{
   planeGameMI=null;
 
   constructor() {
-    SocketClient.instance;
     super();
     this.init();
   }
@@ -75,9 +75,37 @@ class PlaneGameSI extends createjs.Container{
     this.pvpS.x=650;
     this.pvpS.y=200;
     this.addChild(this.pvpS);
+    //文本
+    /**
+     * 用户名文本
+     * @type {createjs.Text}
+     */
+    this.nameT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',0,0);
+    /**
+     * 等级文本
+     * @type {createjs.Text}
+     */
+    this.leveT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',0,30);
+    /**
+     * 经验文本
+     * @type {createjs.Text}
+     */
+    this.expT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',0,60);
+    /**
+     * 金币文本
+     * @type {createjs.Text}
+     */
+    this.goldT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',1000,0);
+    /**
+     * 钻石文本
+     * @type {createjs.Text}
+     */
+    this.diamondT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',1200,0);
+    this.textUpdate();
     //事件
     this.addEventListener('click',this.onClick);
     MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
+
   }
 
   /**
@@ -119,8 +147,16 @@ class PlaneGameSI extends createjs.Container{
 
   }
 
-
-
+  /**
+   * 文本更新
+   */
+  textUpdate(){
+    this.nameT.text='用户：'+UserData.Name;
+    this.leveT.text='等级：'+UserData.level;
+    this.expT.text='经验：'+UserData.exp;
+    this.goldT.text='金币：'+UserData.gold;
+    this.diamondT.text='钻石：'+UserData.diamond;
+  }
 
 
   /**

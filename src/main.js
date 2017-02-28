@@ -72,7 +72,7 @@ class Main extends React.Component{
 
   //登陆成功时
   loginSuccess = (name) =>{
-    UserData.id = name;
+    UserData.Name = name;
     this.setState({loginState:1});
   }
 

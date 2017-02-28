@@ -27,7 +27,7 @@ class DataShow extends createjs.Container{
     this.hittxt.x = 600;
     this.hittxt.y = 30;
     this.addChild(this.hittxt);
-    this.hitText(UserData.id+'加入游戏');
+    this.hitText(UserData.Name+'加入游戏');
     //ping文本
     this.pingTxt=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
     this.pingTxt.x = 720;

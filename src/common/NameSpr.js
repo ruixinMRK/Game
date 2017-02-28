@@ -35,6 +35,9 @@ class NameSpr extends createjs.Container{
       ["overIf_back",100,250,100,80],
     ];
     this.setSheet('gameUI',['assets/img/gameUI.png'],gameUIArr);
+
+    let gameBgArr=[["gameBg",0,0,2000,2000]];
+    this.setSheet('gameBg',['assets/img/gameBg.png'],gameBgArr);
   }
 
   /**
@@ -99,6 +102,24 @@ class NameSpr extends createjs.Container{
     rect.x+=spr.x;
     rect.y+=spr.y;
     return rect;
+  }
+
+  /**
+   * 获得一个文本
+   * @param parent 文本显示父级
+   * @param strText 文本内容
+   * @param font 字体
+   * @param color 颜色
+   * @param sx x
+   * @param sy y
+   * @returns {*} 文本
+   */
+  static getText(parent,strText='',font="bold 24px Arial",color='#000000',sx=0,sy=0){
+    let text=new createjs.Text(strText,font,color);
+    text.x=sx;
+    text.y=sy;
+    parent.addChild(text);
+    return text;
   }
 
 

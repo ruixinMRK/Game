@@ -31,6 +31,7 @@ class PlaneGameMI extends createjs.Container{
    * 初始化
    */
   init(){
+    SocketClient.instance;
     //背景
     this.mapS=new createjs.Shape();
     this.mapS.graphics.beginFill('#f0f0f0');
@@ -51,7 +52,7 @@ class PlaneGameMI extends createjs.Container{
      * 当前玩家用户名
      * @type {createjs.Text}
      */
-    this.name1T=new createjs.Text('玩家：'+UserData.id,"bold 18px Arial",'#000000');
+    this.name1T=new createjs.Text('玩家：'+UserData.Name,"bold 18px Arial",'#000000');
     this.name1T.x=400;
     this.name1T.y=400;
     this.addChild(this.name1T);
@@ -67,7 +68,7 @@ class PlaneGameMI extends createjs.Container{
      * 匹配提示
      * @type {createjs.Text}
      */
-    this.matchT=new createjs.Text('匹配中',"bold 36px Arial",'#000000');
+    this.matchT=new createjs.Text('点击开始匹配',"bold 36px Arial",'#000000');
     this.matchT.x=630;
     this.matchT.y=200;
     this.addChild(this.matchT);
@@ -82,7 +83,6 @@ class PlaneGameMI extends createjs.Container{
     //接受匹配数据
     Router.instance.reg(Router.KPI.matchPVP,this.socketMatchPVP);
 
-    SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.id});
     Router.instance.reg(Router.KPI.planProp,this.socketProp);
   }
 
@@ -90,7 +90,7 @@ class PlaneGameMI extends createjs.Container{
   socketProp = (data)=>{
     console.log('接收飞机道具数据：',data);
     GameData.propArr=data.value;
-    Router.instance.unreg(Router.KPI.planProp);
+    // Router.instance.unreg(Router.KPI.planProp);
   }
 
   //接受服务器的Router.KPI.matchPVP数据 匹配
@@ -105,7 +105,7 @@ class PlaneGameMI extends createjs.Container{
     Timer.add((e)=>{
       if(this.timer!=-1){
         this.timer--;
-        this.matchT.text=this.timer;
+        this.matchT.text=this.timer+'秒后进入游戏';
         if(this.timer==0){
           this.createGame();
           this.timer=-1;
@@ -121,8 +121,9 @@ class PlaneGameMI extends createjs.Container{
   onClick=(e)=>{
     let targetS=e.target;
     if(targetS==this.startS){
-      if(this.timer!=-1)
-        this.createGame();
+      this.startS.visible=false;
+      this.matchT.text='匹配中';
+      SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.Name});
     }
 
   }

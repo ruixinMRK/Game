@@ -16,6 +16,7 @@ import PlaneControl from './PlaneControl';
 import DataShow from './DataShow';
 import PlaneMap from './PlaneMap';
 import MyEvent from '../common/MyEvent';
+import GameDRI from './interface/GameDRI';
 
 /**
  * 飞机大战游戏PVP模式
@@ -37,7 +38,11 @@ class PlaneGame extends createjs.Container{
   * @type {PlaneControl}
   */
   planeControl=null;
-
+  /**
+   * 退出房间界面
+   * @type {GameDRI}
+   */
+  gameDRI=null;
 
   constructor(){
     super();
@@ -70,7 +75,10 @@ class PlaneGame extends createjs.Container{
   //接受服务器的destroyPvpRoom数据 退出房间
   socketDestroyPR = (data)=>{
     console.log('接收退出房间数据：',data);
-    MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'back');
+    if(this.gameDRI==null){
+      this.gameDRI=new GameDRI();
+      GameData.stage.addChild(this.gameDRI);
+    }
   }
 
   /**
@@ -177,6 +185,10 @@ class PlaneGame extends createjs.Container{
     document.removeEventListener('keydown',this.onKeyDown);
     document.removeEventListener('keyup',this.onKeyUp);
     Timer.clear(this.timeId);
+    if(this.gameDRI){
+      this.gameDRI.remove();
+      this.gameDRI=null;
+    }
     this.map.remove();
     this.map=null;
     GameData.planeMap=null;
