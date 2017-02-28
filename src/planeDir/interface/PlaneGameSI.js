@@ -116,6 +116,7 @@ class PlaneGameSI extends createjs.Container{
     if(data=='back'){
       SocketClient.instance.close();
       this.planeGameMI.remove();
+      this.planeGameMI=null;
     }
   }
 

@@ -61,7 +61,7 @@ class GameDRI extends createjs.Container{
     this.timer=3;
     //事件
     this.addEventListener('click',this.onClick);
-    Timer.add((e)=>{
+    this.timerID=Timer.add((e)=>{
         this.timer--;
         this.timerT.text=this.timer+'秒后自动返回';
         if(this.timer==0){
@@ -83,8 +83,9 @@ class GameDRI extends createjs.Container{
   onClick=(e)=>{
     let targetS=e.target;
     if(targetS==this.backS){
-      MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'back');
+      Timer.clear(this.timerID);
       this.visible=false;
+      MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'back');
     }
 
   }
