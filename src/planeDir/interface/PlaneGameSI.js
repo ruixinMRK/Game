@@ -113,7 +113,7 @@ class PlaneGameSI extends createjs.Container{
    * @param data
    */
   MyEventF=(data)=>{
-    if(data=='back'){
+    if(data=='pvpback'){
       SocketClient.instance.close();
       this.planeGameMI.remove();
       this.planeGameMI=null;

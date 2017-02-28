@@ -66,13 +66,13 @@ class PlaneControl extends createjs.Container{
     this.moveFSet=3;
 
     //进入游戏发送数据
-    this.psd.Name=this.HeroPlane.Name;
-    this.psd.x=this.HeroPlane.x;
-    this.psd.y=this.HeroPlane.y;
-    this.psd.rot=this.HeroPlane.rotation;
-    let data = PSData.getObj(this.psd);
+    let od={};
+    od.n=this.HeroPlane.Name;
+    od.x=this.HeroPlane.x;
+    od.y=this.HeroPlane.y;
+    od.r=this.HeroPlane.rotation;
 
-    SocketClient.instance.send({KPI:'goLive',name:UserData.Name,data:data,room:GameData.room});
+    SocketClient.instance.send({KPI:Router.KPI.planeLive,name:UserData.Name,data:od,room:GameData.room});
   }
 
   //接受服务器的planWalk数据 移动
@@ -107,12 +107,12 @@ class PlaneControl extends createjs.Container{
   socketLive = (data)=>{
     console.log('接收加入数据：',data);
     if(data.name!=null){
-      this.psd.Name=this.HeroPlane.Name;
-      this.psd.x=this.HeroPlane.x;
-      this.psd.y=this.HeroPlane.y;
-      this.psd.rot=this.HeroPlane.rotation;
-      let data1 = PSData.getObj(this.psd);
-      SocketClient.instance.send({KPI:'goLive',name:UserData.Name,data:data1,room:GameData.room});
+      let od={};
+      od.n=this.HeroPlane.Name;
+      od.x=this.HeroPlane.x;
+      od.y=this.HeroPlane.y;
+      od.r=this.HeroPlane.rotation;
+      SocketClient.instance.send({KPI:Router.KPI.planeLive,data:od,room:GameData.room});
       this.createEP(data.data);
       GameData.dataShow.hitText(data.name+'加入了游戏');
     }

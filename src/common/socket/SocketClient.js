@@ -77,9 +77,6 @@ class SocketClient{
   WSonOpen=()=>{
     this.Log("WebSocket连接已经建立。","OK");
     this.socketsExist=true;
-    // this.send({KPI:'goLive',name:UserData.Name,data:UserData.planInfo});
-    // SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.Name});
-    // Router.instance.regAll();
   };
 
   WSonMessage=(event)=>{
@@ -105,7 +102,9 @@ class SocketClient{
 
   WSonClose=()=> {
     this.Log("WebSocket连接关闭！","ERROR");
-    this.socketsExist = false;
+    this.socket=null;
+    this.socketsExist=false;
+    SocketClient.__instance = null;
     // Router.instance.regAll();
     //this.init(SocketClient.__url);
   };
