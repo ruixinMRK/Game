@@ -41,6 +41,8 @@ class PlaneControl extends createjs.Container{
     Router.instance.reg(Router.KPI.planeDie,this.socketDie);
     //接受玩家加入数据
     Router.instance.reg(Router.KPI.planeLive,this.socketLive);
+    //接受AI加入数据
+    Router.instance.reg(Router.KPI.AI,this.socketAI);
     //飞机
     this.HeroPlane=new HeroPlane();
     this.HeroPlane.Name=UserData.Name;
@@ -128,6 +130,12 @@ class PlaneControl extends createjs.Container{
       this.createEP(data.data);
     }
   }
+
+  //接受服务器的AI数据 AI
+  socketAI = (data)=>{
+    console.log('接收AI数据：',data);
+  }
+
 
 
 
