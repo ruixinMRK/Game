@@ -48,6 +48,11 @@ class PlaneGameMI extends createjs.Container{
     this.startS.x=600;
     this.startS.y=600;
     this.addChild(this.startS);
+    /**
+     * 返回图标
+     * @type {createjs.Sprite}
+     */
+    this.backS=NameSpr.getNameSpr(this,'gameUI','overIf_back')
     //文本
     /**
      * 当前玩家用户名
@@ -142,6 +147,9 @@ class PlaneGameMI extends createjs.Container{
       this.startS.visible=false;
       this.matchT.text='匹配中';
       SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.Name});
+    }
+    else if(targetS==this.backS){
+      MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'pvpback');
     }
 
   }

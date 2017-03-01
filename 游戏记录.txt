@@ -36,7 +36,8 @@ godie死亡数据传输
 退出bug 返回PVP
 goLive数据转换问题，更改obj不使用PSData类方法转换
 匹配界面退出
-
+2017-3-1
+websocket本地不能关闭
 
 
 

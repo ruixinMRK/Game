@@ -123,6 +123,23 @@ class NameSpr extends createjs.Container{
   }
 
 
+  /**
+   * 获得一个sprite 快捷创建
+   * @param parent 父级
+   * @param fileName 文件名
+   * @param sprName sprite名
+   * @param sx x
+   * @param sy y
+   * @returns {*} sprite
+   */
+  static getNameSpr(parent,fileName,sprName,sx=0,sy=0){
+    let spr=NameSpr.getInstance().getSpr(fileName,sprName);
+    spr.x=sx;
+    spr.y=sy;
+    parent.addChild(spr);
+    return spr
+  }
+
 }
 
 export default NameSpr;
