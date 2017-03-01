@@ -6,17 +6,11 @@ class SocketClient{
 
   constructor() {
     this.socketsExist = false;
-    //var host=window.location.protocol.indexOf("http")!=-1?window.location.hostname:"localhost";
-    //var host="localhost";
-
     this.socket = null;
-
     this.len = 0;
     this.respone = "";
     this._data = "";
     this.prevSendStr = '';
-
-    SocketClient.__instance = null;
 
   }
 
@@ -29,29 +23,17 @@ class SocketClient{
   }
 
   init(url){
-    var ws;
-    try {
-      if ("WebSocket" in window) {
-        ws = new WebSocket(url);
-      } else if ("MozWebSocket" in window) {
-        ws = new MozWebSocket(url);
-      }
-      this.socket = ws;
-    } catch (ex) {
-      console.error(ex);
-      return;
-    }
-    ws.onopen = this.WSonOpen;
-    ws.onmessage = this.WSonMessage;
-    ws.onclose = this.WSonClose;
-    ws.onerror = this.WSonError;
-    ws.parent = this;
+
+    this.socket = new WebSocket(url);
+    this.socket.addEventListener('open',this.open);
+    this.socket.addEventListener('message',this.message);
+    this.socket.addEventListener('close',this.close);
+    this.socket.addEventListener('error',this.error);
+
   }
+
   send(data) {
-    // console.log('socketsExist',this.socketsExist);
-
     //与上次相同的数据不再发送
-
     data = JSON.stringify(data);
     // console.log('发送数据',data);
     if (this.prevSendStr!=data&&this.socketsExist) {
@@ -61,34 +43,26 @@ class SocketClient{
     }
 
   }
-  close(){
-    this.socket.close();
-    this.socket=null;
-    this.socketsExist=false;
-    SocketClient.__instance = null;
-  }
-  Log(Text, MessageType){
 
+  closeClient(){
+    this.socket.close();
+  }
+
+  Log(Text, MessageType){
     let color = MessageType == "OK"?'green':'red';
     console.log('%c ' + Text,'color:'+color);
-
   }
-  //** 事件 this went**/
-  WSonOpen=()=>{
+
+  open=()=>{
     this.Log("WebSocket连接已经建立。","OK");
     this.socketsExist=true;
-  };
+  }
 
-  WSonMessage=(event)=>{
-    //大数据量 需多次 message
-
+  message=(event)=>{
     // this.Log(event.data,"OK");
-    // console.log('接收的数据：',event.data);
-
-    var orgJsonData;
     if (!event.data) return;
     this.respone += event.data;
-    //console.log(len);
+
     //判断下bytes的长度，类型等
     if( this.len==0 &&  this.respone.indexOf("start") !=-1){
       this.len = parseInt( this.respone.substr(0, this.respone.indexOf("start")));
@@ -97,22 +71,29 @@ class SocketClient{
     if (this.respone.length>= this.len &&  this.respone.lastIndexOf("end")!=-1) {
       this.parseData();
     }
-    //Router.instance.dispatcher(orgJsonData);
-  };
+  }
 
-  WSonClose=()=> {
+  close=()=> {
     this.Log("WebSocket连接关闭！","ERROR");
+    this.destory();
+  }
+
+  error=()=> {
+    this.Log("WebSocket异常","ERROR");
+    this.socket.close();
+    this.destory();
+  }
+
+  //释放资源
+  destory(){
+    this.socket.removeEventListener('open',this.open);
+    this.socket.removeEventListener('message',this.message);
+    this.socket.removeEventListener('close',this.close);
+    this.socket.removeEventListener('error',this.error);
     this.socket=null;
     this.socketsExist=false;
     SocketClient.__instance = null;
-    // Router.instance.regAll();
-    //this.init(SocketClient.__url);
-  };
-
-  WSonError=()=> {
-    this.Log("WebSocket连接中断。","ERROR");
-    this.socketsExist = false;
-  };
+  }
 
   parseData(){
     var start = this.respone.indexOf("start")+5;
