@@ -3,19 +3,27 @@
  */
 
 import 'createjs';
-import Timer from '../common/Timer';
-import HeroPlane from './HeroPlane';
-import EnemyPlane from './EnemyPlane';
-import Router from '../common/socket/Router';
-import SocketClient from '../common/socket/SocketClient';
-import UserData from '../manager/UserData';
-import GameData from '../manager/GameData';
-import PSData from '../manager/PSData';
+import Timer from '../../common/Timer';
+import HeroPlane from '../HeroPlane';
+import EnemyPlane from '../EnemyPlane';
+import Router from '../../common/socket/Router';
+import SocketClient from '../../common/socket/SocketClient';
+import UserData from '../../manager/UserData';
+import GameData from '../../manager/GameData';
+import PSData from '../../manager/PSData';
+import GameOverIf from './interface/GameOverIf';
 
 /**
  * 飞机管理
  */
 class PlaneControl extends createjs.Container{
+
+  /**
+   * 结束界面
+   * @type {GameOverIf}
+   */
+  gameOverIf=null;
+
   constructor() {
     super();
     this.init();
@@ -166,6 +174,19 @@ class PlaneControl extends createjs.Container{
    * @param e
    */
   onFrame=(e)=>{
+    if(this.visible==false) return;
+    if(this.HeroPlane.gasoline<=0||this.HeroPlane.life<=0){
+      if(this.gameOverIf==null){
+        this.gameOverIf=new GameOverIf();
+        GameData.stage.addChild(this.gameOverIf);
+      }
+      else if(this.gameOverIf.visible==false)
+        this.gameOverIf.visible=true;
+      this.HeroPlane.visible=false;
+      if(this.HeroPlane.gasoline<=0)
+        SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,type:3,room:GameData.room});
+    }
+
     this.enemyPDataDispose();
 
     this.HeroPlane.onFrame(this);
@@ -232,6 +253,10 @@ class PlaneControl extends createjs.Container{
     Router.instance.unreg(Router.KPI.planeWalk);
     Router.instance.unreg(Router.KPI.planeDie);
     Router.instance.unreg(Router.KPI.planeLive);
+    if(this.gameOverIf){
+      this.gameOverIf.remove();
+      this.gameOverIf=null;
+    }
     this.HeroPlane.remove();
     for(let s in this.enemyP) {
       this.enemyP[s].remove();

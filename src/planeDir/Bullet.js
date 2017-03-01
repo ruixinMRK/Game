@@ -4,7 +4,7 @@
 
 import 'createjs';
 import NameSpr from '../common/NameSpr';
-import PlaneGame from './PlaneGame';
+import PlaneGame from './game/PlaneGame';
 
 /**
  * 子弹类

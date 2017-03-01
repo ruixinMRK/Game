@@ -8,9 +8,9 @@ import GameData from '../../manager/GameData';
 import UserData from '../../manager/UserData';
 import NameSpr from '../../common/NameSpr';
 import MyEvent from '../../common/MyEvent';
-import PlaneGame from 'planeDir/PlaneGame';
-import PlaneGameMI from './PlaneGameMI';
-import GameOverIf from './GameOverIf';
+import PlaneGameMI from '../game/interface/PlaneGameMI';
+import PlaneGame2MI from '../game2/interface/PlaneGame2MI';
+import GameOverIf from '../game/interface/GameOverIf';
 import SocketClient from '../../common/socket/SocketClient';
 
 /**
@@ -23,6 +23,11 @@ class PlaneGameSI extends createjs.Container{
    * @type {PlaneGameMI}
    */
   planeGameMI=null;
+  /**
+   * 多人选择界面
+   * @type {PlaneGame2MI}
+   */
+  planeGame2MI=null;
 
   constructor() {
     super();
@@ -118,6 +123,11 @@ class PlaneGameSI extends createjs.Container{
       this.planeGameMI.remove();
       this.planeGameMI=null;
     }
+    else if(data=='norback'){
+      SocketClient.instance.close();
+      this.planeGame2MI.remove();
+      this.planeGame2MI=null;
+    }
   }
 
   /**
@@ -130,13 +140,11 @@ class PlaneGameSI extends createjs.Container{
 
     }
     else if(targetS==this.shopS){
-      // var planeG=new PlaneGame();
-      // this.addChild(planeG);
     }
     else if(targetS==this.peopleS){
-      if(this.gameOverIf==null){
-        this.gameOverIf=new GameOverIf();
-        this.addChild(this.gameOverIf);
+      if(this.planeGame2MI==null){
+        this.planeGame2MI=new PlaneGame2MI();
+        this.addChild(this.planeGame2MI);
       }
     }
     else if(targetS==this.pvpS){

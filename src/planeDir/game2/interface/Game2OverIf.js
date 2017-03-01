@@ -4,19 +4,19 @@
 
 
 import 'createjs';
-import GameData from '../../manager/GameData';
-import NameSpr from '../../common/NameSpr';
-import MyEvent from '../../common/MyEvent';
-import Timer from '../../common/Timer';
-import PlaneGame from 'planeDir/PlaneGame';
-import UserData from '../../manager/UserData'
-import Router from '../../common/socket/Router';
-import SocketClient from '../../common/socket/SocketClient';
+import GameData from '../../../manager/GameData';
+import NameSpr from '../../../common/NameSpr';
+import MyEvent from '../../../common/MyEvent';
+import Timer from '../../../common/Timer';
+import PlaneGame2 from '../PlaneGame2';
+import UserData from '../../../manager/UserData'
+import Router from '../../../common/socket/Router';
+import SocketClient from '../../../common/socket/SocketClient';
 
 /**
  * 飞机游戏结束界面
  */
-class GameOverIf extends createjs.Container{
+class Game2OverIf extends createjs.Container{
 
 
   constructor() {
@@ -35,6 +35,7 @@ class GameOverIf extends createjs.Container{
      */
     this.bgS=NameSpr.getInstance().getSpr('gameUI','overIf_bg');
     this.addChild(this.bgS);
+    this.titleT=NameSpr.getText(this,'多人',"bold 24px Arial",'#000000',0,0);
     //按钮
     /**
      * 返回按钮
@@ -92,4 +93,4 @@ class GameOverIf extends createjs.Container{
     this.removeEventListener('click',this.onClick);
   }
 }
-export default GameOverIf;
+export default Game2OverIf;

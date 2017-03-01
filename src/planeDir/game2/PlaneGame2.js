@@ -4,28 +4,28 @@
  */
 
 import 'createjs';
-import Timer from '../common/Timer';
-import HeroPlane from './HeroPlane';
-import EnemyPlane from './EnemyPlane';
-import Router from '../common/socket/Router';
-import SocketClient from '../common/socket/SocketClient';
-import UserData from '../manager/UserData';
-import GameData from '../manager/GameData';
-import PSData from '../manager/PSData';
-import PlaneControl from './PlaneControl';
-import DataShow from './DataShow';
-import PlaneMap from './PlaneMap';
-import MyEvent from '../common/MyEvent';
-import GameDRI from './interface/GameDRI';
+import Timer from '../../common/Timer';
+import HeroPlane from '../HeroPlane';
+import EnemyPlane from '../EnemyPlane';
+import Router from '../../common/socket/Router';
+import SocketClient from '../../common/socket/SocketClient';
+import UserData from '../../manager/UserData';
+import GameData from '../../manager/GameData';
+import PSData from '../../manager/PSData';
+import PlaneControl2 from './PlaneControl2';
+import DataShow from '../interface/DataShow';
+import PlaneMap2 from './PlaneMap2';
+import MyEvent from '../../common/MyEvent';
+import Game2DRI from './interface/Game2DRI';
 
 /**
- * 飞机大战游戏PVP模式
+ * 飞机大战游戏多人模式
  */
-class PlaneGame extends createjs.Container{
+class PlaneGame2 extends createjs.Container{
 
   /**
    * 飞机地图
-   * @type {PlaneMap}
+   * @type {PlaneMap2}
    */
   map=null;
   /**
@@ -34,13 +34,13 @@ class PlaneGame extends createjs.Container{
    */
   dataShow=null;
   /**
-  * 飞机管理
-  * @type {PlaneControl}
-  */
+   * 飞机管理
+   * @type {PlaneControl2}
+   */
   planeControl=null;
   /**
    * 退出房间界面
-   * @type {GameDRI}
+   * @type {Game2DRI}
    */
   gameDRI=null;
 
@@ -54,11 +54,11 @@ class PlaneGame extends createjs.Container{
    */
   init(){
     //地图
-    this.map=new PlaneMap();
+    this.map=new PlaneMap2();
     this.addChild(this.map);
     GameData.planeMap=this.map;
     //飞机管理
-    this.planeControl=new PlaneControl();
+    this.planeControl=new PlaneControl2();
     this.addChild(this.planeControl);
     GameData.planeControl=this.planeControl;
     //数据显示
@@ -76,7 +76,7 @@ class PlaneGame extends createjs.Container{
   socketDestroyPR = (data)=>{
     console.log('接收退出房间数据：',data);
     if(this.gameDRI==null){
-      this.gameDRI=new GameDRI();
+      this.gameDRI=new Game2DRI();
       GameData.stage.addChild(this.gameDRI);
     }
   }
@@ -203,4 +203,4 @@ class PlaneGame extends createjs.Container{
 }
 
 
-export default PlaneGame;
+export default PlaneGame2;

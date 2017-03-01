@@ -4,11 +4,11 @@
 
 
 import 'createjs';
-import GameData from '../manager/GameData';
-import UserData from '../manager/UserData';
-import Timer from '../common/Timer';
-import Router from '../common/socket/Router';
-import SocketClient from '../common/socket/SocketClient';
+import GameData from '../../manager/GameData';
+import UserData from '../../manager/UserData';
+import Timer from '../../common/Timer';
+import Router from '../../common/socket/Router';
+import SocketClient from '../../common/socket/SocketClient';
 
 /**
  * 数据显示 FPS ping

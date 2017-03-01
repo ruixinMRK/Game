@@ -3,23 +3,23 @@
  */
 
 import 'createjs';
-import GameData from '../../manager/GameData';
-import NameSpr from '../../common/NameSpr';
-import Timer from '../../common/Timer';
-import PlaneGame from 'planeDir/PlaneGame';
-import UserData from '../../manager/UserData'
-import Router from '../../common/socket/Router';
-import MyEvent from '../../common/MyEvent';
-import SocketClient from '../../common/socket/SocketClient';
+import GameData from '../../../manager/GameData';
+import NameSpr from '../../../common/NameSpr';
+import Timer from '../../../common/Timer';
+import PlaneGame2 from '../PlaneGame2';
+import UserData from '../../../manager/UserData'
+import Router from '../../../common/socket/Router';
+import MyEvent from '../../../common/MyEvent';
+import SocketClient from '../../../common/socket/SocketClient';
 
 /**
  * 飞机游戏选择界面
  */
-class PlaneGameMI extends createjs.Container{
+class PlaneGame2MI extends createjs.Container{
 
   /**
-   * pvp游戏
-   * @type {PlaneGame}
+   * 多人游戏
+   * @type {PlaneGame2}
    */
   game=null;
 
@@ -39,6 +39,7 @@ class PlaneGameMI extends createjs.Container{
     this.mapS.graphics.drawRect(0,0,GameData.mapW,GameData.mapH);
     this.mapS.graphics.endFill();
     this.addChild(this.mapS);
+    this.titleT=NameSpr.getText(this,'多人',"bold 24px Arial",'#000000',600,0);
     //图标
     /**
      * start图标
@@ -63,34 +64,19 @@ class PlaneGameMI extends createjs.Container{
     this.name1T.y=400;
     this.addChild(this.name1T);
     /**
-     * 匹配玩家用户名
-     * @type {createjs.Text}
-     */
-    this.name2T=new createjs.Text('玩家：',"bold 18px Arial",'#000000');
-    this.name2T.x=800;
-    this.name2T.y=400;
-    this.addChild(this.name2T);
-    /**
      * 匹配提示
      * @type {createjs.Text}
      */
-    this.matchT=new createjs.Text('点击开始匹配',"bold 36px Arial",'#000000');
-    this.matchT.x=630;
+    this.matchT=new createjs.Text('点击开始多人匹配',"bold 36px Arial",'#000000');
+    this.matchT.x=530;
     this.matchT.y=200;
     this.addChild(this.matchT);
     //属性
-    /**
-     * 倒计时
-     * @type {number}
-     */
-    this.timer=-1;
     //事件
     this.addEventListener('click',this.onClick);
     //接受匹配数据
-    Router.instance.reg(Router.KPI.matchPVP,this.socketMatchPVP);
     Router.instance.reg(Router.KPI.planProp,this.socketProp);
     MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
-
   }
 
   /**
@@ -100,9 +86,6 @@ class PlaneGameMI extends createjs.Container{
   MyEventF=(data)=>{
     if(data=='back'){
       SocketClient.instance;
-      this.timer=3;
-      this.matchT.text='点击开始匹配';
-      this.name2T.text='玩家:';
       this.startS.visible=true;
       this.game.remove();
       this.game=null;
@@ -111,30 +94,9 @@ class PlaneGameMI extends createjs.Container{
 
   //接受服务器的socketProp数据 飞机道具
   socketProp = (data)=>{
-    console.log('接收飞机道具数据：',data);
+    console.log('界面接收飞机道具数据：',data);
     GameData.propArr=data.value;
     Router.instance.unreg(Router.KPI.planProp);
-  }
-
-  //接受服务器的Router.KPI.matchPVP数据 匹配
-  socketMatchPVP = (data)=>{
-    console.log('接收匹配数据：',data);
-    GameData.room=data.room;
-    GameData.gameType='pvp';
-    this.name2T.text='玩家：'+data.p;
-
-    this.timer=3;
-    this.matchT.text=this.timer;
-    Timer.add((e)=>{
-      if(this.timer!=-1){
-        this.timer--;
-        this.matchT.text=this.timer+'秒后进入游戏';
-        if(this.timer==0){
-          this.createGame();
-          this.timer=-1;
-        }
-      }
-    },1000,3);
   }
 
   /**
@@ -144,12 +106,11 @@ class PlaneGameMI extends createjs.Container{
   onClick=(e)=>{
     let targetS=e.target;
     if(targetS==this.startS){
-      this.startS.visible=false;
-      this.matchT.text='匹配中';
-      SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.Name});
+      this.createGame();
+      SocketClient.instance.send({KPI:Router.KPI.joinNOR,name:UserData.Name});
     }
     else if(targetS==this.backS){
-      MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'pvpback');
+      MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'norback');
     }
 
   }
@@ -159,7 +120,7 @@ class PlaneGameMI extends createjs.Container{
    */
   createGame=()=>{
     if(this.game==null){
-      this.game=new PlaneGame();
+      this.game=new PlaneGame2();
       this.addChild(this.game);
     }
   }
@@ -173,8 +134,6 @@ class PlaneGameMI extends createjs.Container{
     if(this.parent!=null)
       this.parent.removeChild(this);
     this.removeEventListener('click',this.onClick);
-    Router.instance.unreg(Router.KPI.matchPVP);
-    Router.instance.unreg(Router.KPI.planProp);
   }
 }
-export default PlaneGameMI;
+export default PlaneGame2MI;

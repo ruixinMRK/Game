@@ -4,28 +4,45 @@
  */
 
 import 'createjs';
-import Timer from '../common/Timer';
-import HeroPlane from './HeroPlane';
-import EnemyPlane from './EnemyPlane';
-import Router from '../common/socket/Router';
-import SocketClient from '../common/socket/SocketClient';
-import UserData from '../manager/UserData';
-import GameData from '../manager/GameData';
-import PSData from '../manager/PSData';
+import Timer from '../../common/Timer';
+import HeroPlane from '../HeroPlane';
+import EnemyPlane from '../EnemyPlane';
+import Router from '../../common/socket/Router';
+import SocketClient from '../../common/socket/SocketClient';
+import UserData from '../../manager/UserData';
+import GameData from '../../manager/GameData';
+import PSData from '../../manager/PSData';
 import PlaneControl from './PlaneControl';
-import DataShow from './DataShow';
+import DataShow from '../interface/DataShow';
 import PlaneMap from './PlaneMap';
+import MyEvent from '../../common/MyEvent';
+import GameDRI from './interface/GameDRI';
 
 /**
- * 飞机大战游戏多人模式
+ * 飞机大战游戏PVP模式
  */
-class PlaneGame2 extends createjs.Container{
+class PlaneGame extends createjs.Container{
 
   /**
    * 飞机地图
    * @type {PlaneMap}
    */
   map=null;
+  /**
+   * FPS ping显示
+   * @type {DataShow}
+   */
+  dataShow=null;
+  /**
+  * 飞机管理
+  * @type {PlaneControl}
+  */
+  planeControl=null;
+  /**
+   * 退出房间界面
+   * @type {GameDRI}
+   */
+  gameDRI=null;
 
   constructor(){
     super();
@@ -36,31 +53,33 @@ class PlaneGame2 extends createjs.Container{
    * 初始化
    */
   init(){
+    //地图
     this.map=new PlaneMap();
     this.addChild(this.map);
     GameData.planeMap=this.map;
-    /**
-     * 飞机管理
-     * @type {PlaneControl}
-     */
+    //飞机管理
     this.planeControl=new PlaneControl();
     this.addChild(this.planeControl);
     GameData.planeControl=this.planeControl;
-    /**
-     * FPS ping显示
-     * @type {DataShow}
-     */
+    //数据显示
     this.dataShow=new DataShow();
     GameData.dataShow=this.dataShow;
     //添加键盘事件
     document.addEventListener('keydown',this.onKeyDown);
     document.addEventListener('keyup',this.onKeyUp);
-
     //帧频
-    Timer.add(this.onFrame,30,0);
-
+    this.timeId=Timer.add(this.onFrame,30,0);
+    Router.instance.reg(Router.KPI.destroyPvpRoom,this.socketDestroyPR);
   }
 
+  //接受服务器的destroyPvpRoom数据 退出房间
+  socketDestroyPR = (data)=>{
+    console.log('接收退出房间数据：',data);
+    if(this.gameDRI==null){
+      this.gameDRI=new GameDRI();
+      GameData.stage.addChild(this.gameDRI);
+    }
+  }
 
   /**
    * 按键按下
@@ -157,9 +176,31 @@ class PlaneGame2 extends createjs.Container{
     }
   }
 
-
+  /**
+   * 移除
+   */
+  remove(){
+    if(this.parent!=null)
+      this.parent.removeChild(this);
+    document.removeEventListener('keydown',this.onKeyDown);
+    document.removeEventListener('keyup',this.onKeyUp);
+    Timer.clear(this.timeId);
+    if(this.gameDRI){
+      this.gameDRI.remove();
+      this.gameDRI=null;
+    }
+    this.map.remove();
+    this.map=null;
+    GameData.planeMap=null;
+    this.dataShow.remove();
+    this.dataShow=null;
+    GameData.dataShow=null;
+    this.planeControl.remove();
+    this.planeControl=null;
+    GameData.planeControl=null;
+  }
 
 }
 
 
-export default PlaneGame2;
+export default PlaneGame;

@@ -9,10 +9,10 @@ import UserData from '../manager/UserData';
 import GameData from '../manager/GameData';
 import NameSpr from '../common/NameSpr';
 import MyEvent from '../common/MyEvent';
-import GameOverIf from './interface/GameOverIf';
+import GameOverIf from './game/interface/GameOverIf';
 import Router from '../common/socket/Router';
 import SocketClient from '../common/socket/SocketClient';
-import DataShow from './DataShow';
+import DataShow from './interface/DataShow';
 
 /**
  * 飞机类
@@ -44,11 +44,6 @@ class HeroPlane extends BasePlane{
    * @type {number}
    */
   attackTimeSet=300;
-  /**
-   * 结束界面
-   * @type {GameOverIf}
-   */
-  gameOverIf=null;
 
 
   constructor(){
@@ -82,18 +77,6 @@ class HeroPlane extends BasePlane{
    * @param e
    */
   onFrame=(e)=>{
-    if(this.visible==false) return;
-    if(this.gasoline<=0||this.life<=0){
-      if(this.gameOverIf==null){
-        this.gameOverIf=new GameOverIf();
-        GameData.stage.addChild(this.gameOverIf);
-      }
-      else if(this.gameOverIf.visible==false)
-        this.gameOverIf.visible=true;
-      this.visible=false;
-      if(this.gasoline<=0)
-        SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,type:3,room:GameData.room});
-    }
     //帧频开始状态初始化
     this.bulletArr.length==0&&(this.bulletNumId=0);
     this.speed=this.speedSet;
