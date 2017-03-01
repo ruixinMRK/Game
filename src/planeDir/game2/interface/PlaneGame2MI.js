@@ -75,8 +75,18 @@ class PlaneGame2MI extends createjs.Container{
     //事件
     this.addEventListener('click',this.onClick);
     //接受匹配数据
+    Router.instance.reg(Router.KPI.matchNOR,this.socketMatchNOR);
     Router.instance.reg(Router.KPI.planProp,this.socketProp);
     MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
+  }
+
+
+
+  //接受服务器的Router.KPI.matchNOR数据 匹配
+  socketMatchNOR = (data)=>{
+    console.log('接收多人匹配数据：',data);
+    GameData.room=data.room;
+    this.createGame();
   }
 
   /**
@@ -106,7 +116,6 @@ class PlaneGame2MI extends createjs.Container{
   onClick=(e)=>{
     let targetS=e.target;
     if(targetS==this.startS){
-      this.createGame();
       SocketClient.instance.send({KPI:Router.KPI.joinNOR,name:UserData.Name});
     }
     else if(targetS==this.backS){

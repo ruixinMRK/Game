@@ -85,8 +85,8 @@ class Router{
 }
 Router.__instance = null;
 Router.KPI={planeWalk:'planWalk',planeDie:'goDie',planeLive:'goLive',ping:'ping',planHit:'planHit',planProp:'planProp',
-  joinPVP:'joinPVP',matchPVP:'matchPVP',destroyPvpRoom:'destroyPvpRoom',planProp:'planProp',joinNOR:'joinNOR',AI:'AI'
-
+  joinPVP:'joinPVP',matchPVP:'matchPVP',destroyPvpRoom:'destroyPvpRoom',planProp:'planProp',joinNOR:'joinNOR',AI:'AI',
+  matchNOR:'matchNOR'
 };
 
 export default Router;
