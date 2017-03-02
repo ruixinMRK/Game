@@ -5,8 +5,8 @@
 
 import 'createjs';
 import Timer from '../../common/Timer';
-import HeroPlane from '../HeroPlane';
-import EnemyPlane from '../EnemyPlane';
+import HeroPlane from './HeroPlane';
+import EnemyPlane from './EnemyPlane';
 import Router from '../../common/socket/Router';
 import SocketClient from '../../common/socket/SocketClient';
 import UserData from '../../manager/UserData';

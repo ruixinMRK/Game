@@ -3,16 +3,16 @@
  */
 
 import 'createjs';
-import Tools from '../common/Tools';
-import BasePlane from '../container/BasePlane';
-import UserData from '../manager/UserData';
-import GameData from '../manager/GameData';
-import NameSpr from '../common/NameSpr';
-import MyEvent from '../common/MyEvent';
-import GameOverIf from './game/interface/GameOverIf';
-import Router from '../common/socket/Router';
-import SocketClient from '../common/socket/SocketClient';
-import DataShow from './interface/DataShow';
+import Tools from '../../common/Tools';
+import BasePlane from '../../container/BasePlane';
+import UserData from '../../manager/UserData';
+import GameData from '../../manager/GameData';
+import NameSpr from '../../common/NameSpr';
+import MyEvent from '../../common/MyEvent';
+import GameOverIf from './interface/GameOverIf';
+import Router from '../../common/socket/Router';
+import SocketClient from '../../common/socket/SocketClient';
+import DataShow from '../interface/DataShow';
 
 /**
  * 飞机类
@@ -46,20 +46,9 @@ class HeroPlane extends BasePlane{
   attackTimeSet=300;
 
 
-  constructor(){
+  constructor() {
     super();
     this.init();
-    MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
-  }
-
-  /**
-   * 自定义事件移除 复活
-   * @param data
-   */
-  MyEventF=(data)=>{
-    if(data=='rebirth'){
-      this.rebirth();
-    }
   }
 
   /**
@@ -145,7 +134,6 @@ class HeroPlane extends BasePlane{
     super.rebirth();
     this.gasoline=this.gasolineSet;
     this.bulletNum=this.bulletNumSet;
-    SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,type:0,room:GameData.room});
   }
 
   /**
@@ -153,11 +141,6 @@ class HeroPlane extends BasePlane{
    */
   remove(){
     super.remove();
-    if(this.gameOverIf){
-      this.gameOverIf.remove();
-      this.gameOverIf=null;
-    }
-    MyEvent.removeEvent(MyEvent.ME_MyEvent,this.MyEventF);
   }
 
 

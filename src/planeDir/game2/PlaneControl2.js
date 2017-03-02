@@ -4,10 +4,11 @@
 
 import 'createjs';
 import Timer from '../../common/Timer';
-import HeroPlane from '../HeroPlane';
-import EnemyPlane from '../EnemyPlane';
+import HeroPlane2 from './HeroPlane2';
+import EnemyPlane2 from './EnemyPlane2';
 import Router from '../../common/socket/Router';
 import SocketClient from '../../common/socket/SocketClient';
+import MyEvent from '../../common/MyEvent';
 import UserData from '../../manager/UserData';
 import GameData from '../../manager/GameData';
 import PSData from '../../manager/PSData';
@@ -34,15 +35,8 @@ class PlaneControl2 extends createjs.Container{
    * 初始化
    */
   init() {
-
-    //接受移动数据
-    Router.instance.reg(Router.KPI.planeWalk,this.socketPW);
-    //接受玩家掉线数据
-    Router.instance.reg(Router.KPI.planeDie,this.socketDie);
-    //接受玩家加入数据
-    Router.instance.reg(Router.KPI.planeLive,this.socketLive);
     //飞机
-    this.HeroPlane=new HeroPlane();
+    this.HeroPlane=new HeroPlane2();
     this.HeroPlane.Name=UserData.Name;
     this.HeroPlane.x=100;
     this.HeroPlane.y=100;
@@ -72,6 +66,11 @@ class PlaneControl2 extends createjs.Container{
      * @type {number}
      */
     this.moveFSet=3;
+    //事件
+    Router.instance.reg(Router.KPI.planeWalk,this.socketPW);
+    Router.instance.reg(Router.KPI.planeDie,this.socketDie);
+    Router.instance.reg(Router.KPI.planeLive,this.socketLive);
+    MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
 
     //进入游戏发送数据
     let od={};
@@ -81,6 +80,17 @@ class PlaneControl2 extends createjs.Container{
     od.r=this.HeroPlane.rotation;
 
     SocketClient.instance.send({KPI:Router.KPI.planeLive,name:UserData.Name,data:od,room:GameData.room});
+  }
+
+  /**
+   * 自定义事件移除 复活
+   * @param data
+   */
+  MyEventF=(data)=>{
+    if(data=='rebirth'){
+      SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,type:0,room:GameData.room});
+      this.HeroPlane.rebirth();
+    }
   }
 
   //接受服务器的planWalk数据 移动
@@ -160,7 +170,7 @@ class PlaneControl2 extends createjs.Container{
   createEP(data){
     let obj=PSData.getObj(data);
     if(this.enemyP[obj.Name]!=null)return;
-    this.enemyP[obj.Name]=new EnemyPlane();
+    this.enemyP[obj.Name]=new EnemyPlane2();
     this.enemyP[obj.Name].x=obj.x;
     this.enemyP[obj.Name].y=obj.y;
     this.enemyP[obj.Name].rotation=obj.rot;
@@ -174,8 +184,7 @@ class PlaneControl2 extends createjs.Container{
    * @param e
    */
   onFrame=(e)=>{
-    if(this.visible==false) return;
-    if(this.HeroPlane.gasoline<=0||this.HeroPlane.life<=0){
+    if(this.HeroPlane.visible&&(this.HeroPlane.gasoline<=0||this.HeroPlane.life<=0)){
       if(this.gameOverIf==null){
         this.gameOverIf=new Game2OverIf();
         GameData.stage.addChild(this.gameOverIf);
@@ -250,6 +259,11 @@ class PlaneControl2 extends createjs.Container{
   remove(){
     if(this.parent!=null)
       this.parent.removeChild(this);
+    if(this.gameOverIf){
+      this.gameOverIf.remove();
+      this.gameOverIf=null;
+    }
+    MyEvent.removeEvent(MyEvent.ME_MyEvent,this.MyEventF);
     Router.instance.unreg(Router.KPI.planeWalk);
     Router.instance.unreg(Router.KPI.planeDie);
     Router.instance.unreg(Router.KPI.planeLive);

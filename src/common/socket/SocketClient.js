@@ -44,6 +44,9 @@ class SocketClient{
 
   }
 
+  /**
+   * 关闭websocket
+   */
   closeClient(){
     this.socket.close();
   }
@@ -60,6 +63,7 @@ class SocketClient{
 
   message=(event)=>{
     // this.Log(event.data,"OK");
+    // console.log('接收的数据：',event.data);
     if (!event.data) return;
     this.respone += event.data;
 

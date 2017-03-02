@@ -5,7 +5,7 @@
 import 'createjs';
 import GameData from '../../manager/GameData';
 import Prop from '../Prop';
-import HeroPlane from '../HeroPlane';
+import HeroPlane from './HeroPlane';
 import NameSpr from '../../common/NameSpr';
 import SocketClient from '../../common/socket/SocketClient';
 import Router from '../../common/socket/Router';
@@ -69,6 +69,7 @@ class PlaneMap extends createjs.Container{
       this.addChild(prop);
       this.propArr.push(prop);
     }
+    GameData.propArr=[];
 
     Router.instance.reg(Router.KPI.planProp,this.socketProp);
   }

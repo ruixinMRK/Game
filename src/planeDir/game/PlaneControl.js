@@ -4,8 +4,9 @@
 
 import 'createjs';
 import Timer from '../../common/Timer';
-import HeroPlane from '../HeroPlane';
-import EnemyPlane from '../EnemyPlane';
+import HeroPlane from './HeroPlane';
+import EnemyPlane from './EnemyPlane';
+import AIPlane from './AIPlane';
 import Router from '../../common/socket/Router';
 import SocketClient from '../../common/socket/SocketClient';
 import UserData from '../../manager/UserData';
@@ -35,14 +36,6 @@ class PlaneControl extends createjs.Container{
    */
   init() {
 
-    //接受移动数据
-    Router.instance.reg(Router.KPI.planeWalk,this.socketPW);
-    //接受玩家掉线数据
-    Router.instance.reg(Router.KPI.planeDie,this.socketDie);
-    //接受玩家加入数据
-    Router.instance.reg(Router.KPI.planeLive,this.socketLive);
-    //接受AI加入数据
-    Router.instance.reg(Router.KPI.AI,this.socketAI);
     //飞机
     this.HeroPlane=new HeroPlane();
     this.HeroPlane.Name=UserData.Name;
@@ -65,6 +58,16 @@ class PlaneControl extends createjs.Container{
      */
     this.enemyPDataArr=[];
     /**
+     * AI飞机
+     * @type {{}}
+     */
+    this.AIP={};
+    /**
+     * AI飞机数据数组
+     * @type {Array}
+     */
+    this.AIPDataArr=[];
+    /**
      * 移动数据发送帧间隔 位置矫正
      * @type {number}
      */
@@ -74,6 +77,25 @@ class PlaneControl extends createjs.Container{
      * @type {number}
      */
     this.moveFSet=3;
+
+    //创建AI飞机
+    let aiP=GameData.AIPlaneArr;
+    for(let i=aiP.length-1;i>=0;i--){
+      let obj=aiP[i];
+      let p=new AIPlane();
+      p.x=obj.x;
+      p.y=obj.y;
+      p.rotation=obj.r;
+      p.life=obj.life;
+      this.addChild(p);
+      this.AIP[obj.id]=p;
+    }
+
+    //事件
+    Router.instance.reg(Router.KPI.planeWalk,this.socketPW);
+    Router.instance.reg(Router.KPI.resultPVP,this.socketResultPVP);
+    Router.instance.reg(Router.KPI.planeLive,this.socketLive);
+    Router.instance.reg(Router.KPI.AI,this.socketAI);
 
     //进入游戏发送数据
     let od={};
@@ -90,28 +112,15 @@ class PlaneControl extends createjs.Container{
     // console.log('接收移动数据：',data);
     data=PSData.getObj(data);
     this.enemyPDataArr.unshift(data);
-    // console.log('接收移动数据：',data,data.Name);
   }
-  //接受服务器的goDie数据 退出
-  socketDie = (data)=>{
-    console.log('接收退出数据：',data);
-    if(data.type==0){//复活
-      this.enemyP[data.name].visible=true;
-      this.enemyP[data.name].rebirth();
-      GameData.dataShow.hitText(data.name+'复活了');
+  //接受服务器的resultPVP数据 结果
+  socketResultPVP = (data)=>{
+    console.log('接收游戏结果数据：',data);
+    if(this.gameOverIf==null){
+      this.gameOverIf=new GameOverIf();
+      this.gameOverIf.setResultText(data.name);
+      GameData.stage.addChild(this.gameOverIf);
     }
-    else if(data.type==1){//击杀
-      this.enemyP[data.name].visible=false;
-      GameData.dataShow.hitText(data.epn+'击杀'+data.name);
-    }
-    else if(data.type==2){//相撞
-      this.enemyP[data.name].visible=false;
-    }
-    else if(data.type==3){//坠机
-      this.enemyP[data.name].visible=false;
-      GameData.dataShow.hitText(data.name+'坠机了');
-    }
-    // console.log('接收退出数据：',data,data.Name);
   }
   //接受服务器的goLive数据 加入
   socketLive = (data)=>{
@@ -134,6 +143,7 @@ class PlaneControl extends createjs.Container{
   //接受服务器的AI数据 AI
   socketAI = (data)=>{
     console.log('接收AI数据：',data);
+    this.AIPDataArr.concat(data.value);
   }
 
 
@@ -182,19 +192,12 @@ class PlaneControl extends createjs.Container{
    * @param e
    */
   onFrame=(e)=>{
-    if(this.visible==false) return;
-    if(this.HeroPlane.gasoline<=0||this.HeroPlane.life<=0){
-      if(this.gameOverIf==null){
-        this.gameOverIf=new GameOverIf();
-        GameData.stage.addChild(this.gameOverIf);
-      }
-      else if(this.gameOverIf.visible==false)
-        this.gameOverIf.visible=true;
+    if(this.HeroPlane.visible&&(this.HeroPlane.gasoline<=0||this.HeroPlane.life<=0)){
       this.HeroPlane.visible=false;
-      if(this.HeroPlane.gasoline<=0)
-        SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,type:3,room:GameData.room});
+      SocketClient.instance.send({KPI:Router.KPI.resultPVP,name:UserData.Name,room:GameData.room});
     }
 
+    this.AIPDataDispose();
     this.enemyPDataDispose();
 
     this.HeroPlane.onFrame(this);
@@ -207,6 +210,31 @@ class PlaneControl extends createjs.Container{
    */
   enemyPDataDispose=()=>{
     //敌机数据赋值
+    for(let i=this.AIPDataArr.length-1;i>=0;i--){
+      let obj=this.AIPDataArr[i];
+      if(this.AIP[obj.id]!=null){
+        let p=this.AIP[obj.id];
+        p.dataDispose(obj);
+      }
+    }
+    this.AIPDataArr=[];
+    //敌机帧频
+    for(let s in this.AIP){
+      if(this.AIP[s].mc==null){
+        delete this.AIP[s];
+      }
+      else {
+        this.AIP[s].onFrame();
+      }
+
+    }
+  }
+
+  /**
+   * AI飞机数据处理
+   */
+  AIPDataDispose=()=>{
+    //AI飞机数据赋值
     for(let i=this.enemyPDataArr.length-1;i>=0;i--){
       let obj=this.enemyPDataArr[i];
       if(this.enemyP[obj.Name]!=null){
@@ -226,9 +254,8 @@ class PlaneControl extends createjs.Container{
             if(b.bulletId==s){
               if(ep.life>0){
                 ep.life-=b.atk;
-                if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
-                  SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,epn:obj.Name,type:1,room:GameData.room});
-                }
+                // if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
+                // }
               }
               b.remove();
             }
@@ -258,6 +285,10 @@ class PlaneControl extends createjs.Container{
   remove(){
     if(this.parent!=null)
       this.parent.removeChild(this);
+    if(this.gameOverIf){
+      this.gameOverIf.remove();
+      this.gameOverIf=null;
+    }
     Router.instance.unreg(Router.KPI.planeWalk);
     Router.instance.unreg(Router.KPI.planeDie);
     Router.instance.unreg(Router.KPI.planeLive);

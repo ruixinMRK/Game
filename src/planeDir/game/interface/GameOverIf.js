@@ -41,18 +41,11 @@ class GameOverIf extends createjs.Container{
      * @type {createjs.Sprite}
      */
     this.backS=NameSpr.getInstance().getSpr('gameUI','overIf_back');
-    this.backS.x=25;
+    this.backS.x=100;
     this.backS.y=150;
     this.addChild(this.backS);
-    /**
-     * 重生按钮
-     * @type {createjs.Sprite}
-     */
-    this.rebirthS=NameSpr.getInstance().getSpr('gameUI','overIf_rebirth');
-    this.rebirthS.x=175;
-    this.rebirthS.y=150;
-    this.addChild(this.rebirthS);
     //文本
+    this.titleT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',80,80);
     //属性
     //事件
     this.addEventListener('click',this.onClick);
@@ -62,6 +55,18 @@ class GameOverIf extends createjs.Container{
     this.y=(GameData.stageH-bound.height)/2;
   }
 
+  /**
+   * 设置设置显示
+   * @param name 死亡用户名
+   */
+  setResultText=(name)=>{
+    if(name==UserData.Name){
+      this.titleT.text='失败';
+    }
+    else{
+      this.titleT.text='胜利';
+    }
+  }
 
   /**
    * 点击事件
@@ -71,10 +76,6 @@ class GameOverIf extends createjs.Container{
     let targetS=e.target;
     if(targetS==this.backS){
       MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'back');
-      this.visible=false;
-    }
-    else if(targetS==this.rebirthS){
-      MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'rebirth');
       this.visible=false;
     }
 

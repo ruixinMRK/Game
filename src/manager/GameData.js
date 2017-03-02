@@ -39,6 +39,11 @@ export default {
    */
   propArr:[],
   /**
+   * AI飞机数组
+   * @type {Array}
+   */
+  AIPlaneArr:[],
+  /**
    * 上帧时间
    */
   lastTime:0,

@@ -4,13 +4,13 @@
  */
 
 import 'createjs';
-import BasePlane from '../container/BasePlane';
-import Tools from '../common/Tools';
+import BasePlane from '../../container/BasePlane';
+import Tools from '../../common/Tools';
 
 /**
  * 敌机类
  */
-class EnemyPlane extends BasePlane{
+class EnemyPlane2 extends BasePlane{
 
   constructor(){
     super();
@@ -72,6 +72,7 @@ class EnemyPlane extends BasePlane{
    */
   onFrame=(e)=>{
     if(this.visible==false) return;
+    if(this.life<=0)this.visible=false;
     this.frameHitB=false;
     if(this.bulletArr.length==0)
       this.bulletNumId=0;
@@ -112,4 +113,4 @@ class EnemyPlane extends BasePlane{
 
 }
 
-export default EnemyPlane;
+export default EnemyPlane2;
