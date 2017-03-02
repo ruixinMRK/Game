@@ -86,7 +86,7 @@ class PlaneControl extends createjs.Container{
       p.x=obj.x;
       p.y=obj.y;
       p.rotation=obj.r;
-      p.life=obj.life;
+      p.life=obj.hp;
       this.addChild(p);
       this.AIP[obj.id]=p;
     }
@@ -206,10 +206,10 @@ class PlaneControl extends createjs.Container{
   }
 
   /**
-   * 敌机数据处理
+   * AI飞机数据处理
    */
-  enemyPDataDispose=()=>{
-    //敌机数据赋值
+  AIPDataDispose=()=>{
+    //AI飞机数据赋值
     for(let i=this.AIPDataArr.length-1;i>=0;i--){
       let obj=this.AIPDataArr[i];
       if(this.AIP[obj.id]!=null){
@@ -218,23 +218,25 @@ class PlaneControl extends createjs.Container{
       }
     }
     this.AIPDataArr=[];
-    //敌机帧频
-    for(let s in this.AIP){
-      if(this.AIP[s].mc==null){
-        delete this.AIP[s];
-      }
-      else {
-        this.AIP[s].onFrame();
-      }
-
-    }
+    //AI飞机帧频
+    // for(let s in this.AIP){
+    //   if(this.AIP[s].mc==null){
+    //     delete this.AIP[s];
+    //   }
+    //   else {
+    //     this.AIP[s].onFrame();
+    //   }
+    //
+    // }
   }
 
+
+
   /**
-   * AI飞机数据处理
+   * 敌机数据处理
    */
-  AIPDataDispose=()=>{
-    //AI飞机数据赋值
+  enemyPDataDispose=()=>{
+    //敌机数据赋值
     for(let i=this.enemyPDataArr.length-1;i>=0;i--){
       let obj=this.enemyPDataArr[i];
       if(this.enemyP[obj.Name]!=null){
@@ -265,7 +267,7 @@ class PlaneControl extends createjs.Container{
       }
     }
     this.enemyPDataArr=[];
-    //敌机帧频
+    // //敌机帧频
     for(let s in this.enemyP){
       if(this.enemyP[s].mc==null){
         delete this.enemyP[s];

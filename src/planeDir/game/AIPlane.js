@@ -55,7 +55,7 @@ class AIPlane extends BasePlane{
 
     if (obj.t < this.currentTime) return;
 
-    this.life=obj.life;
+    this.life=obj.hp;
 
     this.targetX = obj.x;
     this.targetY = obj.y;
