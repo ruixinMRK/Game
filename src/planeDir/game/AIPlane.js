@@ -51,6 +51,7 @@ class AIPlane extends BasePlane{
    * @param obj {{}}
    */
   dataDispose=(obj)=> {
+    console.log(obj);
     if (obj.attack == 1) this.attackNum++;
 
     if (obj.t < this.currentTime) return;
@@ -68,6 +69,7 @@ class AIPlane extends BasePlane{
    * @param e
    */
   onFrame=(e)=>{
+    // console.log(this.Name,this.x, this.y, this.targetX,this.targetY);
     if(this.visible==false) return;
     if(this.life<=0)this.visible=false;
     this.frameHitB=false;

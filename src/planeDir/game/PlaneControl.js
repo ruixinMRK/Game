@@ -83,6 +83,7 @@ class PlaneControl extends createjs.Container{
     for(let i=aiP.length-1;i>=0;i--){
       let obj=aiP[i];
       let p=new AIPlane();
+      p.Name=obj.id;
       p.x=obj.x;
       p.y=obj.y;
       p.rotation=obj.r;
@@ -142,8 +143,8 @@ class PlaneControl extends createjs.Container{
 
   //接受服务器的AI数据 AI
   socketAI = (data)=>{
-    console.log('接收AI数据：',data);
-    this.AIPDataArr.concat(data.value);
+    // console.log('接收AI数据：',data);
+    this.AIPDataArr=this.AIPDataArr.concat(data.value);
   }
 
 
@@ -219,15 +220,15 @@ class PlaneControl extends createjs.Container{
     }
     this.AIPDataArr=[];
     //AI飞机帧频
-    // for(let s in this.AIP){
-    //   if(this.AIP[s].mc==null){
-    //     delete this.AIP[s];
-    //   }
-    //   else {
-    //     this.AIP[s].onFrame();
-    //   }
-    //
-    // }
+    for(let s in this.AIP){
+      if(this.AIP[s].mc==null){
+        delete this.AIP[s];
+      }
+      else {
+        this.AIP[s].onFrame();
+      }
+
+    }
   }
 
 
