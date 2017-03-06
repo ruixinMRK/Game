@@ -58,6 +58,10 @@ class SocketClient{
   open=()=>{
     this.Log("WebSocket连接已经建立。","OK");
     this.socketsExist=true;
+    if(SocketClient.initF!=null){
+      SocketClient.initF();
+      SocketClient.initF=null;
+    }
   }
 
   message=(event)=>{
@@ -123,6 +127,11 @@ class SocketClient{
   }
 }
 
+/**
+ * 链接建立执行函数
+ * @param e
+ */
+SocketClient.initF=null
 SocketClient.__instance = null;
 SocketClient.__host = "60.205.222.103";//"localhost";
 SocketClient.__url = "ws://" + SocketClient.__host + ":8080";

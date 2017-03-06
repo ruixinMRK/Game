@@ -105,13 +105,15 @@ class PlaneGameMI extends createjs.Container{
    */
   MyEventF=(data)=>{
     if(data=='back'){
-      SocketClient.instance;
+      SocketClient.instance.closeClient();
       this.timer=3;
       this.matchT.text='点击开始匹配';
       this.name2T.text='玩家:';
       this.startS.visible=true;
-      this.game.remove();
-      this.game=null;
+      if(this.game){
+        this.game.remove();
+        this.game=null;
+      }
     }
   }
 
@@ -153,6 +155,9 @@ class PlaneGameMI extends createjs.Container{
       this.startS.visible=false;
       this.matchT.text='匹配中';
       SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.Name});
+      SocketClient.initF=()=>{
+        SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.Name});
+      }
     }
     else if(targetS==this.backS){
       MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'pvpback');
