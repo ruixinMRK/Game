@@ -76,7 +76,7 @@ class PlaneMap extends createjs.Container{
 
   //接受服务器的socketProp数据 飞机道具
   socketProp = (data)=>{
-        console.log('接收飞机道具数据：',data);
+        // console.log('接收飞机道具数据：',data);
         let idArr=data.value;
         let length=this.propArr.length;
         for(let i=0;i<length;i++){

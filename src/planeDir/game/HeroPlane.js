@@ -63,7 +63,7 @@ class HeroPlane extends BasePlane{
 
   /**
    * 帧频函数
-   * @param e
+   * @param e {PlaneControl}
    */
   onFrame=(e)=>{
     //帧频开始状态初始化
@@ -103,8 +103,7 @@ class HeroPlane extends BasePlane{
       let vy=Math.sin(angle)*this.speed;
       this.move(vx,vy);
     }
-    //子弹检测碰撞
-
+    //子弹检测碰撞敌机
     for(let i=this.bulletArr.length-1;i>=0;i--){
       let bullet=this.bulletArr[i];
       let r1=NameSpr.rectGlobal(bullet);
@@ -119,6 +118,27 @@ class HeroPlane extends BasePlane{
           e.enemyP[s].frameHitB=true;
           e.psd.hitObj[bullet.bulletId]=s;
           bullet.remove();
+          break;
+        }
+      }
+    }
+    //子弹检测碰撞AI飞机
+    for(let i=this.bulletArr.length-1;i>=0;i--){
+      let bullet=this.bulletArr[i];
+      let r1=NameSpr.rectGlobal(bullet);
+
+      for(let s in e.AIP){
+        if(e.AIP[s].frameHitB) break;
+        let r2=NameSpr.rectGlobal(e.AIP[s]);
+
+        if(r1.intersects(r2)){
+          //子弹击中了
+          GameData.dataShow.enemyPlane=e.AIP[s];
+          e.AIP[s].frameHitB=true;
+          let hit={};
+          hit[bullet.bulletId]=e.AIP[s].Name;
+          SocketClient.instance.send({KPI:Router.KPI.AiHit,room:GameData.room,type:1,'name':this.Name,'hit':hit});
+          break;
         }
       }
     }

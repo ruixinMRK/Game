@@ -46,9 +46,31 @@ class GameOverIf extends createjs.Container{
     this.addChild(this.backS);
     //文本
     this.titleT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',80,80);
+    /**
+     * 返回提示
+     * @type {createjs.Text}
+     */
+    this.timerT=new createjs.Text('',"bold 24px Arial",'#000000');
+    this.timerT.x=80;
+    this.timerT.y=100;
+    this.addChild(this.timerT);
     //属性
+    /**
+     * 倒计时
+     * @type {number}
+     */
+    this.timer=3;
     //事件
     this.addEventListener('click',this.onClick);
+    this.timerT.text=this.timer+'秒后自动返回';
+    this.timerID=Timer.add((e)=>{
+      this.timer--;
+      this.timerT.text=this.timer+'秒后自动返回';
+      if(this.timer==0){
+        MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'back');
+        this.visible=false;
+      }
+    },1000,3);
     //居中
     let bound=this.getBounds();
     this.x=(GameData.stageW-bound.width)/2;
@@ -75,6 +97,7 @@ class GameOverIf extends createjs.Container{
   onClick=(e)=>{
     let targetS=e.target;
     if(targetS==this.backS){
+      Timer.clear(this.timerID);
       MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'back');
       this.visible=false;
     }

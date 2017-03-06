@@ -46,6 +46,11 @@ class BasePlane extends createjs.Container{
   constructor() {
     super();
     /**
+     * 帧频被子弹击中
+     * @type {boolean}
+     */
+    this.frameHitB=false;
+    /**
      * 速度
      */
     this.speed=3;

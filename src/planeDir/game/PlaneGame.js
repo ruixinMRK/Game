@@ -155,7 +155,7 @@ class PlaneGame extends createjs.Container{
   planeScroll=(plane)=>{
     let spx=this.x+plane.x;
     let spy=this.y+plane.y;
-    let rect={t:100,b:200,l:100,r:700};
+    let rect={t:200,b:500,l:400,r:900};
 
     if(spx>rect.r){
       this.x-=spx-rect.r;

@@ -15,11 +15,6 @@ class EnemyPlane extends BasePlane{
   constructor(){
     super();
     /**
-     * 帧频被子弹击中
-     * @type {boolean}
-     */
-    this.frameHitB=false;
-    /**
      * 攻击次数
      * @type {number}
      */

@@ -33,7 +33,6 @@ class SocketClient{
   }
 
   send(data) {
-    //与上次相同的数据不再发送
     data = JSON.stringify(data);
     // console.log('发送数据',data);
     if (this.prevSendStr!=data&&this.socketsExist) {

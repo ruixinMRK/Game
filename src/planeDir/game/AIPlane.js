@@ -3,8 +3,16 @@
  */
 
 import 'createjs';
-import BasePlane from '../../container/BasePlane';
 import Tools from '../../common/Tools';
+import BasePlane from '../../container/BasePlane';
+import UserData from '../../manager/UserData';
+import GameData from '../../manager/GameData';
+import NameSpr from '../../common/NameSpr';
+import MyEvent from '../../common/MyEvent';
+import GameOverIf from './interface/GameOverIf';
+import Router from '../../common/socket/Router';
+import SocketClient from '../../common/socket/SocketClient';
+import DataShow from '../interface/DataShow';
 
 /**
  * AI飞机类
@@ -51,7 +59,7 @@ class AIPlane extends BasePlane{
    * @param obj {{}}
    */
   dataDispose=(obj)=> {
-    console.log(obj);
+    // console.log(this.Name,obj.hp,this.life);
     if (obj.attack == 1) this.attackNum++;
 
     if (obj.t < this.currentTime) return;
@@ -70,8 +78,8 @@ class AIPlane extends BasePlane{
    */
   onFrame=(e)=>{
     // console.log(this.Name,this.x, this.y, this.targetX,this.targetY);
-    if(this.visible==false) return;
-    if(this.life<=0)this.visible=false;
+    // if(this.visible==false) return;
+    // if(this.life<=0)this.visible=false;
     this.frameHitB=false;
     if(this.bulletArr.length==0)
       this.bulletNumId=0;
@@ -81,6 +89,19 @@ class AIPlane extends BasePlane{
       this.attack();
     }
     this.moveBullet();
+    //子弹检测碰撞
+    for(let i=this.bulletArr.length-1;i>=0;i--){
+      let bullet=this.bulletArr[i];
+      let r1=NameSpr.rectGlobal(bullet);
+        let r2=NameSpr.rectGlobal(GameData.planeControl.HeroPlane);
+
+        if(r1.intersects(r2)){
+          //子弹击中了
+          let hit={};
+          hit[bullet.bulletId]=UserData.Name;
+          SocketClient.instance.send({KPI:Router.KPI.AiHit,room:GameData.room,type:0,'name':this.Name,'hit':hit});
+        }
+    }
     //移动
     this.x=this.targetX;
     this.y=this.targetY;

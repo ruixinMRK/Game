@@ -97,6 +97,7 @@ class PlaneControl extends createjs.Container{
     Router.instance.reg(Router.KPI.resultPVP,this.socketResultPVP);
     Router.instance.reg(Router.KPI.planeLive,this.socketLive);
     Router.instance.reg(Router.KPI.AI,this.socketAI);
+    Router.instance.reg(Router.KPI.AiHit,this.socketAiHit);
 
     //进入游戏发送数据
     let od={};
@@ -147,6 +148,56 @@ class PlaneControl extends createjs.Container{
     this.AIPDataArr=this.AIPDataArr.concat(data.value);
   }
 
+  //接受服务器的AiHit数据 AiHit
+  socketAiHit = (data)=>{
+    console.log('接收AI碰撞数据：',data);
+    if(data.type===0){
+      //AI攻击玩家
+      let p=this.AIP[data.name];
+      let ep;
+      for(let s in data.hit){
+        GameData.dataShow.hitText('AI'+data.name+'击中玩家'+data.hit[s]);
+        if(data.hit[s]==UserData.Name)
+          ep=this.HeroPlane;
+        else
+          ep=this.enemyP[data.hit[s]];
+        p.bulletArr.map((b)=>{
+          if(b.bulletId==s){
+            if(ep.life>0){
+              ep.life-=b.atk;
+              // if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
+              // }
+            }
+            b.remove();
+          }
+        });
+      }
+    }
+    else if(data.type===1){
+      //玩家攻击AI
+      let p;
+      if(data.name==UserData.Name)
+        p=this.HeroPlane;
+      else
+        p=this.enemyP[data.name];
+      let ep;
+      for(let s in data.hit){
+        ep=this.AIP[data.hit[s]];
+        GameData.dataShow.hitText('玩家'+data.name+'击中AI'+data.hit[s]);
+        p.bulletArr.map((b)=>{
+          if(b.bulletId==s){
+            if(ep.life>0){
+              ep.life-=b.atk;
+              GameData.send=true;
+              this.psd.AI[ep.Name]=ep.life;
+            }
+            b.remove();
+          }
+        });
+      }
+    }
+  }
+
 
 
 
@@ -194,8 +245,8 @@ class PlaneControl extends createjs.Container{
    */
   onFrame=(e)=>{
     if(this.HeroPlane.visible&&(this.HeroPlane.gasoline<=0||this.HeroPlane.life<=0)){
-      this.HeroPlane.visible=false;
       SocketClient.instance.send({KPI:Router.KPI.resultPVP,name:UserData.Name,room:GameData.room});
+      this.HeroPlane.visible=false;
     }
 
     this.AIPDataDispose();
@@ -293,7 +344,6 @@ class PlaneControl extends createjs.Container{
       this.gameOverIf=null;
     }
     Router.instance.unreg(Router.KPI.planeWalk);
-    Router.instance.unreg(Router.KPI.planeDie);
     Router.instance.unreg(Router.KPI.planeLive);
     if(this.gameOverIf){
       this.gameOverIf.remove();

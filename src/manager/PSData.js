@@ -67,6 +67,13 @@ class PSData{
      * @type {{}}
      */
     this.hitObj={};
+    /**
+     * 碰撞对象 Obj.AI飞机名=生命
+     * @type {{}}
+     */
+    this.AI={};
+
+
   }
 
   /**
@@ -90,6 +97,8 @@ class PSData{
         obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
       if(JSON.stringify(psdata.hitObj).length>2)
         obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
+      if(JSON.stringify(psdata.AI).length>2)
+        obj[PSData.PSDataIndex['AI']]=psdata.AI;
       return obj;
     }
     else {
@@ -117,6 +126,8 @@ PSData.ObjIndex=null;
  * PSData索引，obj.PSData属性名=上传数据属性名
  * @type {{}}
  */
-PSData.PSDataIndex={Name:'n',room:'room',KPI:'KPI',life:'l',x:'x',y:'y',rot:'r',time:'t',attack:'a',hitObj:'h'};
+PSData.PSDataIndex={Name:'n',room:'room',KPI:'KPI',life:'l',x:'x',y:'y',rot:'r',time:'t',attack:'a',hitObj:'h',
+AI:'AI'
+};
 
 export default PSData;
