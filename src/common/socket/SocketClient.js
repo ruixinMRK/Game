@@ -11,7 +11,7 @@ class SocketClient{
     this.respone = "";
     this._data = "";
     this.prevSendStr = '';
-
+    this.sendDataArr=[];
   }
 
   static get instance(){
@@ -32,7 +32,12 @@ class SocketClient{
 
   }
 
-  send(data) {
+  send=(data)=>{
+    if(this.socketsExist==false){
+      this.sendDataArr.push(data);
+      return ;
+    }
+
     data = JSON.stringify(data);
     // console.log('发送数据',data);
     if (this.prevSendStr!=data&&this.socketsExist) {
@@ -55,12 +60,15 @@ class SocketClient{
     console.log('%c ' + Text,'color:'+color);
   }
 
+
   open=()=>{
     this.Log("WebSocket连接已经建立。","OK");
     this.socketsExist=true;
-    if(SocketClient.initF!=null){
-      SocketClient.initF();
-      SocketClient.initF=null;
+    if(this.sendDataArr.length>0){
+      for(let i=0;i<this.sendDataArr.length;i++){
+        this.send(this.sendDataArr[i]);
+      }
+      this.sendDataArr=[];
     }
   }
 
@@ -127,11 +135,6 @@ class SocketClient{
   }
 }
 
-/**
- * 链接建立执行函数
- * @param e
- */
-SocketClient.initF=null
 SocketClient.__instance = null;
 SocketClient.__host = "60.205.222.103";//"localhost";
 SocketClient.__url = "ws://" + SocketClient.__host + ":8080";

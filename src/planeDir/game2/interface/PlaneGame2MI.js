@@ -77,9 +77,16 @@ class PlaneGame2MI extends createjs.Container{
     //接受匹配数据
     Router.instance.reg(Router.KPI.matchNOR,this.socketMatchNOR);
     Router.instance.reg(Router.KPI.planProp,this.socketProp);
+    Router.instance.reg(Router.KPI.AI,this.socketAI);
     MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
-  }
 
+  }
+  //接受服务器的AI数据 AI
+  socketAI = (data)=>{
+    console.log('匹配界面接收AI数据：',data);
+    GameData.AIPlaneArr=data.value;
+    Router.instance.unreg(Router.KPI.AI);
+  }
 
 
   //接受服务器的Router.KPI.matchNOR数据 匹配

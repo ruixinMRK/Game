@@ -155,9 +155,6 @@ class PlaneGameMI extends createjs.Container{
       this.startS.visible=false;
       this.matchT.text='匹配中';
       SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.Name});
-      SocketClient.initF=()=>{
-        SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.Name});
-      }
     }
     else if(targetS==this.backS){
       MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'pvpback');

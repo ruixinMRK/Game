@@ -13,6 +13,7 @@ import UserData from '../../manager/UserData';
 import GameData from '../../manager/GameData';
 import PSData from '../../manager/PSData';
 import Game2OverIf from './interface/Game2OverIf';
+import AIPlane2 from './AIPlane2';
 
 /**
  * 飞机管理
@@ -57,6 +58,16 @@ class PlaneControl2 extends createjs.Container{
      */
     this.enemyPDataArr=[];
     /**
+     * AI飞机
+     * @type {{}}
+     */
+    this.AIP={};
+    /**
+     * AI飞机数据数组
+     * @type {Array}
+     */
+    this.AIPDataArr=[];
+    /**
      * 移动数据发送帧间隔 位置矫正
      * @type {number}
      */
@@ -66,10 +77,27 @@ class PlaneControl2 extends createjs.Container{
      * @type {number}
      */
     this.moveFSet=3;
+
+    //创建AI飞机
+    let aiP=GameData.AIPlaneArr;
+    for(let i=aiP.length-1;i>=0;i--){
+      let obj=aiP[i];
+      let p=new AIPlane2();
+      p.Name=obj.id;
+      p.x=obj.x;
+      p.y=obj.y;
+      p.rotation=obj.r;
+      p.life=obj.hp;
+      this.addChild(p);
+      this.AIP[obj.id]=p;
+    }
+
     //事件
     Router.instance.reg(Router.KPI.planeWalk,this.socketPW);
     Router.instance.reg(Router.KPI.planeDie,this.socketDie);
     Router.instance.reg(Router.KPI.planeLive,this.socketLive);
+    Router.instance.reg(Router.KPI.AI,this.socketAI);
+    Router.instance.reg(Router.KPI.AiHit,this.socketAiHit);
     MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
 
     //进入游戏发送数据
@@ -141,6 +169,64 @@ class PlaneControl2 extends createjs.Container{
 
 
 
+  //接受服务器的AI数据 AI
+  socketAI = (data)=>{
+    // console.log('接收AI数据：',data);
+    this.AIPDataArr=this.AIPDataArr.concat(data.value);
+  }
+
+  //接受服务器的AiHit数据 AiHit
+  socketAiHit = (data)=>{
+    console.log('接收AI碰撞数据：',data);
+    if(data.type===0){
+      //AI攻击玩家
+      let p=this.AIP[data.name];
+      let ep;
+      for(let s in data.hit){
+        GameData.dataShow.hitText('AI'+data.name+'击中玩家'+data.hit[s]);
+        if(data.hit[s]==UserData.Name)
+          ep=this.HeroPlane;
+        else
+          ep=this.enemyP[data.hit[s]];
+        p.bulletArr.map((b)=>{
+          if(b.bulletId==s){
+            if(ep.life>0){
+              ep.life-=b.atk;
+              // if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
+              // }
+            }
+            b.remove();
+          }
+        });
+      }
+    }
+    else if(data.type===1){
+      //玩家攻击AI
+      let p;
+      if(data.name==UserData.Name)
+        p=this.HeroPlane;
+      else
+        p=this.enemyP[data.name];
+      let ep;
+      for(let s in data.hit){
+        ep=this.AIP[data.hit[s]];
+        GameData.dataShow.hitText('玩家'+data.name+'击中AI'+data.hit[s]);
+        p.bulletArr.map((b)=>{
+          if(b.bulletId==s){
+            if(ep.life>0){
+              ep.life-=b.atk;
+              GameData.send=true;
+              this.psd.AI[ep.Name]=ep.life;
+            }
+            b.remove();
+          }
+        });
+      }
+    }
+  }
+
+
+
   /**
    * 发送状态数据
    */
@@ -196,11 +282,38 @@ class PlaneControl2 extends createjs.Container{
         SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,type:3,room:GameData.room});
     }
 
+    this.AIPDataDispose();
     this.enemyPDataDispose();
 
     this.HeroPlane.onFrame(this);
     this.sendData();
     GameData.send=false;
+  }
+
+
+  /**
+   * AI飞机数据处理
+   */
+  AIPDataDispose=()=>{
+    //AI飞机数据赋值
+    for(let i=this.AIPDataArr.length-1;i>=0;i--){
+      let obj=this.AIPDataArr[i];
+      if(this.AIP[obj.id]!=null){
+        let p=this.AIP[obj.id];
+        p.dataDispose(obj);
+      }
+    }
+    this.AIPDataArr=[];
+    //AI飞机帧频
+    for(let s in this.AIP){
+      if(this.AIP[s].mc==null){
+        delete this.AIP[s];
+      }
+      else {
+        this.AIP[s].onFrame();
+      }
+
+    }
   }
 
   /**
