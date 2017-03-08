@@ -43,6 +43,11 @@ class HeroPlane2 extends BasePlane{
    * @type {number}
    */
   attackTimeSet=300;
+  /**
+   * 攻击者object 记录助攻
+   * @type {{}}
+   */
+  attackerO={};
 
 
   constructor() {
@@ -69,6 +74,8 @@ class HeroPlane2 extends BasePlane{
     this.bulletArr.length==0&&(this.bulletNumId=0);
     this.speed=this.speedSet;
     this.attackTime-=GameData.timeDiff;
+    //助攻计算时间
+    this.attackerTimeOF();
     //道具检测
     GameData.planeMap.propHit(this);
     //按键判断
@@ -127,12 +134,65 @@ class HeroPlane2 extends BasePlane{
   }
 
   /**
+   * 设置攻击者
+   * @param name 攻击者name
+   */
+  setAttacker=(name)=>{
+    this.attackerO[name]=10000;
+  }
+
+  /**
+   * 还得攻击者 数组第一个元素为击杀者
+   * @param name 击杀者name
+   */
+  getAttacker(name){
+    delete this.attackerO[name];
+    let arr=[name];
+    for(let s in this.attackerO){
+      arr.push(s);
+    }
+    return arr;
+  }
+
+  /**
+   * 攻击者时间帧频
+   */
+  attackerTimeOF=()=>{
+    for(let s in this.attackerO){
+      this.attackerO[s]-=GameData.timeDiff;
+      if(this.attackerO[s]<=0){
+        delete this.attackerO[s];
+      }
+    }
+  }
+
+  /**
+   * 设置击杀助攻
+   * @param arr {Array} 击杀助攻数组
+   */
+  setKillAssist(arr){
+    for(let i=0;i<arr.length;i++){
+      if(arr[i]==this.Name){
+        if(i==0)
+          this.kill++;
+        else
+          this.assist++;
+        break;
+      }
+    }
+  }
+
+  /**
    * 复活
    */
   rebirth(){
     super.rebirth();
     this.gasoline=this.gasolineSet;
     this.bulletNum=this.bulletNumSet;
+    this.gameKill+=this.kill;
+    this.gameAssist+=this.assist;
+    this.kill=0;
+    this.assist=0;
   }
 
   /**

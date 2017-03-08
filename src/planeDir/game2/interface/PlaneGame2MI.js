@@ -102,7 +102,7 @@ class PlaneGame2MI extends createjs.Container{
    */
   MyEventF=(data)=>{
     if(data=='back'){
-      SocketClient.instance;
+      SocketClient.instance.closeClient();
       this.startS.visible=true;
       this.game.remove();
       this.game=null;
@@ -123,6 +123,8 @@ class PlaneGame2MI extends createjs.Container{
   onClick=(e)=>{
     let targetS=e.target;
     if(targetS==this.startS){
+      Router.instance.reg(Router.KPI.planProp,this.socketProp);
+      Router.instance.reg(Router.KPI.AI,this.socketAI);
       SocketClient.instance.send({KPI:Router.KPI.joinNOR,name:UserData.Name});
     }
     else if(targetS==this.backS){

@@ -38,6 +38,10 @@ class DataShow extends createjs.Container{
     this.FPSTxt.x = 650;
     this.FPSTxt.text='FPS:';
     this.addChild(this.FPSTxt);
+    //游戏时间文本
+    this.gameTimeT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
+    this.gameTimeT.x = 800;
+    this.addChild(this.gameTimeT);
     //人物信息
     this.lifeT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
     this.lifeT.x = 350;
@@ -119,6 +123,14 @@ class DataShow extends createjs.Container{
       this.ENameT.text='飞机:'+this.enemyPlane.Name;
       this.ELifeT.text='生命:'+this.enemyPlane.life;
     }
+  }
+
+  /**
+   * 游戏时间显示
+   * @param time 时间
+   */
+  gameTimeTxt=(time)=>{
+    this.gameTimeT.text='时间:'+time;
   }
 
   /**

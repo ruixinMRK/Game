@@ -152,6 +152,8 @@ class PlaneGameMI extends createjs.Container{
   onClick=(e)=>{
     let targetS=e.target;
     if(targetS==this.startS){
+      Router.instance.reg(Router.KPI.planProp,this.socketProp);
+      Router.instance.reg(Router.KPI.AI,this.socketAI);
       this.startS.visible=false;
       this.matchT.text='匹配中';
       SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.Name});

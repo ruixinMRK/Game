@@ -33,7 +33,7 @@ class Game2OverIf extends createjs.Container{
      * 界面背景
      * @type {createjs.Sprite}
      */
-    this.bgS=NameSpr.getInstance().getSpr('gameUI','overIf_bg');
+    this.bgS=NameSpr.getInstance().getSpr('gameUI','overIf2_bg');
     this.addChild(this.bgS);
     this.titleT=NameSpr.getText(this,'多人',"bold 24px Arial",'#000000',0,0);
     //按钮
@@ -41,26 +41,36 @@ class Game2OverIf extends createjs.Container{
      * 返回按钮
      * @type {createjs.Sprite}
      */
-    this.backS=NameSpr.getInstance().getSpr('gameUI','overIf_back');
-    this.backS.x=25;
-    this.backS.y=150;
-    this.addChild(this.backS);
+    this.backS=NameSpr.getNameSpr(this,'gameUI','overIf_back',50,320);
     /**
      * 重生按钮
      * @type {createjs.Sprite}
      */
-    this.rebirthS=NameSpr.getInstance().getSpr('gameUI','overIf_rebirth');
-    this.rebirthS.x=175;
-    this.rebirthS.y=150;
-    this.addChild(this.rebirthS);
+    this.rebirthS=NameSpr.getNameSpr(this,'gameUI','overIf_rebirth',250,320);
     //文本
+    /**
+     * 返回提示
+     * @type {createjs.Text}
+     */
+    this.timerT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',120,70);
+    /**
+     * 结果文本
+     * @type {createjs.Text}
+     */
+    this.resultT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',120,100);
     //属性
+    /**
+     * 倒计时
+     * @type {number}
+     */
+    this.timer=10;
     //事件
     this.addEventListener('click',this.onClick);
     //居中
     let bound=this.getBounds();
     this.x=(GameData.stageW-bound.width)/2;
     this.y=(GameData.stageH-bound.height)/2;
+
   }
 
 
@@ -81,7 +91,36 @@ class Game2OverIf extends createjs.Container{
 
   }
 
+  /**
+   * 显示界面
+   */
+  show=()=>{
+    this.visible=true;
+    this.resultT.text='击杀：'+GameData.planeControl.HeroPlane.kill+'\n助攻：'+GameData.planeControl.HeroPlane.assist;
 
+    this.timer=10;
+    this.timerT.text=this.timer+'秒后自动复活';
+    this.timerID=Timer.add((e)=>{
+      this.timer--;
+      this.timerT.text=this.timer+'秒后自动复活';
+      if(this.timer==0){
+        MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'rebirth');
+        this.visible=false;
+      }
+    },1000,this.timer);
+  }
+
+  /**
+   * 显示游戏结束界面
+   */
+  showOver=()=>{
+    this.visible=true;
+    this.rebirthS.visible=false;
+    this.timerT.visible=false;
+    this.backS.x=150;
+    this.resultT.text='总击杀：'+GameData.planeControl.HeroPlane.gameKill
+      +'\n总助攻：'+GameData.planeControl.HeroPlane.gameAssist;
+  }
 
 
   /**

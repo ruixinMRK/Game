@@ -98,6 +98,7 @@ class PlaneControl2 extends createjs.Container{
     Router.instance.reg(Router.KPI.planeLive,this.socketLive);
     Router.instance.reg(Router.KPI.AI,this.socketAI);
     Router.instance.reg(Router.KPI.AiHit,this.socketAiHit);
+    Router.instance.reg(Router.KPI.NorTime,this.socketNorTime);
     MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
 
     //进入游戏发送数据
@@ -139,6 +140,7 @@ class PlaneControl2 extends createjs.Container{
     else if(data.type==1){//击杀
       this.enemyP[data.name].visible=false;
       GameData.dataShow.hitText(data.epn+'击杀'+data.name);
+      this.HeroPlane.setKillAssist(data.attacker);
     }
     else if(data.type==2){//相撞
       this.enemyP[data.name].visible=false;
@@ -166,8 +168,6 @@ class PlaneControl2 extends createjs.Container{
       this.createEP(data.data);
     }
   }
-
-
 
   //接受服务器的AI数据 AI
   socketAI = (data)=>{
@@ -225,6 +225,20 @@ class PlaneControl2 extends createjs.Container{
     }
   }
 
+  //接受服务器的NorTime数据 游戏时间
+  socketNorTime = (data)=>{
+    // console.log('接收游戏时间数据：',data);
+    GameData.dataShow.gameTimeTxt(data.time);
+    if(data.time==1){
+      if(this.gameOverIf==null){
+        this.gameOverIf=new Game2OverIf();
+        GameData.stage.addChild(this.gameOverIf);
+        this.gameOverIf.showOver();
+      }
+      else if(this.gameOverIf.visible==false)
+        this.gameOverIf.showOver();
+    }
+  }
 
 
   /**
@@ -274,9 +288,10 @@ class PlaneControl2 extends createjs.Container{
       if(this.gameOverIf==null){
         this.gameOverIf=new Game2OverIf();
         GameData.stage.addChild(this.gameOverIf);
+        this.gameOverIf.show();
       }
       else if(this.gameOverIf.visible==false)
-        this.gameOverIf.visible=true;
+        this.gameOverIf.show();
       this.HeroPlane.visible=false;
       if(this.HeroPlane.gasoline<=0)
         SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,type:3,room:GameData.room});
@@ -340,8 +355,13 @@ class PlaneControl2 extends createjs.Container{
             if(b.bulletId==s){
               if(ep.life>0){
                 ep.life-=b.atk;
-                if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
-                  SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,epn:obj.Name,type:1,room:GameData.room});
+                if(this.HeroPlane.Name==obj.hitObj[s]){
+                  ep.setAttacker(p.Name);
+                  if(ep.life<=0){
+                    let arr=ep.getAttacker(p.Name);
+                    SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,epn:obj.Name,type:1,
+                      attacker:arr,room:GameData.room});
+                  }
                 }
               }
               b.remove();

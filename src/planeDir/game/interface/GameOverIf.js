@@ -50,10 +50,7 @@ class GameOverIf extends createjs.Container{
      * 返回提示
      * @type {createjs.Text}
      */
-    this.timerT=new createjs.Text('',"bold 24px Arial",'#000000');
-    this.timerT.x=80;
-    this.timerT.y=100;
-    this.addChild(this.timerT);
+    this.timerT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',80,100);
     //属性
     /**
      * 倒计时

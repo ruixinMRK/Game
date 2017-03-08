@@ -40,7 +40,26 @@ class BasePlane extends createjs.Container{
    * @type {number}
    */
   bulletSpeed=10;
-
+  /**
+   * 一局游戏击杀
+   * @type {number}
+   */
+  gameKill=0;
+  /**
+   * 一局游戏助攻
+   * @type {number}
+   */
+  gameAssist=0;
+  /**
+   * 击杀（一条命）
+   * @type {number}
+   */
+  kill=0;
+  /**
+   * 助攻（一条命）
+   * @type {number}
+   */
+  assist=0;
 
 
   constructor() {

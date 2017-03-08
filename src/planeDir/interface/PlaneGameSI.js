@@ -10,7 +10,7 @@ import NameSpr from '../../common/NameSpr';
 import MyEvent from '../../common/MyEvent';
 import PlaneGameMI from '../game/interface/PlaneGameMI';
 import PlaneGame2MI from '../game2/interface/PlaneGame2MI';
-import GameOverIf from '../game/interface/GameOverIf';
+import Game2OverIf from '../game2/interface/Game2OverIf';
 import SocketClient from '../../common/socket/SocketClient';
 
 /**
@@ -137,6 +137,10 @@ class PlaneGameSI extends createjs.Container{
   onClick=(e)=>{
     let targetS=e.target;
     if(targetS==this.warehouseS){
+      if(this.Game2OI==null){
+        this.Game2OI=new Game2OverIf();
+        this.addChild(this.Game2OI);
+      }
 
     }
     else if(targetS==this.shopS){
