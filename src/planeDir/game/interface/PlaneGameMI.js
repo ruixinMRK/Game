@@ -85,19 +85,11 @@ class PlaneGameMI extends createjs.Container{
      */
     this.timer=-1;
     //事件
-    this.addEventListener('click',this.onClick);
+    this.addEventListener('mousedown',this.onClick);
     //接受匹配数据
     Router.instance.reg(Router.KPI.matchPVP,this.socketMatchPVP);
-    Router.instance.reg(Router.KPI.planProp,this.socketProp);
-    Router.instance.reg(Router.KPI.AI,this.socketAI);
     MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
 
-  }
-  //接受服务器的AI数据 AI
-  socketAI = (data)=>{
-    console.log('匹配界面接收AI数据：',data);
-    GameData.AIPlaneArr=data.value;
-    Router.instance.unreg(Router.KPI.AI);
   }
   /**
    * 自定义事件返回界面 清除游戏
@@ -117,18 +109,13 @@ class PlaneGameMI extends createjs.Container{
     }
   }
 
-  //接受服务器的socketProp数据 飞机道具
-  socketProp = (data)=>{
-    console.log('接收飞机道具数据：',data);
-    GameData.propArr=data.value;
-    Router.instance.unreg(Router.KPI.planProp);
-  }
 
   //接受服务器的Router.KPI.matchPVP数据 匹配
   socketMatchPVP = (data)=>{
     console.log('接收匹配数据：',data);
     GameData.room=data.room;
-    GameData.gameType='pvp';
+    GameData.AIPlaneArr=data.ai;
+    GameData.propArr=data.prop;
     this.name2T.text='玩家：'+data.p;
 
     this.timer=3;
@@ -152,8 +139,6 @@ class PlaneGameMI extends createjs.Container{
   onClick=(e)=>{
     let targetS=e.target;
     if(targetS==this.startS){
-      Router.instance.reg(Router.KPI.planProp,this.socketProp);
-      Router.instance.reg(Router.KPI.AI,this.socketAI);
       this.startS.visible=false;
       this.matchT.text='匹配中';
       SocketClient.instance.send({KPI:Router.KPI.joinPVP,name:UserData.Name});
@@ -182,7 +167,7 @@ class PlaneGameMI extends createjs.Container{
   remove(){
     if(this.parent!=null)
       this.parent.removeChild(this);
-    this.removeEventListener('click',this.onClick);
+    this.removeEventListener('mousedown',this.onClick);
     Router.instance.unreg(Router.KPI.matchPVP);
     Router.instance.unreg(Router.KPI.planProp);
   }

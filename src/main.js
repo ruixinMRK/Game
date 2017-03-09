@@ -8,8 +8,10 @@ import Login from 'components/Login';
 import Timer from 'common/Timer';
 import Tools from './common/Tools';
 import PlaneGameSI from './planeDir/interface/PlaneGameSI';
+import LoadI from './planeDir/interface/LoadI';
 import UserData from 'manager/UserData';
 import GameData from './manager/GameData';
+import MyEvent from 'common/MyEvent';
 
 /**
  * 继承React.Component类 React组件类继承可以写成html写法  1366x768
@@ -51,13 +53,25 @@ class Main extends React.Component{
     let newW = oc.getWidth();
     let newH = oc.getHeight();
     let styleObj = `width:${newW}px;height:${newH}px;position:absolute;top:${(oi.height - oc.getHeight())/2}px;left:${(oi.width - oc.getWidth())/2}px;max-width:1366px;max-height:768px`
+
+    //移动端
+    if(oi.height>oi.width){
+
+      oc=Tools.getZoomByRate(GameData.stageW,GameData.stageH,oi.height,oi.width);
+      newW = oc.getWidth();
+      newH = oc.getHeight();
+      styleObj = `transform:matrix(0, 1, -1, 0, ${-(newW-newH)/2},${(newW-newH)/2});width:${newW}px;height:${newH}px;position:absolute;top:0px;left:${(oi.width - newH)/2}px;max-width:1366px;max-height:768px`
+    }
+
     this.refs.myCan.style.cssText = styleObj;
 
   }
 
+
   //state 更新后
   componentDidUpdate(){
     this.stage=new createjs.Stage(this.refs.myCan);
+    createjs.Touch.enable(this.stage);
     GameData.stage=this.stage;
     //createjs创建的舞台刷新才能显示，下面通过计时器设置为30毫秒刷新一次的帧频
     Timer.add(e=>{this.stage.update();},30,0);
@@ -65,9 +79,26 @@ class Main extends React.Component{
     this.renderStage();
     window.addEventListener("resize", e=> {this.renderStage();}, false);
 
-    //开始界面
-    this.planeGameSI=new PlaneGameSI();
-    this.stage.addChild(this.planeGameSI);
+    MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
+
+    this.loadI=new LoadI();
+    this.stage.addChild(this.loadI);
+
+  }
+
+  /**
+   * 自定义事件
+   * @param data
+   */
+  MyEventF=(data)=>{
+    if(data=='start'){
+      this.loadI.remove();
+      this.loadI=null;
+      MyEvent.removeEvent(MyEvent.ME_MyEvent,this.MyEventF);
+      //开始界面
+      this.planeGameSI=new PlaneGameSI();
+      this.stage.addChild(this.planeGameSI);
+    }
   }
 
   //登陆成功时

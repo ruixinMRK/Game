@@ -60,7 +60,7 @@ class GameDRI extends createjs.Container{
      */
     this.timer=3;
     //事件
-    this.addEventListener('click',this.onClick);
+    this.addEventListener('mousedown',this.onClick);
     this.timerT.text=this.timer+'秒后自动返回';
     this.timerID=Timer.add((e)=>{
         this.timer--;
@@ -100,7 +100,7 @@ class GameDRI extends createjs.Container{
   remove(){
     if(this.parent!=null)
       this.parent.removeChild(this);
-    this.removeEventListener('click',this.onClick);
+    this.removeEventListener('mousedown',this.onClick);
   }
 }
 export default GameDRI;

@@ -38,6 +38,8 @@ class PlaneGameSI extends createjs.Container{
    * 初始化
    */
   init(){
+    //BGM
+    createjs.Sound.play('s_gameBGM','none',0,0,-1);
     //背景
     this.mapS=new createjs.Shape();
     this.mapS.graphics.beginFill('#D0D0D0');
@@ -108,7 +110,7 @@ class PlaneGameSI extends createjs.Container{
     this.diamondT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',1200,0);
     this.textUpdate();
     //事件
-    this.addEventListener('click',this.onClick);
+    this.addEventListener('mousedown',this.onClick);
     MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
 
   }

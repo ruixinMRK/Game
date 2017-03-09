@@ -229,7 +229,7 @@ class PlaneControl2 extends createjs.Container{
   socketNorTime = (data)=>{
     // console.log('接收游戏时间数据：',data);
     GameData.dataShow.gameTimeTxt(data.time);
-    if(data.time==1){
+    if(data.time==0){
       if(this.gameOverIf==null){
         this.gameOverIf=new Game2OverIf();
         GameData.stage.addChild(this.gameOverIf);
