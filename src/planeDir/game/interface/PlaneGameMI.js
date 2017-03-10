@@ -85,7 +85,7 @@ class PlaneGameMI extends createjs.Container{
      */
     this.timer=-1;
     //事件
-    this.addEventListener('mousedown',this.onClick);
+    this.addEventListener('click',this.onClick);
     //接受匹配数据
     Router.instance.reg(Router.KPI.matchPVP,this.socketMatchPVP);
     MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
@@ -167,7 +167,7 @@ class PlaneGameMI extends createjs.Container{
   remove(){
     if(this.parent!=null)
       this.parent.removeChild(this);
-    this.removeEventListener('mousedown',this.onClick);
+    this.removeEventListener('click',this.onClick);
     Router.instance.unreg(Router.KPI.matchPVP);
     Router.instance.unreg(Router.KPI.planProp);
   }

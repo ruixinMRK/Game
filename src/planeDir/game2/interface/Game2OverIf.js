@@ -65,7 +65,7 @@ class Game2OverIf extends createjs.Container{
      */
     this.timer=10;
     //事件
-    this.addEventListener('mousedown',this.onClick);
+    this.addEventListener('click',this.onClick);
     //居中
     let bound=this.getBounds();
     this.x=(GameData.stageW-bound.width)/2;
@@ -129,7 +129,7 @@ class Game2OverIf extends createjs.Container{
   remove(){
     if(this.parent!=null)
       this.parent.removeChild(this);
-    this.removeEventListener('mousedown',this.onClick);
+    this.removeEventListener('click',this.onClick);
   }
 }
 export default Game2OverIf;

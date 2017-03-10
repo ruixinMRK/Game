@@ -71,7 +71,6 @@ class Main extends React.Component{
   //state 更新后
   componentDidUpdate(){
     this.stage=new createjs.Stage(this.refs.myCan);
-    createjs.Touch.enable(this.stage);
     GameData.stage=this.stage;
     //createjs创建的舞台刷新才能显示，下面通过计时器设置为30毫秒刷新一次的帧频
     Timer.add(e=>{this.stage.update();},30,0);

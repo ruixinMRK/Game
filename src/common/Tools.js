@@ -477,6 +477,25 @@ class Tools{
     let d = Math.sqrt(dx*dx + dy*dy);
     return d;
   }
+  //计算两点弧度
+  static getTwoPointRadian(p1,p2){
+    let dx = p2.x - p1.x;
+    let dy = p2.y - p1.y;
+    let d = Math.atan2(dy,dx);
+    return d;
+  }
+  /**
+   * 计算角速度
+   * @param radian 弧度
+   * @param speed 速度
+   * @returns {{}} obj.x=x速度 obj.y=y速度
+   */
+  static getAngleSpeed(radian,speed){
+    let obj={};
+    obj.x=Math.cos(radian)*speed;
+    obj.y=Math.sin(radian)*speed;
+    return obj;
+  }
   //取两轴的数值
   static drawY(cormax,cormin,cornumber){
     let temp = 0;
@@ -756,7 +775,7 @@ class Tools{
   }
   //判断是否是手机端
   static isMobile() {
-    return navigator.userAgent.match(/android|iphone|ipod|blackberry|meego|symbianos|windowsphone|ucbrowser/i)
+    return navigator.userAgent.match(/android|iphone|ipad|ipod|blackberry|meego|symbianos|windowsphone|ucbrowser/i)
   }
   //处理长字符串，将其过多的字符用其他字符替代，比如，字符过长，将多余的用...替代
   static doLongString(str,upCount,count,repStr){

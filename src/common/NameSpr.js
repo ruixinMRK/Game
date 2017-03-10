@@ -26,14 +26,17 @@ class NameSpr extends createjs.Container{
     this.setSheet('plane',['assets/img/plane.png'],planeArr);
 
     let gameUIArr=[["overIf2_bg",0,0,400,400],
-      ["overIf_bg",400,0,300,250],
-      ["people",400,250,150,150],
-      ["pvp",550,250,150,150],
-      ["warehouse",0,400,100,100],
-      ["shop",100,400,100,100],
-      ["overIf_back",200,400,100,80],
-      ["overIf_rebirth",300,400,100,80],
-      ["start",400,400,100,80]
+      ["rockerBg",400,0,300,300],
+      ["overIf_bg",0,400,300,250],
+      ["people",300,400,150,150],
+      ["pvp",450,400,150,150],
+      ["warehouse",400,300,100,100],
+      ["attack",500,300,100,100],
+      ["shop",600,300,100,100],
+      ["rockerBtn",600,400,100,100],
+      ["overIf_back",300,550,100,80],
+      ["overIf_rebirth",400,550,100,80],
+      ["start",500,550,100,80]
     ];
     this.setSheet('gameUI',['assets/img/gameUI.png'],gameUIArr);
 

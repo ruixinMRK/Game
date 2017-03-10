@@ -12,6 +12,8 @@ import PlaneGameMI from '../game/interface/PlaneGameMI';
 import PlaneGame2MI from '../game2/interface/PlaneGame2MI';
 import Game2OverIf from '../game2/interface/Game2OverIf';
 import SocketClient from '../../common/socket/SocketClient';
+import TouchIf from './TouchIf';
+import Tools from '../../common/Tools';
 
 /**
  * 飞机游戏开始界面
@@ -39,7 +41,7 @@ class PlaneGameSI extends createjs.Container{
    */
   init(){
     //BGM
-    createjs.Sound.play('s_gameBGM','none',0,0,-1);
+    // createjs.Sound.play('s_gameBGM','none',0,0,-1);
     //背景
     this.mapS=new createjs.Shape();
     this.mapS.graphics.beginFill('#D0D0D0');
@@ -82,6 +84,7 @@ class PlaneGameSI extends createjs.Container{
     this.pvpS.x=650;
     this.pvpS.y=200;
     this.addChild(this.pvpS);
+
     //文本
     /**
      * 用户名文本
@@ -110,7 +113,7 @@ class PlaneGameSI extends createjs.Container{
     this.diamondT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',1200,0);
     this.textUpdate();
     //事件
-    this.addEventListener('mousedown',this.onClick);
+    this.addEventListener('click',this.onClick);
     MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
 
   }

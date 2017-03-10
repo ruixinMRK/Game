@@ -9,6 +9,8 @@ import UserData from '../../manager/UserData';
 import Timer from '../../common/Timer';
 import Router from '../../common/socket/Router';
 import SocketClient from '../../common/socket/SocketClient';
+import Tools from '../../common/Tools';
+import TouchIf from './TouchIf';
 
 /**
  * 数据显示 FPS ping
@@ -108,6 +110,12 @@ class DataShow extends createjs.Container{
     }
     createjs.Ticker.framerate=60;
     FPS.startFPS(this);
+
+    //触屏操作界面
+    if(Tools.isMobile()!=null){
+      this.touchIf=new TouchIf();
+      this.addChild(this.touchIf);
+    }
 
     GameData.stage.addChild(this);
   }

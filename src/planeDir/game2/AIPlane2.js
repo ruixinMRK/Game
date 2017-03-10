@@ -77,9 +77,11 @@ class AIPlane2 extends BasePlane{
    * @param e
    */
   onFrame=(e)=>{
-    // console.log(this.Name,this.x, this.y, this.targetX,this.targetY);
-    // if(this.visible==false) return;
-    // if(this.life<=0)this.visible=false;
+    //移动
+    this.x=this.targetX;
+    this.y=this.targetY;
+    this.rotation=this.targetRot;
+    //状态初始化
     this.frameHitB=false;
     if(this.bulletArr.length==0)
       this.bulletNumId=0;
@@ -102,10 +104,6 @@ class AIPlane2 extends BasePlane{
           SocketClient.instance.send({KPI:Router.KPI.AiHit,room:GameData.room,type:0,'name':this.Name,'hit':hit});
         }
     }
-    //移动
-    this.x=this.targetX;
-    this.y=this.targetY;
-    this.rotation=this.targetRot;
 
     // console.log('子弹',this.bulletArr.length);
   }
