@@ -37,15 +37,14 @@ class Main extends React.Component{
 
   }
 
-
   /**
    * 渲染完成执行
    */
   componentDidMount(){
-
-
-
+    this.renderStage();
+    window.addEventListener("resize", e=> {this.renderStage();}, false);
   }
+
 
   renderStage=e=>{
     let oi=Tools.getInner();
@@ -53,17 +52,27 @@ class Main extends React.Component{
     let newW = oc.getWidth();
     let newH = oc.getHeight();
     let styleObj = `width:${newW}px;height:${newH}px;position:absolute;top:${(oi.height - oc.getHeight())/2}px;left:${(oi.width - oc.getWidth())/2}px;max-width:1366px;max-height:768px`
+    let img = this.refs.imgBG;
+    if(img.style.display === 'block')  img.style.display = 'none';
+
+    this.refs.myCan&&(this.refs.myCan.style.cssText = styleObj);
+
 
     //移动端
     if(oi.height>oi.width){
 
-      oc=Tools.getZoomByRate(GameData.stageW,GameData.stageH,oi.height,oi.width);
-      newW = oc.getWidth();
-      newH = oc.getHeight();
-      styleObj = `transform:matrix(0, 1, -1, 0, ${-(newW-newH)/2},${(newW-newH)/2});width:${newW}px;height:${newH}px;position:absolute;top:0px;left:${(oi.width - newH)/2}px;max-width:1366px;max-height:768px`
+      // oc=Tools.getZoomByRate(GameData.stageW,GameData.stageH,oi.height,oi.width);
+      // newW = oc.getWidth();
+      // newH = oc.getHeight();
+      // styleObj = `transform:matrix(0, 1, -1, 0, ${-(newW-newH)/2},${(newW-newH)/2});width:${newW}px;height:${newH}px;position:absolute;top:0px;left:${(oi.width - newH)/2}px;max-width:1366px;max-height:768px`
+
+      img.style.display = 'block';
+      img.setAttribute('width',oi.width);
+      img.setAttribute('height',oi.height);
+
     }
 
-    this.refs.myCan.style.cssText = styleObj;
+
 
   }
 
@@ -106,16 +115,21 @@ class Main extends React.Component{
     this.setState({loginState:1});
   }
 
+
   /**
    * 渲染
    */
   render(){
+
     return(
       <div>
-        {this.state.loginState==1?
-          <canvas ref='myCan' width='1366px' height='768px'/>:
-          <Login fn={this.loginSuccess}/>
+
+        {
+          this.state.loginState==1?
+            <canvas ref='myCan' width='1366px' height='768px'/>:
+            <Login fn={this.loginSuccess}/>
         }
+        <img ref = 'imgBG' src = './assets/img/test.gif' style = {{display:"none",position:'absolute',left:0,top:0}}/>:
       </div>
     );
   }
