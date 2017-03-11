@@ -58,6 +58,7 @@ class PlaneMap extends createjs.Container{
     }
     //道具
     let pa=GameData.propArr;
+    console.log(pa);
     let length=pa.length;
     for(let i=0;i<length;i++){
       let p=pa[i];

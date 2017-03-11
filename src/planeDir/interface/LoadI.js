@@ -4,6 +4,7 @@
 
 import 'createjs';
 import GameData from '../../manager/GameData';
+import LoadIData from './LoadIData';
 import UserData from '../../manager/UserData';
 import NameSpr from '../../common/NameSpr';
 import MyEvent from '../../common/MyEvent';
@@ -55,17 +56,7 @@ class LoadI extends createjs.Container{
     this.queue.on('fileload',this.onLoadFileload);
     // this.queue.on('progress',this.onLoadProgress);
     // this.queue.on('fileprogress',this.onLoadFileProgress);
-    let dataA=['assets/img/gameBg.png',
-      'assets/img/gameUI.png',
-      'assets/img/guiqizhan.png',
-      'assets/img/icon.png',
-      'assets/img/plane.png',
-      'assets/img/woody_0.png',
-      'assets/img/woody_1.png',
-      'assets/img/woody_2.png',
-      {id:'s_gameBGM',src:'assets/sound/gameBGM.mp3'}
-    ];
-    this.queue.loadManifest(dataA);
+    this.queue.loadManifest(LoadIData.loadData);
   }
 
   /**

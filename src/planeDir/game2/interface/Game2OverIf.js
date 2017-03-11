@@ -81,10 +81,12 @@ class Game2OverIf extends createjs.Container{
   onClick=(e)=>{
     let targetS=e.target;
     if(targetS==this.backS){
+      Timer.clear(this.timerID);
       MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'back');
       this.visible=false;
     }
     else if(targetS==this.rebirthS){
+      Timer.clear(this.timerID);
       MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'rebirth');
       this.visible=false;
     }

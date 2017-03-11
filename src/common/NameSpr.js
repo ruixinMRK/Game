@@ -2,6 +2,7 @@
  * Created by tudouhu on 2017/2/8.
  */
 import 'createjs';
+import NameSprData from './NameSprData';
 
 /**
  * 根据名称在精灵图获得sprite 单例类
@@ -10,38 +11,10 @@ class NameSpr extends createjs.Container{
 
   constructor(){
     super();
-    this.init();
-  }
-
-  /**
-   * 初始化
-   */
-  init(){
-    let planeArr=[["plane",0,0,48,58],
-      ["p_bullet",48,0,40,40],
-      ["p_gasoline",88,0,40,40],
-      ["p_life",128,0,40,40],
-      ["bullet",168,0,20,20]
-    ];
-    this.setSheet('plane',['assets/img/plane.png'],planeArr);
-
-    let gameUIArr=[["overIf2_bg",0,0,400,400],
-      ["rockerBg",400,0,300,300],
-      ["overIf_bg",0,400,300,250],
-      ["people",300,400,150,150],
-      ["pvp",450,400,150,150],
-      ["warehouse",400,300,100,100],
-      ["attack",500,300,100,100],
-      ["shop",600,300,100,100],
-      ["rockerBtn",600,400,100,100],
-      ["overIf_back",300,550,100,80],
-      ["overIf_rebirth",400,550,100,80],
-      ["start",500,550,100,80]
-    ];
-    this.setSheet('gameUI',['assets/img/gameUI.png'],gameUIArr);
-
-    let gameBgArr=[["gameBg",0,0,2000,2000]];
-    this.setSheet('gameBg',['assets/img/gameBg.png'],gameBgArr);
+    //预加载精灵图加载到内存
+    this.getSpr('gameUI');
+    this.getSpr('plane');
+    this.getSpr('gameBg');
   }
 
   /**
@@ -76,8 +49,17 @@ class NameSpr extends createjs.Container{
    * @returns {*} sprite
    */
   getSpr(fileName,sprName){
-    if(this[fileName+'index']==null)return null;
+    //判断是否有精灵图索引存在，不存在读取NameSprData数据创建精灵图索引，NameSprData也没有对应数据则返回null
+    if(this[fileName+'index']==null){
+      if(NameSprData.sprData[fileName]!=null){
+        let obj=NameSprData.sprData[fileName];
+        this.setSheet(fileName,obj.srcA,obj.frameA);
+      }
+      if(this[fileName+'index']==null)return null;
+    }
+    if(sprName==null)return null;
 
+    //获得创建一个sprite
     let spr=new createjs.Sprite(this[fileName+'sheet']);
     spr.fileName=fileName;
     spr.sprName=sprName;
