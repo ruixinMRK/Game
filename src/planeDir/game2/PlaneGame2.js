@@ -14,7 +14,6 @@ import PlaneControl2 from './PlaneControl2';
 import DataShow from '../interface/DataShow';
 import PlaneMap2 from './PlaneMap2';
 import MyEvent from '../../common/MyEvent';
-import Game2DRI from './interface/Game2DRI';
 
 /**
  * 飞机大战游戏多人模式
@@ -36,11 +35,6 @@ class PlaneGame2 extends createjs.Container{
    * @type {PlaneControl2}
    */
   planeControl=null;
-  /**
-   * 退出房间界面
-   * @type {Game2DRI}
-   */
-  gameDRI=null;
 
   constructor(){
     super();
@@ -70,14 +64,6 @@ class PlaneGame2 extends createjs.Container{
     Router.instance.reg(Router.KPI.destroyPvpRoom,this.socketDestroyPR);
   }
 
-  //接受服务器的destroyPvpRoom数据 退出房间
-  socketDestroyPR = (data)=>{
-    console.log('接收退出房间数据：',data);
-    if(this.gameDRI==null){
-      this.gameDRI=new Game2DRI();
-      GameData.stage.addChild(this.gameDRI);
-    }
-  }
 
   /**
    * 按键按下
@@ -183,10 +169,6 @@ class PlaneGame2 extends createjs.Container{
     document.removeEventListener('keydown',this.onKeyDown);
     document.removeEventListener('keyup',this.onKeyUp);
     Timer.clear(this.timeId);
-    if(this.gameDRI){
-      this.gameDRI.remove();
-      this.gameDRI=null;
-    }
     this.map.remove();
     this.map=null;
     GameData.planeMap=null;

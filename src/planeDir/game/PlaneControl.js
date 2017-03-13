@@ -99,14 +99,8 @@ class PlaneControl extends createjs.Container{
     Router.instance.reg(Router.KPI.AI,this.socketAI);
     Router.instance.reg(Router.KPI.AiHit,this.socketAiHit);
 
-    //进入游戏发送数据
-    let od={};
-    od.n=this.HeroPlane.Name;
-    od.x=this.HeroPlane.x;
-    od.y=this.HeroPlane.y;
-    od.r=this.HeroPlane.rotation;
-
-    SocketClient.instance.send({KPI:Router.KPI.planeLive,name:UserData.Name,data:od,room:GameData.room});
+    //发送加入数据
+    this.sendGoLiveData(true);
   }
 
   //接受服务器的planWalk数据 移动
@@ -126,14 +120,11 @@ class PlaneControl extends createjs.Container{
   }
   //接受服务器的goLive数据 加入
   socketLive = (data)=>{
-    console.log('接收加入数据：',data);
+    console.log('接收加入数据：',data);;
+    //接收数据存在name表示有新用户加入游戏（发送不带name数据人新用户创建飞机），不带name表示已经存在游戏中
     if(data.name!=null){
-      let od={};
-      od.n=this.HeroPlane.Name;
-      od.x=this.HeroPlane.x;
-      od.y=this.HeroPlane.y;
-      od.r=this.HeroPlane.rotation;
-      SocketClient.instance.send({KPI:Router.KPI.planeLive,data:od,room:GameData.room});
+      //发送存在游戏中加入数据
+      this.sendGoLiveData();
       this.createEP(data.data);
       GameData.dataShow.hitText(data.name+'加入了游戏');
     }
@@ -161,16 +152,14 @@ class PlaneControl extends createjs.Container{
           ep=this.HeroPlane;
         else
           ep=this.enemyP[data.hit[s]];
-        p.bulletArr.map((b)=>{
-          if(b.bulletId==s){
-            if(ep.life>0){
-              ep.life-=b.atk;
-              // if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
-              // }
-            }
-            b.remove();
-          }
-        });
+        //子弹
+        let b=p.bulletFind(s);
+        if(b!=null){
+          ep.life-=b.atk;
+          // if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
+          // }
+          b.remove();
+        }
       }
     }
     else if(data.type===1){
@@ -184,22 +173,37 @@ class PlaneControl extends createjs.Container{
       for(let s in data.hit){
         ep=this.AIP[data.hit[s]];
         GameData.dataShow.hitText('玩家'+data.name+'击中AI'+data.hit[s]);
-        p.bulletArr.map((b)=>{
-          if(b.bulletId==s){
-            if(ep.life>0){
-              ep.life-=b.atk;
-              GameData.send=true;
-              this.psd.AI[ep.Name]=ep.life;
-            }
-            b.remove();
+        //子弹
+        let b=p.bulletFind(s);
+        if(b!=null){
+          if(ep.life>0){
+            ep.life-=b.atk;
+            GameData.send=true;
+            this.psd.AI[ep.Name]=ep.life;
           }
-        });
+          b.remove();
+        }
       }
     }
   }
 
 
 
+  /**
+   * 加入游戏发送数据
+   * @param live 默认false true=第一次加入游戏 false=已经在游戏中把数据发送给新加入的用户
+   */
+  sendGoLiveData(live=false){
+    let od={};
+    od.n=this.HeroPlane.Name;
+    od.x=this.HeroPlane.x;
+    od.y=this.HeroPlane.y;
+    od.r=this.HeroPlane.rotation;
+    if(live)
+      SocketClient.instance.send({KPI:Router.KPI.planeLive,name:UserData.Name,data:od,room:GameData.room});
+    else
+      SocketClient.instance.send({KPI:Router.KPI.planeLive,data:od,room:GameData.room});
+  }
 
   /**
    * 发送状态数据
@@ -278,7 +282,6 @@ class PlaneControl extends createjs.Container{
       else {
         this.AIP[s].onFrame();
       }
-
     }
   }
 
@@ -304,16 +307,14 @@ class PlaneControl extends createjs.Container{
           else{
             ep=this.enemyP[obj.hitObj[s]];
           }
-          p.bulletArr.map((b)=>{
-            if(b.bulletId==s){
-              if(ep.life>0){
-                ep.life-=b.atk;
-                // if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
-                // }
-              }
-              b.remove();
-            }
-          });
+          //子弹
+          let b=p.bulletFind(s);
+          if(b!=null){
+            ep.life-=b.atk;
+            // if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
+            // }
+            b.remove();
+          }
 
         }
       }
@@ -344,7 +345,10 @@ class PlaneControl extends createjs.Container{
       this.gameOverIf=null;
     }
     Router.instance.unreg(Router.KPI.planeWalk);
+    Router.instance.unreg(Router.KPI.resultPVP);
     Router.instance.unreg(Router.KPI.planeLive);
+    Router.instance.unreg(Router.KPI.AI);
+    Router.instance.unreg(Router.KPI.AiHit);
     if(this.gameOverIf){
       this.gameOverIf.remove();
       this.gameOverIf=null;

@@ -65,7 +65,7 @@ class LoadI extends createjs.Container{
    */
   loadTTxt=(fileNum)=>{
     this.loadNum++;
-    this.loadT.text='正在加载资源'+Math.round(this.loadNum/fileNum*100)+'%';3
+    this.loadT.text='正在加载资源'+Math.round(this.loadNum/fileNum*100)+'%';
   }
 
 

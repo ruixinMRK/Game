@@ -91,7 +91,7 @@ class PlaneMap extends createjs.Container{
             }
           }
         }
-      }
+  }
 
 
   /**

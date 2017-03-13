@@ -101,14 +101,8 @@ class PlaneControl2 extends createjs.Container{
     Router.instance.reg(Router.KPI.NorTime,this.socketNorTime);
     MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
 
-    //进入游戏发送数据
-    let od={};
-    od.n=this.HeroPlane.Name;
-    od.x=this.HeroPlane.x;
-    od.y=this.HeroPlane.y;
-    od.r=this.HeroPlane.rotation;
-
-    SocketClient.instance.send({KPI:Router.KPI.planeLive,name:UserData.Name,data:od,room:GameData.room});
+    //发送加入数据
+    this.sendGoLiveData(true);
   }
 
   /**
@@ -129,9 +123,9 @@ class PlaneControl2 extends createjs.Container{
     this.enemyPDataArr.unshift(data);
     // console.log('接收移动数据：',data,data.Name);
   }
-  //接受服务器的goDie数据 退出
+  //接受服务器的goDie数据 死亡复活
   socketDie = (data)=>{
-    console.log('接收退出数据：',data);
+    console.log('接收死亡复活数据：',data);
     if(data.type==0){//复活
       this.enemyP[data.name].visible=true;
       this.enemyP[data.name].rebirth();
@@ -149,18 +143,14 @@ class PlaneControl2 extends createjs.Container{
       this.enemyP[data.name].visible=false;
       GameData.dataShow.hitText(data.name+'坠机了');
     }
-    // console.log('接收退出数据：',data,data.Name);
   }
   //接受服务器的goLive数据 加入
   socketLive = (data)=>{
     console.log('接收加入数据：',data);
+    //接收数据存在name表示有新用户加入游戏（发送不带name数据人新用户创建飞机），不带name表示已经存在游戏中
     if(data.name!=null){
-      let od={};
-      od.n=this.HeroPlane.Name;
-      od.x=this.HeroPlane.x;
-      od.y=this.HeroPlane.y;
-      od.r=this.HeroPlane.rotation;
-      SocketClient.instance.send({KPI:Router.KPI.planeLive,data:od,room:GameData.room});
+      //发送存在游戏中加入数据
+      this.sendGoLiveData();
       this.createEP(data.data);
       GameData.dataShow.hitText(data.name+'加入了游戏');
     }
@@ -188,16 +178,14 @@ class PlaneControl2 extends createjs.Container{
           ep=this.HeroPlane;
         else
           ep=this.enemyP[data.hit[s]];
-        p.bulletArr.map((b)=>{
-          if(b.bulletId==s){
-            if(ep.life>0){
-              ep.life-=b.atk;
-              // if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
-              // }
-            }
-            b.remove();
-          }
-        });
+        //子弹
+        let b=p.bulletFind(s);
+        if(b!=null){
+          ep.life-=b.atk;
+          // if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
+          // }
+           b.remove();
+        }
       }
     }
     else if(data.type===1){
@@ -211,16 +199,16 @@ class PlaneControl2 extends createjs.Container{
       for(let s in data.hit){
         ep=this.AIP[data.hit[s]];
         GameData.dataShow.hitText('玩家'+data.name+'击中AI'+data.hit[s]);
-        p.bulletArr.map((b)=>{
-          if(b.bulletId==s){
-            if(ep.life>0){
-              ep.life-=b.atk;
-              GameData.send=true;
-              this.psd.AI[ep.Name]=ep.life;
-            }
-            b.remove();
+        //子弹
+        let b=p.bulletFind(s);
+        if(b!=null){
+          if(ep.life>0){
+            ep.life-=b.atk;
+            GameData.send=true;
+            this.psd.AI[ep.Name]=ep.life;
           }
-        });
+          b.remove();
+        }
       }
     }
   }
@@ -235,11 +223,27 @@ class PlaneControl2 extends createjs.Container{
         GameData.stage.addChild(this.gameOverIf);
         this.gameOverIf.showOver();
       }
-      else if(this.gameOverIf.visible==false)
+      else
         this.gameOverIf.showOver();
     }
   }
 
+
+  /**
+   * 加入游戏发送数据
+   * @param live 默认false true=第一次加入游戏 false=已经在游戏中把数据发送给新加入的用户
+   */
+  sendGoLiveData(live=false){
+    let od={};
+    od.n=this.HeroPlane.Name;
+    od.x=this.HeroPlane.x;
+    od.y=this.HeroPlane.y;
+    od.r=this.HeroPlane.rotation;
+    if(live)
+      SocketClient.instance.send({KPI:Router.KPI.planeLive,name:UserData.Name,data:od,room:GameData.room});
+    else
+      SocketClient.instance.send({KPI:Router.KPI.planeLive,data:od,room:GameData.room});
+  }
 
   /**
    * 发送状态数据
@@ -327,7 +331,6 @@ class PlaneControl2 extends createjs.Container{
       else {
         this.AIP[s].onFrame();
       }
-
     }
   }
 
@@ -351,23 +354,23 @@ class PlaneControl2 extends createjs.Container{
           else{
             ep=this.enemyP[obj.hitObj[s]];
           }
-          p.bulletArr.map((b)=>{
-            if(b.bulletId==s){
-              if(ep.life>0){
-                ep.life-=b.atk;
-                if(this.HeroPlane.Name==obj.hitObj[s]){
-                  ep.setAttacker(p.Name);
-                  if(ep.life<=0){
-                    let arr=ep.getAttacker(p.Name);
-                    SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,epn:obj.Name,type:1,
-                      attacker:arr,room:GameData.room});
-                  }
+          //子弹
+          let b=p.bulletFind(s);
+          if(b!=null){
+            if(ep.life>0){
+              ep.life-=b.atk;
+              if(this.HeroPlane.Name==obj.hitObj[s]){
+                ep.setAttacker(p.Name);
+                if(ep.life<=0){
+                  let arr=ep.getAttacker(p.Name);
+                  //发送死亡和击杀助攻
+                  SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,epn:obj.Name,type:1,
+                    attacker:arr,room:GameData.room});
                 }
               }
-              b.remove();
             }
-          });
-
+            b.remove();
+          }
         }
       }
     }

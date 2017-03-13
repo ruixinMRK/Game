@@ -33,17 +33,13 @@ class GameOverIf extends createjs.Container{
      * 界面背景
      * @type {createjs.Sprite}
      */
-    this.bgS=NameSpr.getInstance().getSpr('gameUI','overIf_bg');
-    this.addChild(this.bgS);
+    this.bgS=NameSpr.getNameSpr(this,'gameUI','overIf_bg');
     //按钮
     /**
      * 返回按钮
      * @type {createjs.Sprite}
      */
-    this.backS=NameSpr.getInstance().getSpr('gameUI','overIf_back');
-    this.backS.x=100;
-    this.backS.y=150;
-    this.addChild(this.backS);
+    this.backS=NameSpr.getNameSpr(this,'gameUI','overIf_back',100,150);
     //文本
     this.titleT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',80,80);
     /**

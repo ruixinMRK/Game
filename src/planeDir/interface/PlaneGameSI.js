@@ -53,37 +53,22 @@ class PlaneGameSI extends createjs.Container{
      * 仓库图标
      * @type {createjs.Sprite}
      */
-    this.warehouseS=NameSpr.getInstance().getSpr('gameUI','warehouse');
-    this.warehouseS.x=540;
-    this.warehouseS.y=668;
-    this.addChild(this.warehouseS);
-
+    this.warehouseS=NameSpr.getNameSpr(this,'gameUI','warehouse',540,668);
     /**
      * 商店图标
      * @type {createjs.Sprite}
      */
-    this.shopS=NameSpr.getInstance().getSpr('gameUI','shop');
-    this.shopS.x=650;
-    this.shopS.y=668;
-    this.addChild(this.shopS);
-
+    this.shopS=NameSpr.getNameSpr(this,'gameUI','shop',650,668);
     /**
      * 多人图标
      * @type {createjs.Sprite}
      */
-    this.peopleS=NameSpr.getInstance().getSpr('gameUI','people');
-    this.peopleS.x=480;
-    this.peopleS.y=200;
-    this.addChild(this.peopleS);
-
+    this.peopleS=NameSpr.getNameSpr(this,'gameUI','people',480,200);
     /**
      * pvp图标
      * @type {createjs.Sprite}
      */
-    this.pvpS=NameSpr.getInstance().getSpr('gameUI','pvp');
-    this.pvpS.x=650;
-    this.pvpS.y=200;
-    this.addChild(this.pvpS);
+    this.pvpS=NameSpr.getNameSpr(this,'gameUI','pvp',650,200);
 
     //文本
     /**

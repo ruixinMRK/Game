@@ -128,6 +128,28 @@ class HeroPlane2 extends BasePlane{
         }
       }
     }
+
+
+    //子弹检测碰撞AI飞机
+    for(let i=this.bulletArr.length-1;i>=0;i--){
+      let bullet=this.bulletArr[i];
+      let r1=NameSpr.rectGlobal(bullet);
+
+      for(let s in e.AIP){
+        if(e.AIP[s].frameHitB) break;
+        let r2=NameSpr.rectGlobal(e.AIP[s]);
+
+        if(r1.intersects(r2)){
+          //子弹击中了
+          GameData.dataShow.enemyPlane=e.AIP[s];
+          e.AIP[s].frameHitB=true;
+          let hit={};
+          hit[bullet.bulletId]=e.AIP[s].Name;
+          SocketClient.instance.send({KPI:Router.KPI.AiHit,room:GameData.room,type:1,'name':this.Name,'hit':hit});
+          break;
+        }
+      }
+    }
     //飞机数据显示
     GameData.dataShow.planeTxt(this);
     // console.log('子弹',this.bulletArr.length);
@@ -138,11 +160,12 @@ class HeroPlane2 extends BasePlane{
    * @param name 攻击者name
    */
   setAttacker=(name)=>{
+    //10秒
     this.attackerO[name]=10000;
   }
 
   /**
-   * 还得攻击者 数组第一个元素为击杀者
+   * 获得攻击者 数组第一个元素为击杀者剩下为助攻
    * @param name 击杀者name
    */
   getAttacker(name){
@@ -151,6 +174,7 @@ class HeroPlane2 extends BasePlane{
     for(let s in this.attackerO){
       arr.push(s);
     }
+    this.attackerO={};
     return arr;
   }
 

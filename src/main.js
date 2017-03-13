@@ -129,7 +129,7 @@ class Main extends React.Component{
             <canvas ref='myCan' width='1366px' height='768px'/>:
             <Login fn={this.loginSuccess}/>
         }
-        <img ref = 'imgBG' src = './assets/img/test.gif' style = {{display:"none",position:'absolute',left:0,top:0}}/>:
+        <img ref = 'imgBG' src = './assets/img/test.gif' style = {{display:"none",position:'absolute',left:0,top:0}}/>
       </div>
     );
   }

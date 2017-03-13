@@ -11,6 +11,7 @@ import Router from '../../common/socket/Router';
 import SocketClient from '../../common/socket/SocketClient';
 import Tools from '../../common/Tools';
 import TouchIf from './TouchIf';
+import NameSpr from '../../common/NameSpr';
 
 /**
  * 数据显示 FPS ping
@@ -25,49 +26,21 @@ class DataShow extends createjs.Container{
   constructor(){
     super();
     //击中文本
-    this.hittxt=new createjs.Text('',"bold 46px Arial",'#000000');
-    this.hittxt.x = 600;
-    this.hittxt.y = 30;
-    this.addChild(this.hittxt);
+    this.hittxt=NameSpr.getText(this,'',"bold 46px Arial",'#000000',600,30);
     this.hitText(UserData.Name+'加入游戏');
     //ping文本
-    this.pingTxt=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
-    this.pingTxt.x = 720;
-    this.pingTxt.text='ping:';
-    this.addChild(this.pingTxt);
+    this.pingTxt=NameSpr.getText(this,'ping:',"bold 18px Arial",'#FFFFFF',720);
     //FPS文本
-    this.FPSTxt=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
-    this.FPSTxt.x = 650;
-    this.FPSTxt.text='FPS:';
-    this.addChild(this.FPSTxt);
+    this.FPSTxt=NameSpr.getText(this,'FPS:',"bold 18px Arial",'#FFFFFF',650);
     //游戏时间文本
-    this.gameTimeT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
-    this.gameTimeT.x = 800;
-    this.addChild(this.gameTimeT);
+    this.gameTimeT=NameSpr.getText(this,'',"bold 18px Arial",'#FFFFFF',800);
     //人物信息
-    this.lifeT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
-    this.lifeT.x = 350;
-    this.lifeT.y=240;
-    this.lifeT.text='生命:';
-    this.addChild(this.lifeT);
-    this.gasolineT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
-    this.gasolineT.x = 350;
-    this.gasolineT.y=260
-    this.gasolineT.text='汽油:';
-    this.addChild(this.gasolineT);
-    this.bulletNumT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
-    this.bulletNumT.x = 350;
-    this.bulletNumT.y=280;
-    this.bulletNumT.text='子弹:';
-    this.addChild(this.bulletNumT);
+    this.lifeT=NameSpr.getText(this,'生命:',"bold 18px Arial",'#FFFFFF',350,240);
+    this.gasolineT=NameSpr.getText(this,'汽油:',"bold 18px Arial",'#FFFFFF',350,260);
+    this.bulletNumT=NameSpr.getText(this,'子弹:',"bold 18px Arial",'#FFFFFF',350,280);
     //敌机信息
-    this.ENameT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
-    this.ENameT.text='飞机:';
-    this.addChild(this.ENameT);
-    this.ELifeT=new createjs.Text('',"bold 18px Arial",'#FFFFFF');
-    this.ELifeT.y=20;
-    this.ELifeT.text='生命:';
-    this.addChild(this.ELifeT);
+    this.ENameT=NameSpr.getText(this,'飞机:',"bold 18px Arial",'#FFFFFF');
+    this.ELifeT=NameSpr.getText(this,'生命:',"bold 18px Arial",'#FFFFFF',0,20);
     //接受ping数据
     Router.instance.reg(Router.KPI.ping,this.socketPing);
 
@@ -88,28 +61,28 @@ class DataShow extends createjs.Container{
     this.currentPingTime = 0;
 
     //fps
-    var FPS = {};
-    FPS.time = 0;
-    FPS.FPS = 0;
-    FPS.startFPS = function (stage){
-      FPS.txt =new createjs.Text("", "18px Arial", "#ffffff");
-      FPS.txt.x=580;
-      stage.addChild(FPS.txt);
-      createjs.Ticker.addEventListener("tick", FPS.TickerFPS);
+    this.FPS = {};
+    this.FPS.time = 0;
+    this.FPS.FPS = 0;
+    this.FPS.startFPS = (stage)=>{
+      this.FPS.txt =new createjs.Text("", "18px Arial", "#ffffff");
+      this.FPS.txt.x=580;
+      stage.addChild(this.FPS.txt);
+      createjs.Ticker.addEventListener("tick", this.FPS.TickerFPS);
     }
-    FPS.TickerFPS = function (event)
+    this.FPS.TickerFPS = (event)=>
     {
-      FPS.date = new Date();
-      FPS.currentTime = FPS.date.getTime();
-      if(FPS.time!=0)
+      this.FPS.date = new Date();
+      this.FPS.currentTime = this.FPS.date.getTime();
+      if(this.FPS.time!=0)
       {
-        FPS.FPS = Math.ceil(1000/(FPS.currentTime -  FPS.time));
+        this.FPS.FPS = Math.ceil(1000/(this.FPS.currentTime -  this.FPS.time));
       }
-      FPS.time = FPS.currentTime;
-      FPS.txt.text = "cjs: "+FPS.FPS;
+      this.FPS.time = this.FPS.currentTime;
+      this.FPS.txt.text = "cjs: "+this.FPS.FPS;
     }
     createjs.Ticker.framerate=60;
-    FPS.startFPS(this);
+    this.FPS.startFPS(this);
 
     //触屏操作界面
     if(Tools.isMobile()!=null){
@@ -151,7 +124,7 @@ class DataShow extends createjs.Container{
     this.bulletNumT.text='子弹:'+plane.bulletNum+'/'+plane.bulletNumSet;
   }
 
-//接受服务器的ping数据 延迟
+  //接受服务器的ping数据 延迟
   socketPing = (data)=>{
     // console.log('接收延迟数据：',data);
 
@@ -178,7 +151,7 @@ class DataShow extends createjs.Container{
       this.pingF=this.pingFSet;
       let obj={};
       obj.KPI='ping';
-      obj.t=new Date().getTime();//获取10秒的毫秒
+      obj.t=new Date().getTime();
       SocketClient.instance.send(obj);
     }
 
@@ -186,7 +159,7 @@ class DataShow extends createjs.Container{
 
 
   /**
-   * 显示击中
+   * 显示击中文本
    * @param str
    */
   hitText(str){
@@ -206,6 +179,7 @@ class DataShow extends createjs.Container{
     if(this.parent!=null)
       this.parent.removeChild(this);
     Router.instance.unreg(Router.KPI.ping);
+    createjs.Ticker.removeEventListener("tick", this.FPS.TickerFPS);
   }
 
 }

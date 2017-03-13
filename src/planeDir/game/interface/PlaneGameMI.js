@@ -44,10 +44,7 @@ class PlaneGameMI extends createjs.Container{
      * start图标
      * @type {createjs.Sprite}
      */
-    this.startS=NameSpr.getInstance().getSpr('gameUI','start');
-    this.startS.x=600;
-    this.startS.y=600;
-    this.addChild(this.startS);
+    this.startS=NameSpr.getNameSpr(this,'gameUI','start',600,600);
     /**
      * 返回图标
      * @type {createjs.Sprite}
@@ -58,26 +55,17 @@ class PlaneGameMI extends createjs.Container{
      * 当前玩家用户名
      * @type {createjs.Text}
      */
-    this.name1T=new createjs.Text('玩家：'+UserData.Name,"bold 18px Arial",'#000000');
-    this.name1T.x=400;
-    this.name1T.y=400;
-    this.addChild(this.name1T);
+    this.name1T=NameSpr.getText(this,'玩家：'+UserData.Name,"bold 18px Arial",'#000000',400,400);
     /**
      * 匹配玩家用户名
      * @type {createjs.Text}
      */
-    this.name2T=new createjs.Text('玩家：',"bold 18px Arial",'#000000');
-    this.name2T.x=800;
-    this.name2T.y=400;
-    this.addChild(this.name2T);
+    this.name2T=NameSpr.getText(this,'玩家：',"bold 18px Arial",'#000000',800,400);
     /**
      * 匹配提示
      * @type {createjs.Text}
      */
-    this.matchT=new createjs.Text('点击开始匹配',"bold 36px Arial",'#000000');
-    this.matchT.x=630;
-    this.matchT.y=200;
-    this.addChild(this.matchT);
+    this.matchT=NameSpr.getText(this,'点击开始匹配',"bold 36px Arial",'#000000',630,200);
     //属性
     /**
      * 倒计时
@@ -119,7 +107,7 @@ class PlaneGameMI extends createjs.Container{
     this.name2T.text='玩家：'+data.p;
 
     this.timer=3;
-    this.matchT.text=this.timer;
+    this.matchT.text=this.timer+'秒后进入游戏';
     Timer.add((e)=>{
       if(this.timer!=-1){
         this.timer--;
@@ -169,7 +157,7 @@ class PlaneGameMI extends createjs.Container{
       this.parent.removeChild(this);
     this.removeEventListener('click',this.onClick);
     Router.instance.unreg(Router.KPI.matchPVP);
-    Router.instance.unreg(Router.KPI.planProp);
+    MyEvent.removeEvent(MyEvent.ME_MyEvent,this.MyEventF);
   }
 }
 export default PlaneGameMI;

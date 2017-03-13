@@ -43,17 +43,8 @@ class Prop extends createjs.Container{
     this.mc.regX = bound.width / 2;
     this.mc.regY = bound.height / 2;
     this.addChild(this.mc);
-    // this.randomPos();
   }
 
-  /**
-   * 随机位置
-   */
-  randomPos(){
-    let bound = this.mc.getBounds();
-    this.x=bound.width/2+Math.random()*(GameData.mapW-bound.width);
-    this.y=bound.height/2+Math.random()*(GameData.mapH-bound.height);
-  }
 
 
   /**

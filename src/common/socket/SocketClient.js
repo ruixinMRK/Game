@@ -14,6 +14,10 @@ class SocketClient{
     this.sendDataArr=[];
   }
 
+  /**
+   * 获得实例
+   * @returns {null|SocketClient}
+   */
   static get instance(){
     if(!SocketClient.__instance){
      SocketClient.__instance=new SocketClient();

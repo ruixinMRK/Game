@@ -107,7 +107,6 @@ class EnemyPlane2 extends BasePlane{
       else
         this.rotation=this.targetRot;
     }
-    // console.log('子弹',this.bulletArr.length);
   }
 
 

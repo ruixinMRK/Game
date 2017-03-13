@@ -33,8 +33,7 @@ class Game2OverIf extends createjs.Container{
      * 界面背景
      * @type {createjs.Sprite}
      */
-    this.bgS=NameSpr.getInstance().getSpr('gameUI','overIf2_bg');
-    this.addChild(this.bgS);
+    this.bgS=NameSpr.getNameSpr(this,'gameUI','overIf2_bg');
     this.titleT=NameSpr.getText(this,'多人',"bold 24px Arial",'#000000',0,0);
     //按钮
     /**
@@ -116,10 +115,10 @@ class Game2OverIf extends createjs.Container{
    * 显示游戏结束界面
    */
   showOver=()=>{
-    this.visible=true;
     this.rebirthS.visible=false;
     this.timerT.visible=false;
     this.backS.x=150;
+    this.visible=true;
     this.resultT.text='总击杀：'+GameData.planeControl.HeroPlane.gameKill
       +'\n总助攻：'+GameData.planeControl.HeroPlane.gameAssist;
   }

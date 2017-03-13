@@ -159,6 +159,22 @@ class BasePlane extends createjs.Container{
     this.bulletArr.push(bullet);
   }
 
+  /**
+   * 查找子弹
+   * @param id 子弹id
+   * @returns {null/Bullet} 返回子弹
+   */
+  bulletFind(id){
+    let bullet=null;
+    for(let i=0;i<this.bulletArr.length;i++){
+      if(this.bulletArr[i].bulletId=id){
+        bullet=this.bulletArr[i];
+        break;
+      }
+    }
+    return bullet;
+  }
+
 
   /**
    * 复活

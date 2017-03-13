@@ -184,6 +184,7 @@ class PlaneGame extends createjs.Container{
       this.parent.removeChild(this);
     document.removeEventListener('keydown',this.onKeyDown);
     document.removeEventListener('keyup',this.onKeyUp);
+    Router.instance.unreg(Router.KPI.destroyPvpRoom);
     Timer.clear(this.timeId);
     if(this.gameDRI){
       this.gameDRI.remove();

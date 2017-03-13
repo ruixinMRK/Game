@@ -45,10 +45,7 @@ class PlaneGame2MI extends createjs.Container{
      * start图标
      * @type {createjs.Sprite}
      */
-    this.startS=NameSpr.getInstance().getSpr('gameUI','start');
-    this.startS.x=600;
-    this.startS.y=600;
-    this.addChild(this.startS);
+    this.startS=NameSpr.getNameSpr(this,'gameUI','start',600,600);
     /**
      * 返回图标
      * @type {createjs.Sprite}
@@ -59,18 +56,12 @@ class PlaneGame2MI extends createjs.Container{
      * 当前玩家用户名
      * @type {createjs.Text}
      */
-    this.name1T=new createjs.Text('玩家：'+UserData.Name,"bold 18px Arial",'#000000');
-    this.name1T.x=400;
-    this.name1T.y=400;
-    this.addChild(this.name1T);
+    this.name1T=NameSpr.getText(this,'玩家：'+UserData.Name,"bold 18px Arial",'#000000',400,400);
     /**
      * 匹配提示
      * @type {createjs.Text}
      */
-    this.matchT=new createjs.Text('点击开始多人匹配',"bold 36px Arial",'#000000');
-    this.matchT.x=530;
-    this.matchT.y=200;
-    this.addChild(this.matchT);
+    this.matchT=NameSpr.getText(this,'点击开始多人匹配',"bold 36px Arial",'#000000',530,200);
     //属性
     //事件
     this.addEventListener('click',this.onClick);
@@ -137,6 +128,7 @@ class PlaneGame2MI extends createjs.Container{
     if(this.parent!=null)
       this.parent.removeChild(this);
     this.removeEventListener('click',this.onClick);
+    Router.instance.unreg(Router.KPI.matchNOR);
   }
 }
 export default PlaneGame2MI;

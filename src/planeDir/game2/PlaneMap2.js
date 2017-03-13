@@ -90,7 +90,7 @@ class PlaneMap2 extends createjs.Container{
             }
           }
         }
-      }
+  }
 
 
   /**
@@ -125,6 +125,7 @@ class PlaneMap2 extends createjs.Container{
   remove(){
     if(this.parent!=null)
       this.parent.removeChild(this);
+    Router.instance.unreg(Router.KPI.planProp);
   }
 
 

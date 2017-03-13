@@ -1,8 +1,8 @@
 
 
 import SocketClient from "./SocketClient";
-import Pubsub from "common/Pubsub";
-import Map from "common/Map";
+import Pubsub from "../Pubsub";
+import Map from "../Map";
 
 class Router{
   constructor(){
@@ -10,6 +10,10 @@ class Router{
     this.routeTable=new Map();
   }
 
+  /**
+   * 实例
+   * @returns {null|Router}
+   */
   static get instance(){
     if(!Router.__instance){
       Router.__instance=new Router();
