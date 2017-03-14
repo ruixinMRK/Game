@@ -96,7 +96,7 @@ class HeroPlane extends BasePlane{
     this.moveBullet();
     //移动
     if(this.gasoline>0){
-      this.gasoline-=this.speed/100;
+      this.gasoline-=this.speed/150;
       // this.gasoline-=this.speed;
       let angle=Tools.getHD(this.rotation);
       let vx=Math.cos(angle)*this.speed;

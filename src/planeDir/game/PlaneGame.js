@@ -70,6 +70,7 @@ class PlaneGame extends createjs.Container{
     //帧频
     this.timeId=Timer.add(this.onFrame,30,0);
     Router.instance.reg(Router.KPI.destroyPvpRoom,this.socketDestroyPR);
+    Router.instance.reg(Router.KPI.PVPTime,this.socketPVPTime);
   }
 
   //接受服务器的destroyPvpRoom数据 退出房间
@@ -79,6 +80,19 @@ class PlaneGame extends createjs.Container{
       this.gameDRI=new GameDRI();
       GameData.stage.addChild(this.gameDRI);
     }
+  }
+
+
+  //接受服务器的PVPTime数据 游戏时间
+  socketPVPTime = (data)=>{
+    // console.log('接收游戏时间数据：',data);
+    GameData.dataShow.gameTimeTxt(data.time);
+    if(data.time==0){
+       if(this.gameDRI==null){
+         this.gameDRI=new GameDRI();
+         GameData.stage.addChild(this.gameDRI);
+       }
+     }
   }
 
   /**

@@ -126,7 +126,12 @@ class PlaneControl2 extends createjs.Container{
   //接受服务器的goDie数据 死亡复活
   socketDie = (data)=>{
     console.log('接收死亡复活数据：',data);
-    if(data.type==0){//复活
+    if(data.type==-1){//掉线
+      this.enemyP[data.name].remove();
+      delete this.enemyP[data.name];
+      GameData.dataShow.hitText(data.name+'掉线了');
+    }
+    else if(data.type==0){//复活
       this.enemyP[data.name].visible=true;
       this.enemyP[data.name].rebirth();
       GameData.dataShow.hitText(data.name+'复活了');
@@ -221,10 +226,10 @@ class PlaneControl2 extends createjs.Container{
       if(this.gameOverIf==null){
         this.gameOverIf=new Game2OverIf();
         GameData.stage.addChild(this.gameOverIf);
-        this.gameOverIf.showOver();
+        this.gameOverIf.showOver(data.value);
       }
       else
-        this.gameOverIf.showOver();
+        this.gameOverIf.showOver(data.value);
     }
   }
 

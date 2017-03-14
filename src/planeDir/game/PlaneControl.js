@@ -94,10 +94,10 @@ class PlaneControl extends createjs.Container{
 
     //事件
     Router.instance.reg(Router.KPI.planeWalk,this.socketPW);
-    Router.instance.reg(Router.KPI.resultPVP,this.socketResultPVP);
     Router.instance.reg(Router.KPI.planeLive,this.socketLive);
     Router.instance.reg(Router.KPI.AI,this.socketAI);
     Router.instance.reg(Router.KPI.AiHit,this.socketAiHit);
+    Router.instance.reg(Router.KPI.resultPVP,this.socketResultPVP);
 
     //发送加入数据
     this.sendGoLiveData(true);

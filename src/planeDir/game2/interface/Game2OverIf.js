@@ -113,14 +113,30 @@ class Game2OverIf extends createjs.Container{
 
   /**
    * 显示游戏结束界面
+   * @param arr 信息数组
    */
-  showOver=()=>{
+  showOver=(arr)=>{
     this.rebirthS.visible=false;
     this.timerT.visible=false;
     this.backS.x=150;
     this.visible=true;
-    this.resultT.text='总击杀：'+GameData.planeControl.HeroPlane.gameKill
-      +'\n总助攻：'+GameData.planeControl.HeroPlane.gameAssist;
+
+    let th=60;
+    NameSpr.getText(this,'用户',"bold 18px Arial",'#000000',0,th);
+    NameSpr.getText(this,'击杀',"bold 18px Arial",'#000000',80,th);
+    NameSpr.getText(this,'死亡',"bold 18px Arial",'#000000',160,th);
+    NameSpr.getText(this,'助攻',"bold 18px Arial",'#000000',240,th);
+    NameSpr.getText(this,'得分',"bold 18px Arial",'#000000',320,th);
+    th = 80
+    for(let i=0;i<arr.length;i++){
+      let ad=arr[i];
+      NameSpr.getText(this,ad.name,"bold 18px Arial",'#000000',0,th);
+      NameSpr.getText(this,ad.kill,"bold 18px Arial",'#000000',80,th);
+      NameSpr.getText(this,ad.die,"bold 18px Arial",'#000000',160,th);
+      NameSpr.getText(this,ad.holdAtt,"bold 18px Arial",'#000000',240,th);
+      NameSpr.getText(this,ad.score,"bold 18px Arial",'#000000',320,th);
+      th+=20;
+    }
   }
 
 
