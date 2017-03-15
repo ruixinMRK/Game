@@ -121,13 +121,7 @@ class BasePlane extends createjs.Container{
 
   }
 
-  /**
-   * 帧频函数
-   * @param e
-   */
-  onFrame=(e)=>{
 
-  }
 
   /**
    * 操作子弹
