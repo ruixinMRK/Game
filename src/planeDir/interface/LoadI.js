@@ -40,7 +40,7 @@ class LoadI extends createjs.Container{
      * 加载文本
      * @type {createjs.Text}
      */
-    this.loadT=NameSpr.getText(this,'',"bold 48px Arial",'#000000',450,600);
+    this.loadT=NameSpr.getText(this,'正在加载资源0%',"bold 48px Arial",'#000000',450,600);
 
     //属性
     /**

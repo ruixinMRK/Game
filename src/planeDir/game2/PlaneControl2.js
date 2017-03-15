@@ -159,6 +159,60 @@ class PlaneControl2 extends PlaneControlB{
     GameData.send=false;
   }
 
+  /**
+   * 敌机数据处理
+   */
+  enemyPDataDispose=()=>{
+    //敌机数据赋值
+    for(let i=this.enemyPDataArr.length-1;i>=0;i--){
+      let obj=this.enemyPDataArr[i];
+      if(this.enemyP[obj.Name]!=null){
+        let p=this.enemyP[obj.Name];
+        p.dataDispose(obj);
+        //碰撞数据处理
+        for(let s in obj.hitObj){
+          let ep;
+          if(this.HeroPlane.Name==obj.hitObj[s]){
+            ep=this.HeroPlane;
+            GameData.send=true;
+          }
+          else{
+            ep=this.enemyP[obj.hitObj[s]];
+          }
+          //子弹
+          let b=p.bulletFind(s);
+          if(b!=null){
+            if(ep.life>0){
+              ep.life-=b.atk;
+              if(this.HeroPlane.Name==obj.hitObj[s]){
+                ep.setAttacker(p.Name);
+                if(ep.life<=0){
+                  let arr=ep.getAttacker(p.Name);
+                  //发送死亡和击杀助攻
+                  SocketClient.instance.send({KPI:Router.KPI.planeDie,name:UserData.Name,epn:obj.Name,type:1,
+                    attacker:arr,room:GameData.room});
+                }
+              }
+            }
+            b.remove();
+          }
+        }
+      }
+    }
+    this.enemyPDataArr=[];
+    //敌机帧频
+    for(let s in this.enemyP){
+      if(this.enemyP[s].mc==null){
+        delete this.enemyP[s];
+      }
+      else {
+        this.enemyP[s].onFrame();
+      }
+
+    }
+
+  }
+
 
   /**
    * 移除

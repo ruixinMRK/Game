@@ -104,6 +104,53 @@ class PlaneControl extends PlaneControlB{
     GameData.send=false;
   }
 
+  /**
+   * 敌机数据处理
+   */
+  enemyPDataDispose=()=>{
+    //敌机数据赋值
+    for(let i=this.enemyPDataArr.length-1;i>=0;i--){
+      let obj=this.enemyPDataArr[i];
+      if(this.enemyP[obj.Name]!=null){
+        let p=this.enemyP[obj.Name];
+        p.dataDispose(obj);
+        //碰撞数据处理
+        for(let s in obj.hitObj){
+          let ep;
+          if(this.HeroPlane.Name==obj.hitObj[s]){
+            ep=this.HeroPlane;
+            GameData.send=true;
+          }
+          else{
+            ep=this.enemyP[obj.hitObj[s]];
+          }
+          //子弹
+          let b=p.bulletFind(s);
+          if(b!=null){
+            ep.life-=b.atk;
+            // if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
+            // }
+            b.remove();
+          }
+
+        }
+      }
+    }
+    this.enemyPDataArr=[];
+    // //敌机帧频
+    for(let s in this.enemyP){
+      if(this.enemyP[s].mc==null){
+        delete this.enemyP[s];
+      }
+      else {
+        this.enemyP[s].onFrame();
+      }
+
+    }
+
+  }
+
+
 
   /**
    * 移除
