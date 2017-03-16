@@ -4,7 +4,7 @@
 //对象池(仅适用于频繁创建与移除的地方,记住返回的东西需要自己重置)
 import 'createjs.js';
 import Tools from 'common/Tools.js';
-import Bullet from '../planeDir/Bullet';
+import Bullet from '../container/Bullet';
 
 class ObjectPool {
     constructor() {

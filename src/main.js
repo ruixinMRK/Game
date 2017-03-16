@@ -3,12 +3,12 @@
  */
 import React from 'react';
 import ReactDom from 'react-dom';
-import '../vendors/createjs';
-import Login from 'components/Login';
+import './vendors/../vendors/createjs';
+import Login from 'interface/Login';
 import Timer from 'common/Timer';
 import Tools from './common/Tools';
-import PlaneGameSI from './planeDir/interface/PlaneGameSI';
-import LoadI from './planeDir/interface/LoadI';
+import PlaneGameSI from './interface/PlaneGameSI';
+import LoadI from './interface/LoadI';
 import UserData from 'manager/UserData';
 import GameData from './manager/GameData';
 import MyEvent from 'common/MyEvent';
