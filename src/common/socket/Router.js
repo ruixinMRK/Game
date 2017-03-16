@@ -88,8 +88,8 @@ class Router{
 
 }
 Router.__instance = null;
-Router.KPI={planeWalk:'planWalk',planeDie:'goDie',planeLive:'goLive',ping:'ping',planHit:'planHit',planProp:'planProp',
-  joinPVP:'joinPVP',matchPVP:'matchPVP',destroyPvpRoom:'destroyPvpRoom',planProp:'planProp',joinNOR:'joinNOR',AI:'AI',
+Router.KPI={plane:'plane',planeWalk:'planWalk',planeDie:'goDie',planeLive:'goLive',ping:'ping',planHit:'planHit',planProp:'planProp',
+  joinPVP:'joinPVP',matchPVP:'matchPVP',destroyPvpRoom:'destroyPvpRoom',planProp:'planProp',joinNOR:'joinNOR',
   matchNOR:'matchNOR',resultPVP:'resultPVP',AiHit:'AiHit',NorTime:'NorTime',PVPTime:'PVPTime'
 };
 

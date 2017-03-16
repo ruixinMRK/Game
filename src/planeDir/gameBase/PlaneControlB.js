@@ -61,19 +61,28 @@ class PlaneControlB extends createjs.Container{
     this.moveFSet=3;
 
     //事件
-    Router.instance.reg(Router.KPI.planeWalk,this.socketPW);
+    Router.instance.reg(Router.KPI.plane,this.socketPW);
     Router.instance.reg(Router.KPI.planeLive,this.socketLive);
-    Router.instance.reg(Router.KPI.AI,this.socketAI);
     Router.instance.reg(Router.KPI.AiHit,this.socketAiHit);
 
 
   }
 
-  //接受服务器的planWalk数据 移动
+  //接受服务器的plan数据 移动
   socketPW = (data)=>{
     // console.log('接收移动数据：',data);
-    data=PSData.getObj(data);
-    this.enemyPDataArr.unshift(data);
+    console.log('接收移动数据：',data.heroPlane);
+    //ai
+    this.AIPDataArr=this.AIPDataArr.concat(data.ai);
+    //玩家
+    let obj=data.heroPlane;
+    for(let s in obj){
+      if(s!=UserData.Name){
+        data=obj[s];
+        data=PSData.getObj(data);
+        this.enemyPDataArr.unshift(data);
+      }
+    }
   }
 
 
@@ -92,11 +101,6 @@ class PlaneControlB extends createjs.Container{
     }
   }
 
-  //接受服务器的AI数据 AI
-  socketAI = (data)=>{
-    // console.log('接收AI数据：',data);
-    this.AIPDataArr=this.AIPDataArr.concat(data.value);
-  }
 
   //接受服务器的AiHit数据 AiHit
   socketAiHit = (data)=>{
@@ -217,9 +221,8 @@ class PlaneControlB extends createjs.Container{
   remove(){
     if(this.parent!=null)
       this.parent.removeChild(this);
-    Router.instance.unreg(Router.KPI.planeWalk);
+    Router.instance.unreg(Router.KPI.plane);
     Router.instance.unreg(Router.KPI.planeLive);
-    Router.instance.unreg(Router.KPI.AI);
     Router.instance.unreg(Router.KPI.AiHit);
     if(this.gameOverIf){
       this.gameOverIf.remove();

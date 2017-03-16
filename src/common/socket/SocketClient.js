@@ -43,7 +43,7 @@ class SocketClient{
     }
 
     data = JSON.stringify(data);
-    console.log('发送数据',data);
+    // console.log('发送数据',data);
     if (this.prevSendStr!=data&&this.socketsExist) {
       let str = 'start' + data + 'end';
       this.socket.send(str);
