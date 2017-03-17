@@ -70,7 +70,7 @@ class PlaneControlB extends createjs.Container{
   //接受服务器的plan数据 移动
   socketPW = (data)=>{
     // console.log('接收移动数据：',data);
-    console.log('接收移动数据：',data.heroPlane);
+    console.log('接收移动数据：',JSON.stringify(data.heroPlane));
     //ai
     this.AIPDataArr=this.AIPDataArr.concat(data.ai);
     //玩家

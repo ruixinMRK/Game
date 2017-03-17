@@ -1,6 +1,9 @@
 /**
  * Created by Administrator on 2017/2/16.
  */
+
+import Router from '../common/socket/Router';
+
 /**
  * 飞机传输数据类
  */
@@ -31,7 +34,7 @@ class PSData{
      */
     this.room='';
     //数据名
-    this.KPI='planWalk';
+    this.KPI=Router.KPI.planeWalk;
     /**
      * 生命值
      * @type {number}

@@ -39,28 +39,68 @@ class LoadI extends createjs.Container{
 
     //属性
     /**
-     * 加载完成文件数量
+     * 加载完成的队列文件大小
      * @type {number}
      */
-    this.loadNum=0;
+    this.loadingSize=0;
+    /**
+     * 队列所有文件大小
+     * @type {number}
+     */
+    this.allFileSize=0;
+    /**
+     * 记录队列每个文件大小
+     * @type {{}}
+     */
+    this.fileSizeO={};
+    /**
+     * 加载中的文件进度大小
+     * @type {{}}
+     */
+    this.loadingFileO={};
 
     this.queue= new createjs.LoadQueue(true);
     this.queue.installPlugin(createjs.Sound);
     this.queue.on('complete',this.onLoadComplete);
     this.queue.on('error',this.onLoadError);
     this.queue.on('fileload',this.onLoadFileload);
+    this.queue.on('fileprogress',this.onLoadFileProgress);
     // this.queue.on('progress',this.onLoadProgress);
-    // this.queue.on('fileprogress',this.onLoadFileProgress);
-    this.queue.loadManifest(LoadIData.loadData);
+    this.loadFile(LoadIData.loadData);
   }
 
   /**
-   * 加载文本更新设置
-   * @param fileNum 加载文件总数量
+   * 加载数组中文件
+   * @param fileA {Array} 加载文件数组
    */
-  loadTTxt=(fileNum)=>{
-    this.loadNum++;
-    this.loadT.text='正在加载资源'+Math.round(this.loadNum/fileNum*100)+'%';
+  loadFile(fileA){
+    this.loadingSize=0;
+    this.allFileSize=0;
+    this.fileSizeO={};
+    this.loadingFileO={};
+
+    fileA=fileA.concat();
+    for(let i=0;i<fileA.length;i++){
+      let obj=fileA[i];
+      this.fileSizeO[obj.src]=obj.size;
+      this.allFileSize+=obj.size;
+      delete obj.size;
+    }
+    this.queue.loadManifest(fileA);
+  }
+
+
+  /**
+   * 加载文本更新设置
+   * @param fileSize 完成加载文件大小
+   */
+  loadTTxt=(fileSize=0)=>{
+    this.loadingSize+=fileSize;
+    let size=this.loadingSize;
+    for(let s in this.loadingFileO){
+      size+=this.loadingFileO[s];
+    }
+    this.loadT.text='正在加载资源'+Math.round(size/this.allFileSize*100)+'%';
   }
 
 
@@ -95,7 +135,10 @@ class LoadI extends createjs.Container{
    */
   onLoadFileload=(event)=>{
     // console.log('文件加载完成',event);
-    this.loadTTxt(event.currentTarget._numItems);
+    // console.log('文件加载完成',event.item.src);
+    let src=event.item.src;
+    delete this.loadingFileO[src];
+    this.loadTTxt(this.fileSizeO[src]);
   }
 
   /**
@@ -104,6 +147,10 @@ class LoadI extends createjs.Container{
    */
   onLoadFileProgress=(event)=>{
     // console.log('单个文件进度改变',event);
+    // console.log('单个文件进度改变',event.item.src,event.loaed,event.progress,event.total);
+    let src=event.item.src;
+    this.loadingFileO[src]=event.progress*this.fileSizeO[src];
+    this.loadTTxt();
   }
 
 

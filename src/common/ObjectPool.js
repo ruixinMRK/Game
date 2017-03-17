@@ -2,8 +2,8 @@
  * Created by ruixin on 2016/9/20 0020.
  */
 //对象池(仅适用于频繁创建与移除的地方,记住返回的东西需要自己重置)
-import 'createjs.js';
-import Tools from 'common/Tools.js';
+import '../vendors/createjs.js';
+import Tools from './Tools.js';
 import Bullet from '../container/Bullet';
 
 class ObjectPool {
