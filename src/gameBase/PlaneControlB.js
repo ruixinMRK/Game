@@ -70,7 +70,7 @@ class PlaneControlB extends createjs.Container{
   //接受服务器的plan数据 移动
   socketPW = (data)=>{
     // console.log('接收移动数据：',data);
-    console.log('接收移动数据：',JSON.stringify(data.heroPlane));
+    // console.log('接收移动数据：',JSON.stringify(data.heroPlane));
     //ai
     this.AIPDataArr=this.AIPDataArr.concat(data.ai);
     //玩家
@@ -104,27 +104,29 @@ class PlaneControlB extends createjs.Container{
   //接受服务器的AiHit数据 AiHit
   socketAiHit = (data)=>{
     // console.log('接收AI碰撞数据：',data);
-    if(data.type===0){
+    if(data.type==0){
       //AI攻击玩家
       let p=this.AIP[data.name];
       let ep;
       for(let s in data.hit){
-        GameData.dataShow.hitText('AI'+data.name+'击中玩家'+data.hit[s]);
-        if(data.hit[s]==UserData.Name)
-          ep=this.HeroPlane;
+        if(Array.isArray(data.hit[s])){//类型数组为ai击杀玩家
+          let enemyName=data.hit[s][0];
+          console.log('AI'+data.name+'击杀玩家'+enemyName);
+          GameData.dataShow.hitText('AI'+data.name+'击杀玩家'+enemyName);
+          if(enemyName!=UserData.Name){
+            this.enemyP[enemyName].visible=false;
+          }
+        }
         else
-          ep=this.enemyP[data.hit[s]];
+          GameData.dataShow.hitText('AI'+data.name+'击中玩家'+data.hit[s]);
         //子弹
         let b=p.bulletFind(s);
         if(b!=null){
-          ep.life-=b.atk;
-          // if(ep.life<=0&&this.HeroPlane.Name==obj.hitObj[s]){
-          // }
           b.remove();
         }
       }
     }
-    else if(data.type===1){
+    else if(data.type==1){
       //玩家攻击AI
       let p;
       if(data.name==UserData.Name)
@@ -133,16 +135,10 @@ class PlaneControlB extends createjs.Container{
         p=this.enemyP[data.name];
       let ep;
       for(let s in data.hit){
-        ep=this.AIP[data.hit[s]];
         GameData.dataShow.hitText('玩家'+data.name+'击中AI'+data.hit[s]);
         //子弹
         let b=p.bulletFind(s);
         if(b!=null){
-          if(ep.life>0){
-            ep.life-=b.atk;
-            GameData.send=true;
-            this.psd.AI[ep.Name]=ep.life;
-          }
           b.remove();
         }
       }

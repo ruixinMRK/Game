@@ -82,16 +82,24 @@ class AIPlaneB extends BasePlane{
     }
     this.moveBullet();
     //子弹检测碰撞
-    for(let i=this.bulletArr.length-1;i>=0;i--){
-      let bullet=this.bulletArr[i];
-      let r1=NameSpr.rectGlobal(bullet);
-      let r2=NameSpr.rectGlobal(GameData.planeControl.HeroPlane);
+    let heroPlane=GameData.planeControl.HeroPlane;
+    if(heroPlane.visible&&heroPlane.life>0){
+      for(let i=this.bulletArr.length-1;i>=0;i--){
+        let bullet=this.bulletArr[i];
+        let r1=NameSpr.rectGlobal(bullet);
+        let r2=NameSpr.rectGlobal(heroPlane);
 
-      if(r1.intersects(r2)){
-        //子弹击中了
-        let hit={};
-        hit[bullet.bulletId]=UserData.Name;
-        SocketClient.instance.send({KPI:Router.KPI.AiHit,room:GameData.room,type:0,'name':this.Name,'hit':hit});
+        if(r1.intersects(r2)){
+          //子弹击中了
+          let data={KPI:Router.KPI.AiHit,room:GameData.room,type:0,'name':this.Name,'hit':{}};
+          heroPlane.life-=bullet.atk;
+          data.hit[bullet.bulletId]=UserData.Name;
+          if(heroPlane.life<=0)
+            data.hit[bullet.bulletId]=[UserData.Name];
+
+          SocketClient.instance.send(data);
+          bullet.remove();
+        }
       }
     }
 

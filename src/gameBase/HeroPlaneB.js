@@ -116,6 +116,9 @@ class HeroPlaneB extends BasePlane{
     }
     //子弹检测碰撞AI飞机
     for(let i=this.bulletArr.length-1;i>=0;i--){
+      /**
+       * @type {Bullet}
+       */
       let bullet=this.bulletArr[i];
       let r1=NameSpr.rectGlobal(bullet);
 
@@ -127,9 +130,14 @@ class HeroPlaneB extends BasePlane{
           //子弹击中了
           GameData.dataShow.enemyPlane=e.AIP[s];
           e.AIP[s].frameHitB=true;
+
+          e.AIP[s].life-=bullet.atk;
+          GameData.send=true;
+          e.psd.AI[e.AIP[s].Name]=e.AIP[s].life;
           let hit={};
           hit[bullet.bulletId]=e.AIP[s].Name;
           SocketClient.instance.send({KPI:Router.KPI.AiHit,room:GameData.room,type:1,'name':this.Name,'hit':hit});
+          bullet.remove();
           break;
         }
       }
