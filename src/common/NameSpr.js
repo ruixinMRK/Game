@@ -1,7 +1,7 @@
 /**
  * Created by tudouhu on 2017/2/8.
  */
-import 'createjs';
+import '../vendors/createjs';
 import NameSprData from './NameSprData';
 
 /**

@@ -12,7 +12,7 @@ export  default {
    */
   sprData:{
     // 精灵图名:{srcA:['路径'],
-    //   frameA:[帧数据数组]
+    //   frameA:[name,x,y,w,h]
     // }
     // :{srcA:[''],
     //   frameA:[]
@@ -40,7 +40,7 @@ export  default {
         ["start",500,550,100,80]
       ]
     },
-    gameBg:{srcA:['assets/img/gameBg.png'],
+    gameBg:{srcA:['assets/img/gameBg.jpg'],
       frameA:[["gameBg",0,0,2000,2000]]
     }
   }
