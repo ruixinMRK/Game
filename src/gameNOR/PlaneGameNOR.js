@@ -6,7 +6,7 @@
 import '../vendors/createjs';
 import GameData from '../manager/GameData';
 import PlaneControl2 from './PlaneControlNOR';
-import DataShow from '../interface/DataShow';
+import DataShow from '../container/DataShow';
 import PlaneMap2 from './PlaneMapNOR';
 import PlaneGameB from '../gameBase/PlaneGameB';
 

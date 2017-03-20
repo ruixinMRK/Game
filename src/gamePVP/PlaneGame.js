@@ -8,7 +8,7 @@ import '../vendors/../vendors/createjs';
 import Router from '../common/socket/Router';
 import GameData from '../manager/GameData';
 import PlaneControl from './PlaneControl';
-import DataShow from '../interface/DataShow';
+import DataShow from '../container/DataShow';
 import PlaneMap from './PlaneMap';
 import GameDRI from './interface/GameDRI';
 import PlaneGameB from '../gameBase/PlaneGameB';

@@ -111,7 +111,6 @@ class PlaneControlB extends createjs.Container{
       for(let s in data.hit){
         if(Array.isArray(data.hit[s])){//类型数组为ai击杀玩家
           let enemyName=data.hit[s][0];
-          console.log('AI'+data.name+'击杀玩家'+enemyName);
           GameData.dataShow.hitText('AI'+data.name+'击杀玩家'+enemyName);
           if(enemyName!=UserData.Name){
             this.enemyP[enemyName].visible=false;
@@ -166,7 +165,7 @@ class PlaneControlB extends createjs.Container{
    */
   sendData=()=>{
     this.moveF--;
-    if(this.moveF<=0){
+    if(this.moveF<0){
       this.moveF=this.moveFSet;
       GameData.send=true;
     }

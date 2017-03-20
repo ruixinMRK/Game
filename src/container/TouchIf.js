@@ -2,7 +2,7 @@
  * Created by tudouhu on 2017/3/10.
  */
 
-import '../vendors/../vendors/createjs';
+import '../vendors/createjs';
 import GameData from '../manager/GameData';
 import NameSpr from '../common/NameSpr';
 import Tools from '../common/Tools';

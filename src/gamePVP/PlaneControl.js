@@ -37,7 +37,10 @@ class PlaneControl extends PlaneControlB{
    */
   init() {
 
-    //飞机
+    /**
+     * 飞机
+     * @type {HeroPlane}
+     */
     this.HeroPlane=new HeroPlane();
     this.HeroPlane.Name=UserData.Name;
     this.HeroPlane.x=100;

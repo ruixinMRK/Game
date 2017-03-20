@@ -17,6 +17,16 @@ class HeroPlaneNOR extends HeroPlaneB{
    * @type {{}}
    */
   attackerO={};
+  /**
+   * 无敌时间设置
+   * @type {number}
+   */
+  invincibleSet=3000;
+  /**
+   * 无敌时间
+   * @type {number}
+   */
+  invincible=this.invincibleSet;
 
 
   constructor() {
@@ -32,8 +42,11 @@ class HeroPlaneNOR extends HeroPlaneB{
    */
   onFrame(e){
     super.onFrame(e);
+    //无敌时间计算
+    this.invincible-=GameData.timeDiff;
     //助攻计算时间
     this.attackerTimeOF();
+
   }
 
   /**
@@ -92,6 +105,7 @@ class HeroPlaneNOR extends HeroPlaneB{
    */
   rebirth(){
     super.rebirth();
+    this.invincible=this.invincibleSet;
     this.gameKill+=this.kill;
     this.gameAssist+=this.assist;
     this.kill=0;

@@ -184,6 +184,10 @@ class PlaneControlNOR extends PlaneControlB{
             if(ep.life>0){
               ep.life-=b.atk;
               if(this.HeroPlane.Name==obj.hitObj[s]){
+                if(ep.invincible>0){
+                  ep.life+=b.atk;
+                  continue;
+                }
                 ep.setAttacker(p.Name);
                 if(ep.life<=0){
                   let arr=ep.getAttacker(p.Name);

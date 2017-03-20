@@ -101,7 +101,7 @@ class HeroPlaneB extends BasePlane{
       let r1=NameSpr.rectGlobal(bullet);
 
       for(let s in e.enemyP){
-        if(e.enemyP[s].frameHitB) break;
+        if(e.enemyP[s].frameHitB) continue;
         let r2=NameSpr.rectGlobal(e.enemyP[s]);
 
         if(r1.intersects(r2)){
@@ -123,7 +123,7 @@ class HeroPlaneB extends BasePlane{
       let r1=NameSpr.rectGlobal(bullet);
 
       for(let s in e.AIP){
-        if(e.AIP[s].frameHitB) break;
+        if(e.AIP[s].frameHitB) continue;
         let r2=NameSpr.rectGlobal(e.AIP[s]);
 
         if(r1.intersects(r2)){

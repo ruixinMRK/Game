@@ -3,7 +3,7 @@
  */
 
 
-import '../vendors/../vendors/createjs';
+import '../vendors/createjs';
 import GameData from '../manager/GameData';
 import UserData from '../manager/UserData';
 import Timer from '../common/Timer';
@@ -11,6 +11,7 @@ import Router from '../common/socket/Router';
 import SocketClient from '../common/socket/SocketClient';
 import Tools from '../common/Tools';
 import TouchIf from './TouchIf';
+import RadarScan from './RadarScan';
 import NameSpr from '../common/NameSpr';
 
 /**
@@ -28,16 +29,16 @@ class DataShow extends createjs.Container{
     //击中文本
     this.hittxt=NameSpr.getText(this,'',"bold 46px Arial",'#000000',600,30);
     this.hitText(UserData.Name+'加入游戏');
-    //ping文本
-    this.pingTxt=NameSpr.getText(this,'ping:',"bold 18px Arial",'#FFFFFF',720);
     //FPS文本
-    this.FPSTxt=NameSpr.getText(this,'FPS:',"bold 18px Arial",'#FFFFFF',650);
+    this.FPSTxt=NameSpr.getText(this,'FPS:',"bold 18px Arial",'#FFFFFF',950);
+    //ping文本
+    this.pingTxt=NameSpr.getText(this,'ping:',"bold 18px Arial",'#FFFFFF',1020);
     //游戏时间文本
-    this.gameTimeT=NameSpr.getText(this,'',"bold 18px Arial",'#FFFFFF',800);
+    this.gameTimeT=NameSpr.getText(this,'',"bold 18px Arial",'#FFFFFF',1100);
     //人物信息
-    this.lifeT=NameSpr.getText(this,'生命:',"bold 18px Arial",'#FFFFFF',350,240);
-    this.gasolineT=NameSpr.getText(this,'汽油:',"bold 18px Arial",'#FFFFFF',350,260);
-    this.bulletNumT=NameSpr.getText(this,'子弹:',"bold 18px Arial",'#FFFFFF',350,280);
+    this.lifeT=NameSpr.getText(this,'生命:',"bold 18px Arial",'#FFFFFF',650,690);
+    this.gasolineT=NameSpr.getText(this,'汽油:',"bold 18px Arial",'#FFFFFF',650,710);
+    this.bulletNumT=NameSpr.getText(this,'子弹:',"bold 18px Arial",'#FFFFFF',650,730);
     //敌机信息
     this.ENameT=NameSpr.getText(this,'飞机:',"bold 18px Arial",'#FFFFFF');
     this.ELifeT=NameSpr.getText(this,'生命:',"bold 18px Arial",'#FFFFFF',0,20);
@@ -66,7 +67,7 @@ class DataShow extends createjs.Container{
     this.FPS.FPS = 0;
     this.FPS.startFPS = (stage)=>{
       this.FPS.txt =new createjs.Text("", "18px Arial", "#ffffff");
-      this.FPS.txt.x=580;
+      this.FPS.txt.x=880;
       stage.addChild(this.FPS.txt);
       createjs.Ticker.addEventListener("tick", this.FPS.TickerFPS);
     }
@@ -90,6 +91,15 @@ class DataShow extends createjs.Container{
       this.addChild(this.touchIf);
     }
 
+    /**
+     * 雷达
+     * @type {RadarScan}
+     */
+    this.radar=new RadarScan();
+    this.radar.x=GameData.stageW-this.radar.bgRadius;
+    this.radar.y=this.radar.bgRadius;
+    this.addChild(this.radar);
+
     GameData.stage.addChild(this);
   }
 
@@ -104,6 +114,7 @@ class DataShow extends createjs.Container{
       this.ENameT.text='飞机:'+this.enemyPlane.Name;
       this.ELifeT.text='生命:'+this.enemyPlane.life;
     }
+    this.radar.onFrame(e);
   }
 
   /**
@@ -147,7 +158,7 @@ class DataShow extends createjs.Container{
    */
   sendPing=()=>{
     this.pingF--;
-    if(this.pingF<=0){
+    if(this.pingF<0){
       this.pingF=this.pingFSet;
       let obj={};
       obj.KPI='ping';

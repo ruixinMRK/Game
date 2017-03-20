@@ -12,6 +12,7 @@ import PlaneGameMI from '../gamePVP/interface/PlaneGameMI';
 import PlaneGameNORMI from '../gameNOR/interface/PlaneGameNORMI';
 import GameNOROverIf from '../gameNOR/interface/GameNOROverIf';
 import SocketClient from '../common/socket/SocketClient';
+import Tools from '../common/Tools';
 
 /**
  * 飞机游戏开始界面
@@ -99,6 +100,15 @@ class PlaneGameSI extends createjs.Container{
     this.addEventListener('click',this.onClick);
     MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
 
+    Tools.ajax({data:{},url:'http://60.205.222.103:8000/shop?name=1',mothed:'get',async:true,timeout:5000,
+        callback:(d)=>{
+          console.log(d);
+        },
+        error:e=>{
+          alert('服务器错误,请稍后重新尝试!!')
+        }
+      }
+    )
   }
 
   /**
