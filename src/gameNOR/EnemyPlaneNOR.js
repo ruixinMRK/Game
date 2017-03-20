@@ -9,7 +9,7 @@ import EnemyPlaneB from '../gameBase/EnemyPlaneB';
 /**
  * 敌机类
  */
-class EnemyPlane2 extends EnemyPlaneB{
+class EnemyPlaneNOR extends EnemyPlaneB{
 
   constructor(){
     super();
@@ -17,4 +17,4 @@ class EnemyPlane2 extends EnemyPlaneB{
 
 }
 
-export default EnemyPlane2;
+export default EnemyPlaneNOR;

@@ -5,7 +5,7 @@
 import '../../vendors/createjs';
 import GameData from '../../manager/GameData';
 import NameSpr from '../../common/NameSpr';
-import PlaneGame2 from '../PlaneGame2';
+import PlaneGameNOR from '../PlaneGameNOR';
 import UserData from '../../manager/UserData'
 import Router from '../../common/socket/Router';
 import MyEvent from '../../common/MyEvent';
@@ -14,11 +14,11 @@ import SocketClient from '../../common/socket/SocketClient';
 /**
  * 飞机游戏选择界面
  */
-class PlaneGame2MI extends createjs.Container{
+class PlaneGameNORMI extends createjs.Container{
 
   /**
    * 多人游戏
-   * @type {PlaneGame2}
+   * @type {PlaneGameNOR}
    */
   game=null;
 
@@ -113,7 +113,7 @@ class PlaneGame2MI extends createjs.Container{
    */
   createGame=()=>{
     if(this.game==null){
-      this.game=new PlaneGame2();
+      this.game=new PlaneGameNOR();
       this.addChild(this.game);
     }
   }
@@ -130,4 +130,4 @@ class PlaneGame2MI extends createjs.Container{
     Router.instance.unreg(Router.KPI.matchNOR);
   }
 }
-export default PlaneGame2MI;
+export default PlaneGameNORMI;

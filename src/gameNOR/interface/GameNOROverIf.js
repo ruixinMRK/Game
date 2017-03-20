@@ -12,7 +12,7 @@ import Timer from '../../common/Timer';
 /**
  * 飞机游戏结束界面
  */
-class Game2OverIf extends createjs.Container{
+class GameNOROverIf extends createjs.Container{
 
 
   constructor() {
@@ -145,4 +145,4 @@ class Game2OverIf extends createjs.Container{
     this.removeEventListener('click',this.onClick);
   }
 }
-export default Game2OverIf;
+export default GameNOROverIf;

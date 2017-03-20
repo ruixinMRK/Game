@@ -3,26 +3,26 @@
  */
 
 import '../vendors/createjs';
-import HeroPlane2 from './HeroPlane2';
-import EnemyPlane2 from './EnemyPlane2';
+import HeroPlaneNOR from './HeroPlaneNOR';
+import EnemyPlaneNOR from './EnemyPlaneNOR';
 import Router from '../common/socket/Router';
 import SocketClient from '../common/socket/SocketClient';
 import MyEvent from '../common/MyEvent';
 import UserData from '../manager/UserData';
 import GameData from '../manager/GameData';
 import PSData from '../manager/PSData';
-import Game2OverIf from './interface/Game2OverIf';
-import AIPlane2 from './AIPlane2';
+import GameNOROverIf from './interface/GameNOROverIf';
+import AIPlaneNOR from './AIPlaneNOR';
 import PlaneControlB from '../gameBase/PlaneControlB';
 
 /**
  * 飞机管理
  */
-class PlaneControl2 extends PlaneControlB{
+class PlaneControlNOR extends PlaneControlB{
 
   /**
    * 结束界面
-   * @type {Game2OverIf}
+   * @type {GameNOROverIf}
    */
   gameOverIf=null;
 
@@ -36,7 +36,7 @@ class PlaneControl2 extends PlaneControlB{
    */
   init() {
     //飞机
-    this.HeroPlane=new HeroPlane2();
+    this.HeroPlane=new HeroPlaneNOR();
     this.HeroPlane.Name=UserData.Name;
     this.HeroPlane.x=100;
     this.HeroPlane.y=100;
@@ -46,7 +46,7 @@ class PlaneControl2 extends PlaneControlB{
     let aiP=GameData.AIPlaneArr;
     for(let i=aiP.length-1;i>=0;i--){
       let obj=aiP[i];
-      let p=new AIPlane2();
+      let p=new AIPlaneNOR();
       p.Name=obj.id;
       p.x=obj.x;
       p.y=obj.y;
@@ -106,7 +106,7 @@ class PlaneControl2 extends PlaneControlB{
     GameData.dataShow.gameTimeTxt(data.time);
     if(data.time==0){
       if(this.gameOverIf==null){
-        this.gameOverIf=new Game2OverIf();
+        this.gameOverIf=new GameNOROverIf();
         GameData.stage.addChild(this.gameOverIf);
         this.gameOverIf.showOver(data.value);
       }
@@ -123,7 +123,7 @@ class PlaneControl2 extends PlaneControlB{
   createEP(data){
     let obj=PSData.getObj(data);
     if(this.enemyP[obj.Name]!=null)return;
-    this.enemyP[obj.Name]=new EnemyPlane2();
+    this.enemyP[obj.Name]=new EnemyPlaneNOR();
     this.enemyP[obj.Name].x=obj.x;
     this.enemyP[obj.Name].y=obj.y;
     this.enemyP[obj.Name].rotation=obj.rot;
@@ -139,7 +139,7 @@ class PlaneControl2 extends PlaneControlB{
   onFrame=(e)=>{
     if(this.HeroPlane.visible&&(this.HeroPlane.gasoline<=0||this.HeroPlane.life<=0)){
       if(this.gameOverIf==null){
-        this.gameOverIf=new Game2OverIf();
+        this.gameOverIf=new GameNOROverIf();
         GameData.stage.addChild(this.gameOverIf);
         this.gameOverIf.show();
       }
@@ -225,4 +225,4 @@ class PlaneControl2 extends PlaneControlB{
 
 
 }
-export default PlaneControl2;
+export default PlaneControlNOR;

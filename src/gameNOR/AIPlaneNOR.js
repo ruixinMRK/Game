@@ -8,7 +8,7 @@ import AIPlaneB from '../gameBase/AIPlaneB';
 /**
  * AI飞机类
  */
-class AIPlane2 extends AIPlaneB{
+class AIPlaneNOR extends AIPlaneB{
 
   constructor(){
     super();
@@ -19,4 +19,4 @@ class AIPlane2 extends AIPlaneB{
 
 }
 
-export default AIPlane2;
+export default AIPlaneNOR;

@@ -8,7 +8,7 @@ import PlaneMapB from '../gameBase/PlaneMapB';
 /**
  * 飞机游戏地图
  */
-class PlaneMap2 extends PlaneMapB{
+class PlaneGameNOR extends PlaneMapB{
 
 
 
@@ -18,4 +18,4 @@ class PlaneMap2 extends PlaneMapB{
 
 
 }
-export default PlaneMap2;
+export default PlaneGameNOR;

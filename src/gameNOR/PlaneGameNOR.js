@@ -5,15 +5,15 @@
 
 import '../vendors/createjs';
 import GameData from '../manager/GameData';
-import PlaneControl2 from './PlaneControl2';
+import PlaneControl2 from './PlaneControlNOR';
 import DataShow from '../interface/DataShow';
-import PlaneMap2 from './PlaneMap2';
+import PlaneMap2 from './PlaneMapNOR';
 import PlaneGameB from '../gameBase/PlaneGameB';
 
 /**
  * 飞机大战游戏多人模式
  */
-class PlaneGame2 extends PlaneGameB{
+class PlaneGameNOR extends PlaneGameB{
 
   /**
    * 飞机地图
@@ -67,4 +67,4 @@ class PlaneGame2 extends PlaneGameB{
 }
 
 
-export default PlaneGame2;
+export default PlaneGameNOR;

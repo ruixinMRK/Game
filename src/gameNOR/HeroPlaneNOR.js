@@ -9,7 +9,7 @@ import GameData from '../manager/GameData';
 /**
  * 飞机类
  */
-class HeroPlane2 extends HeroPlaneB{
+class HeroPlaneNOR extends HeroPlaneB{
 
 
   /**
@@ -102,4 +102,4 @@ class HeroPlane2 extends HeroPlaneB{
 
 }
 
-export default HeroPlane2;
+export default HeroPlaneNOR;

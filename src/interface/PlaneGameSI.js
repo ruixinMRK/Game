@@ -9,8 +9,8 @@ import UserData from '../manager/UserData';
 import NameSpr from '../common/NameSpr';
 import MyEvent from '../common/MyEvent';
 import PlaneGameMI from '../gamePVP/interface/PlaneGameMI';
-import PlaneGame2MI from '../gameNOR/interface/PlaneGame2MI';
-import Game2OverIf from '../gameNOR/interface/Game2OverIf';
+import PlaneGameNORMI from '../gameNOR/interface/PlaneGameNORMI';
+import GameNOROverIf from '../gameNOR/interface/GameNOROverIf';
 import SocketClient from '../common/socket/SocketClient';
 
 /**
@@ -25,7 +25,7 @@ class PlaneGameSI extends createjs.Container{
   planeGameMI=null;
   /**
    * 多人选择界面
-   * @type {PlaneGame2MI}
+   * @type {PlaneGameNORMI}
    */
   planeGame2MI=null;
 
@@ -126,7 +126,7 @@ class PlaneGameSI extends createjs.Container{
     let targetS=e.target;
     if(targetS==this.warehouseS){
       if(this.Game2OI==null){
-        this.Game2OI=new Game2OverIf();
+        this.Game2OI=new GameNOROverIf();
         this.addChild(this.Game2OI);
       }
 
@@ -135,7 +135,7 @@ class PlaneGameSI extends createjs.Container{
     }
     else if(targetS==this.peopleS){
       if(this.planeGame2MI==null){
-        this.planeGame2MI=new PlaneGame2MI();
+        this.planeGame2MI=new PlaneGameNORMI();
         this.addChild(this.planeGame2MI);
       }
     }
