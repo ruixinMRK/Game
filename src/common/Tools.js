@@ -1045,6 +1045,7 @@ class Tools{
     {// code for IE6, IE5
       xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
     }
+    xmlhttp.withCredentials = true;
     Tools.cacheAjax[Tools.cacheAjax.length] = xmlhttp;
     console.log(Tools.cacheAjax.length);
     return xmlhttp;
