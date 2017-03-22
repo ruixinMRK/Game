@@ -988,7 +988,7 @@ class Tools{
     var keyTimer = '';
 
     //解析参数
-    if(mothed === 'get') url +=  '?' + Tools.paramsData(obj.data);
+    if(mothed === 'get'&&obj.data) url +=  '?' + Tools.paramsData(obj.data);
     if(url.indexOf('?')>0) url+='&r=' + Math.random();
     else url+='?r=' + Math.random();
 
@@ -1045,6 +1045,7 @@ class Tools{
     {// code for IE6, IE5
       xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
     }
+    xmlhttp.withCredentials = true;
     Tools.cacheAjax[Tools.cacheAjax.length] = xmlhttp;
     console.log(Tools.cacheAjax.length);
     return xmlhttp;
