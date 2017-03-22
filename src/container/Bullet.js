@@ -3,6 +3,7 @@
  */
 
 import '../vendors/createjs';
+import GameData from '../manager/GameData';
 import NameSpr from '../common/NameSpr';
 import PlaneGame from '../gamePVP/PlaneGame';
 
@@ -15,7 +16,7 @@ class Bullet extends createjs.Container{
    * 攻击力
    * @type {number}
    */
-  atk=20;
+  atk=5;
 
   /**
    * 子弹构造函数
@@ -95,6 +96,15 @@ class Bullet extends createjs.Container{
    */
   onFrame=(e)=>{
     this.move(this.vx,this.vy);
+    if(this.rectSpr==null){
+      this.rectSpr=new createjs.Shape();
+      GameData.stage.addChild(this.rectSpr);
+    }
+    let r=NameSpr.rectGlobal(this);
+    this.rectSpr.graphics.clear();
+    this.rectSpr.graphics.beginFill('#D0D0D0');
+    this.rectSpr.graphics.drawRect(r.x,r.y,r.width,r.height);
+    this.rectSpr.graphics.endFill();
   }
 
 

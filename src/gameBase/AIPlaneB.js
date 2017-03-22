@@ -102,6 +102,9 @@ class AIPlaneB extends BasePlane{
         }
       }
     }
+    //子弹碰撞检测移除，不做别的处理
+    this.bulletHit(GameData.planeControl.AIP);
+    this.bulletHit(GameData.planeControl.enemyP);
 
     // console.log('子弹',this.bulletArr.length);
   }

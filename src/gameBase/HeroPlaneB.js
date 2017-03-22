@@ -37,7 +37,7 @@ class HeroPlaneB extends BasePlane{
    * 设置攻击时间
    * @type {number}
    */
-  attackTimeSet=300;
+  attackTimeSet=100;
 
   constructor() {
     super();
@@ -145,6 +145,15 @@ class HeroPlaneB extends BasePlane{
     //飞机数据显示
     GameData.dataShow.planeTxt(this);
     // console.log('子弹',this.bulletArr.length);
+    if(this.rectSpr==null){
+      this.rectSpr=new createjs.Shape();
+      GameData.stage.addChild(this.rectSpr);
+    }
+    let r=NameSpr.rectGlobal(this);
+    this.rectSpr.graphics.clear();
+    this.rectSpr.graphics.beginFill('#D0D0D0');
+    this.rectSpr.graphics.drawRect(r.x,r.y,r.width,r.height);
+    this.rectSpr.graphics.endFill();
   }
 
 

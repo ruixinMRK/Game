@@ -78,15 +78,30 @@ class NameSpr extends createjs.Container{
     return NameSpr.instance;
   }
 
+  /**
+   * 对象矩形框碰撞检测
+   * @param s1 对象1
+   * @param s2 对象2
+   * @returns {boolean}
+   */
+  static hitObj(s1,s2){
+    let r1=NameSpr.rectGlobal(s1);
+    let r2=NameSpr.rectGlobal(s2);
+    let b=r1.intersects(r2);
+    if(b)
+      console.log(r1,r2)
+    return b;
+  }
 
   /**
-   * 获得对象父级坐标的矩形框 返回矩形框
+   * 获得对象在舞台全局坐标的矩形框 返回矩形框
    * @param spr 对象
    */
   static rectGlobal(spr){
     let rect=spr.getBounds();
-    rect.x+=spr.x;
-    rect.y+=spr.y;
+    let p=spr.localToGlobal(0,0);
+    rect.x=p.x;
+    rect.y=p.y;
     return rect;
   }
 

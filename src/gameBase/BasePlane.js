@@ -34,12 +34,12 @@ class BasePlane extends createjs.Container{
    * 子弹移动距离
    * @type {number}
    */
-  bulletDis=1000;
+  bulletDis=800;
   /**
    * 子弹移动速度
    * @type {number}
    */
-  bulletSpeed=10;
+  bulletSpeed=13;
   /**
    * 一局游戏击杀
    * @type {number}
@@ -119,6 +119,28 @@ class BasePlane extends createjs.Container{
     if(this.y<0)this.y=0;
     else if(this.y>GameData.mapH)this.y=GameData.mapH;
 
+  }
+
+  /**
+   * 子弹碰撞移除，不做任何处理
+   * @param obj 检测对象
+   * @param objB 包含多个飞机的obj对象=true 飞机对象=false
+   */
+  bulletHit(obj,objB=true){
+    let planeO={};
+    if(objB)
+      planeO=obj;
+    else
+      planeO[obj.Name]=obj;
+    for(let i=0;i<this.bulletArr.length;i++){
+      if(this.bulletArr[i].parent==null) continue;
+      for(let s in planeO){
+        if(planeO[s].Name==this.Name) continue;
+        if(NameSpr.hitObj(this.bulletArr[i],planeO[s])){
+          this.bulletArr[i].remove();
+        }
+      }
+    }
   }
 
 

@@ -46,15 +46,15 @@ class DataShow extends createjs.Container{
     Router.instance.reg(Router.KPI.ping,this.socketPing);
 
     /**
-     * ping数据发送帧间隔
-     * @type {number}
-     */
-    this.pingF=3;
-    /**
      * ping数据发送帧间隔设置
      * @type {number}
      */
-    this.pingFSet=3;
+    this.pingFSet=150;
+    /**
+     * ping数据发送帧间隔
+     * @type {number}
+     */
+    this.pingF=this.pingFSet;
     /**
      * 当前ping时间
      * @type {number}
@@ -142,12 +142,12 @@ class DataShow extends createjs.Container{
     if(data.t < this.currentPingTime) return;
     let t=new Date().getTime()-data.t;
     if(t<0) return;
-    if(t<100){
-      this.pingFSet=3;
-    }
-    else{
-      this.pingFSet=1;
-    }
+    // if(t<100){
+    //   this.pingFSet=3;
+    // }
+    // else{
+    //   this.pingFSet=1;
+    // }
     this.pingTxt.text='ping:'+t;
     this.currentPingTime = data.t;
 

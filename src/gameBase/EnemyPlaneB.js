@@ -4,6 +4,7 @@
 import '../vendors/createjs';
 import BasePlane from './BasePlane';
 import Tools from '../common/Tools';
+import GameData from '../manager/GameData';
 
 /**
  * 飞机大战游戏敌人飞机基类
@@ -64,7 +65,6 @@ class EnemyPlaneB extends BasePlane{
    * @param e
    */
   onFrame=(e)=>{
-    if(this.visible==false) return;
     this.frameHitB=false;
     if(this.bulletArr.length==0)
       this.bulletNumId=0;
@@ -99,6 +99,12 @@ class EnemyPlaneB extends BasePlane{
       else
         this.rotation=this.targetRot;
     }
+
+    //子弹碰撞检测移除，不做别的处理
+    this.bulletHit(GameData.planeControl.AIP);
+    this.bulletHit(GameData.planeControl.enemyP);
+    this.bulletHit(GameData.planeControl.HeroPlane,false);
+
     // console.log('子弹',this.bulletArr.length);
   }
 
