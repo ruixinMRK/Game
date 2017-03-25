@@ -148,6 +148,7 @@ class PlaneGameSI extends createjs.Container{
         this.planeGame2MI=new PlaneGameNORMI();
         this.addChild(this.planeGame2MI);
       }
+
     }
     else if(targetS==this.pvpS){
       if(this.planeGameMI==null){

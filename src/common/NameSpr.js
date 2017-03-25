@@ -3,6 +3,7 @@
  */
 import '../vendors/createjs';
 import NameSprData from './NameSprData';
+import Tools from './Tools';
 
 /**
  * 根据名称在精灵图获得sprite 单例类
@@ -79,22 +80,61 @@ class NameSpr extends createjs.Container{
   }
 
   /**
-   * 对象矩形框碰撞检测
+   * 对象碰撞检测 s1检测s2
    * @param s1 对象1
    * @param s2 对象2
+   * @param grid 网格碰撞检测 默认true
    * @returns {boolean}
    */
-  static hitObj(s1,s2){
-    let r1=NameSpr.rectGlobal(s1);
-    let r2=NameSpr.rectGlobal(s2);
-    let b=r1.intersects(r2);
-    if(b)
-      console.log(r1,r2)
-    return b;
+  static hitObj1(s1,s2,grid=true){
+    if(grid){
+      if(Math.floor(s1.x/NameSpr.gridW)!=Math.floor(s2.x/NameSpr.gridW))
+        return false;
+      if(Math.floor(s1.y/NameSpr.gridH)!=Math.floor(s2.y/NameSpr.gridH))
+        return false;
+    }
+
+    let ha=s1.hitArr.concat();
+    let i;
+    let pa;
+    if(s1.rotation%360!=0){
+      for(i=0;i<ha.length;i++){
+        pa=ha[i];
+        pa=Tools.getXY(pa[0],pa[1],s1.rotation,false);
+      }
+    }
+    for(i=0;i<ha.length;i++){
+      pa=ha[i];
+      pa=s1.localToLocal(pa[0],pa[1],s2);
+      if(s2.hitTest(pa.x,pa.y))
+        return true;
+    }
+    return false;
   }
 
   /**
-   * 获得对象在舞台全局坐标的矩形框 返回矩形框
+   * 对象碰撞检测 s1,s2相互检测
+   * @param s1 对象1
+   * @param s2 对象2
+   * @param grid 网格碰撞检测 默认true
+   * @returns {boolean}
+   */
+  static hitObj2(s1,s2,grid=true){
+    if(grid){
+      if(Math.floor(s1.x/NameSpr.gridW)!=Math.floor(s2.x/NameSpr.gridW))
+        return false;
+      if(Math.floor(s1.y/NameSpr.gridH)!=Math.floor(s2.y/NameSpr.gridH))
+        return false;
+    }
+
+    if(NameSpr.hitObj1(s1,s2,false))
+      return true;
+    return NameSpr.hitObj1(s2,s1,false);
+  }
+
+  /**
+   * 获得对象在舞台全局坐标的矩形框
+   * 注册点不为0，矩形x,y和对象x,y转全局不同 返回矩形框
    * @param spr 对象
    */
   static rectGlobal(spr){
@@ -103,6 +143,30 @@ class NameSpr extends createjs.Container{
     rect.x=p.x;
     rect.y=p.y;
     return rect;
+  }
+
+
+  /**
+   * 对象注册点居中
+   * @param spr 对象
+   */
+  static registerPointCenter(spr){
+    let bound = spr.getBounds();
+    spr.regX = bound.width / 2;
+    spr.regY = bound.height / 2;
+  }
+
+  /**
+   * 设置对象碰撞点(4个顶点)
+   * @param spr 对象
+   * @param spr
+   * @returns {[*,*,*,*]} 碰撞点坐标
+   */
+  static setHitPoint(spr){
+    let bound = spr.getBounds();
+    let hitArr=[[bound.x,bound.y],[bound.x,bound.y+bound.height],
+      [bound.x+bound.width,bound.y],[bound.x+bound.width,bound.y+bound.height]];
+    return hitArr;
   }
 
   /**
@@ -142,5 +206,18 @@ class NameSpr extends createjs.Container{
   }
 
 }
+
+/**
+ * 网格高
+ * @type {number}
+ */
+NameSpr.gridW=200;
+
+/**
+ * 网格宽
+ * @type {number}
+ */
+NameSpr.gridH=200;
+
 
 export default NameSpr;

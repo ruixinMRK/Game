@@ -104,11 +104,9 @@ class PlaneMapB extends createjs.Container{
    * @param plane {HeroPlane}
    */
   propHit(plane){
-    let r1=NameSpr.rectGlobal(plane);
     for(let i=this.propArr.length-1;i>=0;i--){
       if(this.propArr[i].visible==false) continue;
-      let r2=NameSpr.rectGlobal(this.propArr[i]);
-      if(r1.intersects(r2)){
+      if(NameSpr.hitObj2(plane,this.propArr[i])){
         //碰撞了
         SocketClient.instance.send({KPI:Router.KPI.planProp,id:this.propArr[i].id,room:GameData.room});
         this.propArr[i].planeHit(plane);

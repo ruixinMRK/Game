@@ -86,10 +86,7 @@ class AIPlaneB extends BasePlane{
     if(heroPlane.visible&&heroPlane.life>0){
       for(let i=this.bulletArr.length-1;i>=0;i--){
         let bullet=this.bulletArr[i];
-        let r1=NameSpr.rectGlobal(bullet);
-        let r2=NameSpr.rectGlobal(heroPlane);
-
-        if(r1.intersects(r2)){
+        if(NameSpr.hitObj2(bullet,heroPlane)){
           //子弹击中了
           let data={KPI:Router.KPI.AiHit,room:GameData.room,type:0,'name':this.Name,'hit':{}};
           heroPlane.life-=bullet.atk;

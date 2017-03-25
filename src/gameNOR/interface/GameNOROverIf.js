@@ -65,7 +65,6 @@ class GameNOROverIf extends createjs.Container{
     let bound=this.getBounds();
     this.x=(GameData.stageW-bound.width)/2;
     this.y=(GameData.stageH-bound.height)/2;
-
   }
 
 

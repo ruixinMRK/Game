@@ -5,6 +5,10 @@
 import '../vendors/createjs';
 import HeroPlaneB from '../gameBase/HeroPlaneB';
 import GameData from '../manager/GameData';
+import NameSpr from '../common/NameSpr';
+import Router from '../common/socket/Router';
+import SocketClient from '../common/socket/SocketClient';
+
 
 /**
  * 飞机类
@@ -46,6 +50,30 @@ class HeroPlaneNOR extends HeroPlaneB{
     this.invincible-=GameData.timeDiff;
     //助攻计算时间
     this.attackerTimeOF();
+
+    if(this.visible==false||this.invincible>0) return;
+    //飞机相撞检测
+    for(let s in e.enemyP){
+      if(e.enemyP[s].visible==false) continue;
+      if(NameSpr.hitObj2(this,e.enemyP[s])){
+        this.life=0;
+        e.enemyP[s].visible=false;
+        SocketClient.instance.send({KPI:Router.KPI.planeDie,name:this.Name,type:2,room:GameData.room,en:e.enemyP[s].Name});
+        break;
+      }
+    }
+    for(let s in e.AIP){
+      if(e.AIP[s].visible==false) continue;
+      if(NameSpr.hitObj2(this,e.AIP[s])){
+        this.life=0;
+        e.AIP[s].life=0;
+        GameData.send=true;
+        e.psd.AI[e.AIP[s].Name]=e.AIP[s].life;
+        e.AIP[s].visible=false;
+        SocketClient.instance.send({KPI:Router.KPI.planeDie,name:this.Name,type:2,room:GameData.room,an:e.AIP[s].Name});
+        break;
+      }
+    }
 
   }
 

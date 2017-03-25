@@ -98,13 +98,9 @@ class HeroPlaneB extends BasePlane{
     //子弹检测碰撞敌机
     for(let i=this.bulletArr.length-1;i>=0;i--){
       let bullet=this.bulletArr[i];
-      let r1=NameSpr.rectGlobal(bullet);
-
       for(let s in e.enemyP){
         if(e.enemyP[s].frameHitB) continue;
-        let r2=NameSpr.rectGlobal(e.enemyP[s]);
-
-        if(r1.intersects(r2)){
+        if(NameSpr.hitObj2(bullet,e.enemyP[s])){
           //子弹击中了
           GameData.dataShow.enemyPlane=e.enemyP[s];
           e.enemyP[s].frameHitB=true;
@@ -120,13 +116,9 @@ class HeroPlaneB extends BasePlane{
        * @type {Bullet}
        */
       let bullet=this.bulletArr[i];
-      let r1=NameSpr.rectGlobal(bullet);
-
       for(let s in e.AIP){
         if(e.AIP[s].frameHitB) continue;
-        let r2=NameSpr.rectGlobal(e.AIP[s]);
-
-        if(r1.intersects(r2)){
+        if(NameSpr.hitObj2(bullet,e.AIP[s])){
           //子弹击中了
           GameData.dataShow.enemyPlane=e.AIP[s];
           e.AIP[s].frameHitB=true;
@@ -145,15 +137,6 @@ class HeroPlaneB extends BasePlane{
     //飞机数据显示
     GameData.dataShow.planeTxt(this);
     // console.log('子弹',this.bulletArr.length);
-    if(this.rectSpr==null){
-      this.rectSpr=new createjs.Shape();
-      GameData.stage.addChild(this.rectSpr);
-    }
-    let r=NameSpr.rectGlobal(this);
-    this.rectSpr.graphics.clear();
-    this.rectSpr.graphics.beginFill('#D0D0D0');
-    this.rectSpr.graphics.drawRect(r.x,r.y,r.width,r.height);
-    this.rectSpr.graphics.endFill();
   }
 
 

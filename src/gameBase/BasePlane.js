@@ -95,13 +95,10 @@ class BasePlane extends createjs.Container{
    * 初始化
    */
   init() {
-
-
     this.mc = NameSpr.getInstance().getSpr('plane', 'plane');
-    let bound = this.mc.getBounds();
-    this.mc.regX = bound.width / 2;
-    this.mc.regY = bound.height / 2;
     this.addChild(this.mc);
+    NameSpr.registerPointCenter(this);
+    this.hitArr=NameSpr.setHitPoint(this);
   }
 
   /**
@@ -136,7 +133,7 @@ class BasePlane extends createjs.Container{
       if(this.bulletArr[i].parent==null) continue;
       for(let s in planeO){
         if(planeO[s].Name==this.Name) continue;
-        if(NameSpr.hitObj(this.bulletArr[i],planeO[s])){
+        if(NameSpr.hitObj2(this.bulletArr[i],planeO[s])){
           this.bulletArr[i].remove();
         }
       }

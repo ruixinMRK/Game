@@ -55,10 +55,9 @@ class Bullet extends createjs.Container{
    */
   init(){
     this.mc=NameSpr.getInstance().getSpr('plane','bullet');
-    let bound=this.mc.getBounds();
-    this.mc.x=-bound.width/2;
-    this.mc.y=-bound.height/2;
     this.addChild(this.mc);
+    NameSpr.registerPointCenter(this);
+    this.hitArr=NameSpr.setHitPoint(this);
   }
 
 
@@ -96,15 +95,6 @@ class Bullet extends createjs.Container{
    */
   onFrame=(e)=>{
     this.move(this.vx,this.vy);
-    if(this.rectSpr==null){
-      this.rectSpr=new createjs.Shape();
-      GameData.stage.addChild(this.rectSpr);
-    }
-    let r=NameSpr.rectGlobal(this);
-    this.rectSpr.graphics.clear();
-    this.rectSpr.graphics.beginFill('#D0D0D0');
-    this.rectSpr.graphics.drawRect(r.x,r.y,r.width,r.height);
-    this.rectSpr.graphics.endFill();
   }
 
 
