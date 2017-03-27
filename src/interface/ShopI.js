@@ -100,6 +100,7 @@ class ShopI extends createjs.Container{
   MyEventF=(data)=>{
     if(data=='planeUpdata'){
       this.planeUpdate();
+      this.textUpdate();
     }
   }
 
@@ -244,6 +245,8 @@ class ShopPlaneI extends createjs.Container{
         Tools.ajax({data:d,url:'http://60.205.222.103:8000/shop',mothed:'post',async:true,timeout:5000,
             callback:(d)=>{
               console.log(d);
+              this.planeDataO.have=1;
+              UserData.gold-=this.planeDataO.price;
               MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'planeUpdata');
             },
             error:e=>{
@@ -253,18 +256,18 @@ class ShopPlaneI extends createjs.Container{
         );
       }
       else if(this.buyS.sprName=='use'){
-        GameData.planeName=this.planeDataO.nameEng;
         let d={default:GameData.planeName};
         Tools.ajax({data:d,url:'http://60.205.222.103:8000/userinfo',mothed:'post',async:true,timeout:5000,
             callback:(d)=>{
               console.log(d);
+              GameData.planeName=this.planeDataO.nameEng;
+              MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'planeUpdata');
             },
             error:e=>{
               alert('服务器错误,请稍后重新尝试!!')
             }
           }
         );
-        MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'planeUpdata');
       }
     }
   }

@@ -979,52 +979,73 @@ class Tools{
   //ajax请求
   //{data:{},url:'',upload:true,mothed:'post,get',callback:function(){},async:true,timeout:6000};
   static ajax(obj){
+    return new Promise((resolve, reject)=>{
+      //回调函数结合Promise
+      if(obj.error==null){
+        obj.error=e=>{
+          alert('服务器错误,请稍后重新尝试!!')
+        };
+      }
+      let cf=obj.callback;
+      let ef=obj.error;
+      obj.callback=(d)=>{
+        cf(d);
+        resolve(d);
+      };
+      obj.error=(d)=>{
+        ef(d);
+        //如果reject函数不存在执行reject函数会报错
+        reject(d);
+      };
 
-    var xhr = Tools.createAjax();
 
-    let url = obj.url;
-    let mothed = obj.mothed;
-    let timeout = obj.timeout;
-    var keyTimer = '';
+      var xhr = Tools.createAjax();
 
-    //解析参数
-    if(mothed === 'get'&&obj.data) url +=  '?' + Tools.paramsData(obj.data);
-    if(url.indexOf('?')>0) url+='&r=' + Math.random();
-    else url+='?r=' + Math.random();
+      let url = obj.url;
+      let mothed = obj.mothed;
+      let timeout = obj.timeout;
+      var keyTimer = '';
 
-    //判断是否完成
-    if(obj.async){
-      xhr.onreadystatechange = function(){
-        if(xhr.readyState == 4){
-          Timer.clear(keyTimer);
-          Tools.ajaxCallBack(xhr,obj.callback,obj.error);
+      //解析参数
+      if(mothed === 'get'&&obj.data) url +=  '?' + Tools.paramsData(obj.data);
+      if(url.indexOf('?')>0) url+='&r=' + Math.random();
+      else url+='?r=' + Math.random();
+
+      //判断是否完成
+      if(obj.async){
+        xhr.onreadystatechange = function(){
+          if(xhr.readyState == 4){
+            Timer.clear(keyTimer);
+            Tools.ajaxCallBack(xhr,obj.callback,obj.error);
+          }
         }
       }
-    }
 
-    //到时间后取消请求
-    if(timeout&&timeout>0){
-      function ajaxTimeOut(){
-        obj.error&&obj.error();
-        xhr.abort();
+      //到时间后取消请求
+      if(timeout&&timeout>0){
+        function ajaxTimeOut(){
+          obj.error&&obj.error();
+          xhr.abort();
+        }
+        keyTimer = Timer.add(ajaxTimeOut,timeout,1);
       }
-      keyTimer = Timer.add(ajaxTimeOut,timeout,1);
-    }
 
-    //发送请求
-    xhr.open(mothed,url,obj.async);
-    if(mothed === 'post'){
-      if(!obj.upload) xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-      xhr.send(obj.upload?obj.data:Tools.paramsData(obj.data,obj.dataType));
-    }
-    else{
-      xhr.send(null);
-    }
+      //发送请求
+      xhr.open(mothed,url,obj.async);
+      if(mothed === 'post'){
+        if(!obj.upload) xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+        xhr.send(obj.upload?obj.data:Tools.paramsData(obj.data,obj.dataType));
+      }
+      else{
+        xhr.send(null);
+      }
 
-    console.log('ajax url is:',url);
-    //同步的话
-    if(!obj.async)  Tools.ajaxCallBack(xhr,obj.callback,obj.error);
-    // return xhr.abort;
+      console.log('ajax url is:',url);
+      //同步的话
+      if(!obj.async)  Tools.ajaxCallBack(xhr,obj.callback,obj.error);
+      // return xhr.abort;
+    });
+
   }
 
   //创建ajax

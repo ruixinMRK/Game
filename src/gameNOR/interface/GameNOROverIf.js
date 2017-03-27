@@ -53,6 +53,18 @@ class GameNOROverIf extends createjs.Container{
      * @type {createjs.Text}
      */
     this.resultT=NameSpr.getText(this,'',"bold 24px Arial",'#000000',120,100);
+    /**
+     * 经验文本
+     * @type {createjs.Text}
+     */
+    this.expT=NameSpr.getText(this,'经验：',"bold 24px Arial",'#000000',0,350);
+    this.expT.visible=false;
+    /**
+     * 金币文本
+     * @type {createjs.Text}
+     */
+    this.goldT=NameSpr.getText(this,'金币：',"bold 24px Arial",'#000000',0,375);
+    this.goldT.visible=false;
     //属性
     /**
      * 倒计时
@@ -130,6 +142,12 @@ class GameNOROverIf extends createjs.Container{
       NameSpr.getText(this,ad.die,"bold 18px Arial",'#000000',160,th);
       NameSpr.getText(this,ad.holdAtt,"bold 18px Arial",'#000000',240,th);
       NameSpr.getText(this,ad.score,"bold 18px Arial",'#000000',320,th);
+      if(ad.name==GameData.planeControl.HeroPlane.Name){
+        this.expT.visible=true;
+        this.goldT.visible=true;
+        this.expT.text='经验：'+ad.exp;
+        this.goldT.text='金币：'+ad.money;
+      }
       th+=20;
     }
   }

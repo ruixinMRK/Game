@@ -117,6 +117,7 @@ class PlaneControlNOR extends PlaneControlB{
     // console.log('接收游戏时间数据：',data);
     GameData.dataShow.gameTimeTxt(data.time);
     if(data.time==0){
+      console.log(data)
       if(this.gameOverIf==null){
         this.gameOverIf=new GameNOROverIf();
         GameData.stage.addChild(this.gameOverIf);
@@ -135,7 +136,7 @@ class PlaneControlNOR extends PlaneControlB{
   createEP(data){
     let obj=PSData.getObj(data);
     if(this.enemyP[obj.Name]!=null)return;
-    this.enemyP[obj.Name]=new EnemyPlaneNOR(data.snd);
+    this.enemyP[obj.Name]=new EnemyPlaneNOR(GameData.planeNameO[data.sn]);
     this.enemyP[obj.Name].x=obj.x;
     this.enemyP[obj.Name].y=obj.y;
     this.enemyP[obj.Name].rotation=obj.rot;

@@ -61,37 +61,22 @@ class LoadI extends createjs.Container{
      */
     this.loadingFileO={};
 
-    let p=new Promise((resolve, reject)=>{
-      Tools.ajax({data:{},url:'http://60.205.222.103:8000/shop',mothed:'post',async:true,timeout:5000,
+    Tools.ajax({data:{},url:'http://60.205.222.103:8000/shop',mothed:'post',async:true,timeout:5000,
+        callback:(d)=>{
+          d=JSON.parse(d);
+          GameData.shopArr=d.value;
+        }
+      }
+    ).then((data)=>{
+      return Tools.ajax({data:{},url:'http://60.205.222.103:8000/userinfo',mothed:'post',async:true,timeout:5000,
           callback:(d)=>{
-            console.log(d);
             d=JSON.parse(d);
-            GameData.shopArr=d.value;
-            resolve(d);
-          },
-          error:e=>{
-            alert('服务器错误,请稍后重新尝试!!')
+            UserData.exp=d.exp;
+            UserData.gold=d.money;
+            GameData.planeName=d.lastuse;
           }
         }
       );
-    });
-    p.then((data)=>{
-      return new Promise((resolve, reject)=>{
-        Tools.ajax({data:{},url:'http://60.205.222.103:8000/userinfo',mothed:'post',async:true,timeout:5000,
-            callback:(d)=>{
-              d=JSON.parse(d);
-              console.log(d);
-              UserData.exp=d.exp;
-              UserData.gold=d.money;
-              GameData.planeName=d.lastuse;
-              resolve(d);
-            },
-            error:e=>{
-              alert('服务器错误,请稍后重新尝试!!')
-            }
-          }
-        );
-      });
     }).then((data)=>{
       this.queue= new createjs.LoadQueue(true);
       this.queue.installPlugin(createjs.Sound);

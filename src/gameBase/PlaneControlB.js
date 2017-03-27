@@ -179,6 +179,7 @@ class PlaneControlB extends createjs.Container{
     this.psd.rot=this.HeroPlane.rotation;
     this.psd.time=new Date().getTime();
 
+    
     SocketClient.instance.send(PSData.getObj(this.psd));
     this.psd.init();
   }
