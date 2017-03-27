@@ -981,23 +981,6 @@ class Tools{
   static ajax(obj){
     return new Promise((resolve, reject)=>{
       //回调函数结合Promise
-      if(obj.error==null){
-        obj.error=e=>{
-          alert('服务器错误,请稍后重新尝试!!')
-        };
-      }
-      let cf=obj.callback;
-      let ef=obj.error;
-      obj.callback=(d)=>{
-        cf(d);
-        resolve(d);
-      };
-      obj.error=(d)=>{
-        ef(d);
-        //如果reject函数不存在执行reject函数会报错
-        reject(d);
-      };
-
 
       var xhr = Tools.createAjax();
 
@@ -1016,7 +999,18 @@ class Tools{
         xhr.onreadystatechange = function(){
           if(xhr.readyState == 4){
             Timer.clear(keyTimer);
-            Tools.ajaxCallBack(xhr,obj.callback,obj.error);
+            // Tools.ajaxCallBack(xhr,obj.callback,obj.error);
+
+            if(xhr.status===0) {
+              return;
+            }
+            if(xhr.status == 200){
+              resolve(xhr.responseText);
+            }
+            else{
+              reject('服务器错误,请稍后重新尝试!!');
+            }
+
           }
         }
       }
@@ -1024,7 +1018,7 @@ class Tools{
       //到时间后取消请求
       if(timeout&&timeout>0){
         function ajaxTimeOut(){
-          obj.error&&obj.error();
+          reject('服务器错误,请稍后重新尝试!!');
           xhr.abort();
         }
         keyTimer = Timer.add(ajaxTimeOut,timeout,1);
@@ -1082,37 +1076,6 @@ class Tools{
       arr.push( encodeURIComponent(str) + '=' + encodeURIComponent(data[str]));
     }
     return arr.join('&');
-
-  }
-
-  static ajaxCallBack(xhr,success,error){
-
-    if(xhr.status===0) {
-      return;
-    }
-    if(xhr.status == 200){
-
-      //let arr = xhr.responseText.split("#");
-      //let i = 0;
-      //let cacheData = [];
-      //for(; i<arr.length;i++){
-      //  let obj = null;
-      //  try{
-      //    obj = JSON.parse(arr[i]);
-      //  }
-      //  catch(e){
-      //    console.log('解析数据错误');
-      //  }
-      //  if(obj) cacheData.push(obj);
-      //}
-      ////Router.instance.dispatcher(arr[i])
-      //let returnObj = cacheData.length>1?cacheData:cacheData[0];
-      success&&success(xhr.responseText);
-      // Router.instance.dispatcher(returnObj);
-    }
-    else{
-      error&&error();
-    }
 
   }
 

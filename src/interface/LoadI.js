@@ -61,32 +61,29 @@ class LoadI extends createjs.Container{
      */
     this.loadingFileO={};
 
-    Tools.ajax({data:{},url:'http://60.205.222.103:8000/shop',mothed:'post',async:true,timeout:5000,
-        callback:(d)=>{
-          d=JSON.parse(d);
-          GameData.shopArr=d.value;
-        }
+    let pro = Tools.ajax({data:{},url:'http://60.205.222.103:8000/shop',mothed:'post',async:true,timeout:5000,});
+    pro.then(
+      d=>{
+        d=JSON.parse(d);
+        GameData.shopArr=d.value;
+        return Tools.ajax({data:{},url:'http://60.205.222.103:8000/userinfo',mothed:'post',async:true,timeout:5000});
       }
-    ).then((data)=>{
-      return Tools.ajax({data:{},url:'http://60.205.222.103:8000/userinfo',mothed:'post',async:true,timeout:5000,
-          callback:(d)=>{
-            d=JSON.parse(d);
-            UserData.exp=d.exp;
-            UserData.gold=d.money;
-            GameData.planeName=d.lastuse;
-          }
-        }
-      );
-    }).then((data)=>{
-      this.queue= new createjs.LoadQueue(true);
-      this.queue.installPlugin(createjs.Sound);
-      this.queue.on('complete',this.onLoadComplete);
-      this.queue.on('error',this.onLoadError);
-      this.queue.on('fileload',this.onLoadFileload);
-      this.queue.on('fileprogress',this.onLoadFileProgress);
-      // this.queue.on('progress',this.onLoadProgress);
-      this.loadFile(LoadIData.loadData);
-    });
+    ).then(
+      d=>{
+        d=JSON.parse(d);
+        UserData.exp=d.exp;
+        UserData.gold=d.money;
+        GameData.planeName=d.lastuse;
+        this.queue= new createjs.LoadQueue(true);
+        this.queue.installPlugin(createjs.Sound);
+        this.queue.on('complete',this.onLoadComplete);
+        this.queue.on('error',this.onLoadError);
+        this.queue.on('fileload',this.onLoadFileload);
+        this.queue.on('fileprogress',this.onLoadFileProgress);
+        // this.queue.on('progress',this.onLoadProgress);
+        this.loadFile(LoadIData.loadData);
+      }
+    ).catch(e=>{alert(e)});
 
 
   }

@@ -242,32 +242,26 @@ class ShopPlaneI extends createjs.Container{
     if(targetS==this.buyS){
       if(this.buyS.sprName=='buy'){
         let d={buyName:this.planeDataO.nameEng};
-        Tools.ajax({data:d,url:'http://60.205.222.103:8000/shop',mothed:'post',async:true,timeout:5000,
-            callback:(d)=>{
-              console.log(d);
-              this.planeDataO.have=1;
-              UserData.gold-=this.planeDataO.price;
-              MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'planeUpdata');
-            },
-            error:e=>{
-              alert('服务器错误,请稍后重新尝试!!')
-            }
+        let pro=Tools.ajax({data:d,url:'http://60.205.222.103:8000/shop',mothed:'post',async:true,timeout:5000});
+        pro.then(
+          d=>{
+            console.log(d);
+            this.planeDataO.have=1;
+            UserData.gold-=this.planeDataO.price;
+            MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'planeUpdata');
           }
-        );
+        ).catch(e=>{alert(e)});
       }
       else if(this.buyS.sprName=='use'){
         let d={default:GameData.planeName};
-        Tools.ajax({data:d,url:'http://60.205.222.103:8000/userinfo',mothed:'post',async:true,timeout:5000,
-            callback:(d)=>{
-              console.log(d);
-              GameData.planeName=this.planeDataO.nameEng;
-              MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'planeUpdata');
-            },
-            error:e=>{
-              alert('服务器错误,请稍后重新尝试!!')
-            }
+        let pro=Tools.ajax({data:d,url:'http://60.205.222.103:8000/userinfo',mothed:'post',async:true,timeout:5000});
+        pro.then(
+          d=>{
+            console.log(d);
+            GameData.planeName=this.planeDataO.nameEng;
+            MyEvent.dispatchEvent(MyEvent.ME_MyEvent,'planeUpdata');
           }
-        );
+        ).catch(e=>{alert(e)});
       }
     }
   }

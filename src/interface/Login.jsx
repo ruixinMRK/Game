@@ -75,12 +75,9 @@ class Login extends React.Component{
 
     let d = {name:this.refs.name.value,password:this.refs.password.value,type:this.state.type};
 
-    Tools.ajax({data:d,url:'http://60.205.222.103:8000/user',mothed:'get',async:true,timeout:5000,
-      callback:(d)=>{
-
-        //{"data":"0"}  //已存在
-        //{"data":"1"}  // 注册成功
-        //{'data':'err'} //数据库错误
+    let pro = Tools.ajax({data:d,url:'http://60.205.222.103:8000/user',mothed:'get',async:true,timeout:5000});
+    pro.then(
+      d=>{
 
         try{
 
@@ -103,11 +100,9 @@ class Login extends React.Component{
         catch(e){
 
         }
-      },
-      error:e=>{
-        alert('服务器错误,请稍后重新尝试!!')
+
       }
-  });
+    ).catch(e=>{alert(e)});
 
 
   }
