@@ -75,12 +75,9 @@ class Login extends React.Component{
 
     let d = {name:this.refs.name.value,password:this.refs.password.value,type:this.state.type};
 
-    Tools.ajax({data:d,url:'http://60.205.222.103:8000/user',mothed:'get',async:true,timeout:5000,
-      callback:(d)=>{
-
-        //{"data":"0"}  //已存在
-        //{"data":"1"}  // 注册成功
-        //{'data':'err'} //数据库错误
+    let pro = Tools.ajax({data:d,url:'http://60.205.222.103:8000/user',mothed:'get',async:true,timeout:5000});
+    pro.then(
+      d=>{
 
         try{
 
@@ -103,12 +100,44 @@ class Login extends React.Component{
         catch(e){
 
         }
-      },
-      error:e=>{
-        alert('服务器错误,请稍后重新尝试!!')
+
       }
-  }
-    )
+    ).catch(e=>{alert(e)});
+
+  //   Tools.ajax({data:d,url:'http://60.205.222.103:8000/user1',mothed:'get',async:true,timeout:5000,
+  //     callback:(d)=>{
+  //
+  //       //{"data":"0"}  //已存在
+  //       //{"data":"1"}  // 注册成功
+  //       //{'data':'err'} //数据库错误
+  //
+  //       try{
+  //
+  //         var str = JSON.parse(d).data;
+  //         if(this.state.type == 'reg'){
+  //           if(str=='0') alert('已存在');
+  //           else if(str =='1') {
+  //             alert('注册成功');
+  //           }
+  //
+  //         }
+  //         else{
+  //           if(str=='0') alert('用户名或者密码错误');
+  //           else if(str =='1') {
+  //             this.props.fn(this.refs.name.value);
+  //           }
+  //         }
+  //
+  //       }
+  //       catch(e){
+  //
+  //       }
+  //     },
+  //     error:e=>{
+  //       alert('服务器错误,请稍后重新尝试!!')
+  //     }
+  // }
+  //   )
 
 
   }
