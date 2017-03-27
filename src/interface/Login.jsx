@@ -107,8 +107,7 @@ class Login extends React.Component{
       error:e=>{
         alert('服务器错误,请稍后重新尝试!!')
       }
-  }
-    )
+  });
 
 
   }
