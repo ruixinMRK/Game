@@ -154,6 +154,7 @@ class PlaneControlB extends createjs.Container{
     od.x=this.HeroPlane.x;
     od.y=this.HeroPlane.y;
     od.r=this.HeroPlane.rotation;
+    od.sn=GameData.planeName;
     if(live)
       SocketClient.instance.send({KPI:Router.KPI.planeLive,name:UserData.Name,data:od,room:GameData.room});
     else

@@ -34,6 +34,19 @@ export default {
    */
   room:'',
   /**
+   * 飞机名称
+   */
+  planeName:'',
+  /**
+   * 飞机英文名称
+   */
+  planeEnName:'',
+  /**
+   * 商店数据数组
+   * @type {Array}
+   */
+  shopArr:[],
+  /**
    * 道具数组
    * @type {Array}
    */
@@ -73,8 +86,15 @@ export default {
   key_D:false,
   key_W:false,
   key_S:false,
-  key_J:false
+  key_J:false,
 
 
+
+  /**
+   * 飞机名对应飞机精灵名
+   * @type {{*}}
+   */
+  planeNameO:{'A':'plane0','B':'plane1','C':'plane2','D':'plane3',
+    'E':'plane4','F':'plane5',}
 
 };

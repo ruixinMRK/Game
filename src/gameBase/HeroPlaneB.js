@@ -41,7 +41,7 @@ class HeroPlaneB extends BasePlane{
 
   constructor() {
     super();
-    this.init();
+    this.init(GameData.planeNameO[GameData.planeName]);
   }
 
   /**

@@ -80,7 +80,7 @@ class PlaneControl extends PlaneControlB{
   createEP(data){
     let obj=PSData.getObj(data);
     if(this.enemyP[obj.Name]!=null)return;
-    this.enemyP[obj.Name]=new EnemyPlane();
+    this.enemyP[obj.Name]=new EnemyPlane(data.sn);
     this.enemyP[obj.Name].x=obj.x;
     this.enemyP[obj.Name].y=obj.y;
     this.enemyP[obj.Name].rotation=obj.rot;

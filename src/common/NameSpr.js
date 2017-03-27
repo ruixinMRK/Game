@@ -21,7 +21,7 @@ class NameSpr extends createjs.Container{
   /**
    * 设置spriteSheet
    * @param fileName 文件名
-   * @param url 路径
+   * @param urlArr 路径
    * @param frameArr 帧信息
    */
   setSheet(fileName,urlArr,frameArr){
@@ -46,7 +46,7 @@ class NameSpr extends createjs.Container{
   /**
    * 获得一个sprite
    *  @param fileName 文件名
-   * @param name sprite名称
+   * @param sprName sprite名称
    * @returns {*} sprite
    */
   getSpr(fileName,sprName){
@@ -69,6 +69,16 @@ class NameSpr extends createjs.Container{
   }
 
   /**
+   * 跳转帧并暂停
+   * @param spr 精灵
+   * @param sprName sprite名称
+   */
+  gotoAndStop(spr,sprName){
+    spr.gotoAndStop(this[spr.fileName+'index'][sprName]);
+    spr.sprName=sprName;
+  }
+
+  /**
    * 获得实例
    * @returns {NameSpr}
    */
@@ -88,23 +98,17 @@ class NameSpr extends createjs.Container{
    */
   static hitObj1(s1,s2,grid=true){
     if(grid){
-      if(Math.floor(s1.x/NameSpr.gridW)!=Math.floor(s2.x/NameSpr.gridW))
-        return false;
-      if(Math.floor(s1.y/NameSpr.gridH)!=Math.floor(s2.y/NameSpr.gridH))
+      if(Math.floor(s1.x/NameSpr.gridW)!=Math.floor(s2.x/NameSpr.gridW)||Math.floor(s1.y/NameSpr.gridH)!=Math.floor(s2.y/NameSpr.gridH))
         return false;
     }
 
     let ha=s1.hitArr.concat();
     let i;
     let pa;
-    if(s1.rotation%360!=0){
-      for(i=0;i<ha.length;i++){
-        pa=ha[i];
-        pa=Tools.getXY(pa[0],pa[1],s1.rotation,false);
-      }
-    }
     for(i=0;i<ha.length;i++){
       pa=ha[i];
+      if(s1.rotation%360!=0)
+        pa=Tools.getXY(pa[0],pa[1],s1.rotation,false);
       pa=s1.localToLocal(pa[0],pa[1],s2);
       if(s2.hitTest(pa.x,pa.y))
         return true;
@@ -165,7 +169,8 @@ class NameSpr extends createjs.Container{
   static setHitPoint(spr){
     let bound = spr.getBounds();
     let hitArr=[[bound.x,bound.y],[bound.x,bound.y+bound.height],
-      [bound.x+bound.width,bound.y],[bound.x+bound.width,bound.y+bound.height]];
+      [bound.x+bound.width,bound.y],[bound.x+bound.width,bound.y+bound.height],
+      [bound.x+bound.width/2,bound.y+bound.height/2]];
     return hitArr;
   }
 

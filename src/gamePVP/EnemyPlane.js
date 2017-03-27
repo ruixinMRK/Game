@@ -11,8 +11,12 @@ import EnemyPlaneB from '../gameBase/EnemyPlaneB';
  */
 class EnemyPlane extends EnemyPlaneB{
 
-  constructor(){
-    super();
+  /**
+   * 敌机构造函数
+   * @param sprName 飞机精灵名
+   */
+  constructor(sprName){
+    super(sprName);
   }
 
 }

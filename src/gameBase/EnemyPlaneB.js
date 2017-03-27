@@ -11,7 +11,11 @@ import GameData from '../manager/GameData';
  */
 class EnemyPlaneB extends BasePlane{
 
-  constructor(){
+  /**
+   * 敌机构造函数
+   * @param sprName 飞机精灵名
+   */
+  constructor(sprName){
     super();
     /**
      * 攻击次数
@@ -38,7 +42,7 @@ class EnemyPlaneB extends BasePlane{
      * @type {number}
      */
     this.currentTime=0;
-    this.init();
+    this.init(sprName);
   }
 
   /**

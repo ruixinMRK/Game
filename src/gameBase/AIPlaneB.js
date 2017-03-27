@@ -41,7 +41,7 @@ class AIPlaneB extends BasePlane{
      * @type {number}
      */
     this.currentTime=0;
-    this.init();
+    this.init('AIPlane0');
   }
 
   /**

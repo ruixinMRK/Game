@@ -93,9 +93,10 @@ class BasePlane extends createjs.Container{
 
   /**
    * 初始化
+   * @param sprName 飞机精灵名
    */
-  init() {
-    this.mc = NameSpr.getInstance().getSpr('plane', 'plane');
+  init(sprName) {
+    this.mc = NameSpr.getInstance().getSpr('plane', sprName);
     this.addChild(this.mc);
     NameSpr.registerPointCenter(this);
     this.hitArr=NameSpr.setHitPoint(this);
