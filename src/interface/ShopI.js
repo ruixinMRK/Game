@@ -253,7 +253,7 @@ class ShopPlaneI extends createjs.Container{
         ).catch(e=>{alert(e)});
       }
       else if(this.buyS.sprName=='use'){
-        let d={default:GameData.planeName};
+        let d={default:this.planeDataO.nameEng};
         let pro=Tools.ajax({data:d,url:'http://60.205.222.103:8000/userinfo',mothed:'post',async:true,timeout:5000});
         pro.then(
           d=>{

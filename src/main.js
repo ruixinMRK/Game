@@ -87,6 +87,23 @@ class Main extends React.Component{
     this.renderStage();
     window.addEventListener("resize", e=> {this.renderStage();}, false);
 
+
+    //需要优化
+    window.addEventListener("beforeunload", function (e) {
+
+      try{
+        let pro = Tools.ajax({data:null,url:'http://60.205.222.103:8000/des',mothed:'get',async:true,timeout:5000});
+        pro.then(e=>{});
+      }
+      catch(e){
+
+      }
+      //var confirmationMessage = '确定离开此页吗？本页不需要刷新或后退';
+      //(e || window.event).returnValue = '';
+      //return null;
+
+    });
+
     MyEvent.addEvent(MyEvent.ME_MyEvent,this.MyEventF);
 
     this.loadI=new LoadI();
