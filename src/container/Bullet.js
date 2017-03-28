@@ -32,6 +32,11 @@ class Bullet extends createjs.Container{
      */
     this.speed=8;
     /**
+     * 弧度
+     * @type {number}
+     */
+    this.angle=0;
+    /**
      * x速度
      * @type {number}
      */
@@ -66,13 +71,14 @@ class Bullet extends createjs.Container{
    * @param dis 距离
    * @param speed 速度
    * @param angle 弧度
+   * @param atk 子弹攻击力
    * @param id  子弹id
    */
-  setData(dis=500,speed=8,angle=0,id=0) {
+  setData(dis=500,speed=8,angle=0,atk=5,id=0) {
     this.dis = dis;
     this.speed = speed;
-    this.vx = Math.cos(angle) * speed;
-    this.vy = Math.sin(angle) * speed;
+    this.angle=angle;
+    this.atk=atk;
     this.bulletId = id;
   }
 
@@ -84,7 +90,7 @@ class Bullet extends createjs.Container{
   move(x,y){
     this.x+=x;
     this.y+=y;
-    this.dis-=this.speed
+    this.dis-=this.speed*GameData.timeDiff;
     if(this.dis<0||this.x<0||this.x>PlaneGame.mapW||this.y<0||this.y>PlaneGame.mapH)
       this.remove();
   }
@@ -94,6 +100,8 @@ class Bullet extends createjs.Container{
    * @param e
    */
   onFrame=(e)=>{
+    this.vx = Math.cos(this.angle) * this.speed*GameData.timeDiff;
+    this.vy = Math.sin(this.angle) * this.speed*GameData.timeDiff;
     this.move(this.vx,this.vy);
   }
 

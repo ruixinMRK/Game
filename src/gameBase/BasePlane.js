@@ -10,6 +10,12 @@ import ObjectPool from '../common/ObjectPool';
 
 class BasePlane extends createjs.Container{
 
+
+  /**
+   * 攻击力
+   * @type {number}
+   */
+  atk=5;
   /**
    * 生命值
    * @type {number}
@@ -39,7 +45,7 @@ class BasePlane extends createjs.Container{
    * 子弹移动速度
    * @type {number}
    */
-  bulletSpeed=13;
+  bulletSpeed=400/1000;
   /**
    * 一局游戏击杀
    * @type {number}
@@ -167,7 +173,7 @@ class BasePlane extends createjs.Container{
     let bullet=ObjectPool.getObj('Bullet');
     bullet.x=this.x;
     bullet.y=this.y;
-    bullet.setData(this.bulletDis,this.bulletSpeed,Tools.getHD(this.rotation),this.bulletNumId);
+    bullet.setData(this.bulletDis,this.bulletSpeed,Tools.getHD(this.rotation),this.atk,this.bulletNumId);
     this.bulletNumId++;
     this.parent.addChild(bullet);
     this.bulletArr.push(bullet);

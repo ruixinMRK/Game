@@ -17,7 +17,7 @@ class HeroPlaneB extends BasePlane{
    * 速度设置
    * @type {number}
    */
-  speedSet=3;
+  speedSet=100/1000;
   /**
    * 设置汽油值
    * @type {number}
@@ -71,7 +71,7 @@ class HeroPlaneB extends BasePlane{
     else if(GameData.key_D){
       this.planeRot(this.rotationSpeed);
     }
-    if(GameData.key_J&&this.bulletNum>0&&this.attackTime<=0){
+    if(this.visible&&GameData.key_J&&this.bulletNum>0&&this.attackTime<=0){
       this.attack();
       this.bulletNum--;
       this.attackTime=this.attackTimeSet;
@@ -91,8 +91,8 @@ class HeroPlaneB extends BasePlane{
       this.gasoline-=this.speed/150;
       // this.gasoline-=this.speed;
       let angle=Tools.getHD(this.rotation);
-      let vx=Math.cos(angle)*this.speed;
-      let vy=Math.sin(angle)*this.speed;
+      let vx=Math.cos(angle)*this.speed*GameData.timeDiff;
+      let vy=Math.sin(angle)*this.speed*GameData.timeDiff;
       this.move(vx,vy);
     }
     //子弹检测碰撞敌机

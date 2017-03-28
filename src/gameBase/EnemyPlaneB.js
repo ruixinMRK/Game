@@ -50,8 +50,10 @@ class EnemyPlaneB extends BasePlane{
    * @param obj {PSData}
    */
   dataDispose=(obj)=> {
-    console.log(obj.attack,obj.time);
-    if (obj.attack == 1) this.attackNum++;
+    if (obj.attack == 1){
+      console.log(obj.attack,obj.time);
+      this.attackNum++;
+    }
 
     if (obj.time < this.currentTime) return;
 

@@ -36,11 +36,7 @@ export default {
   /**
    * 飞机名称
    */
-  planeName:'',
-  /**
-   * 飞机英文名称
-   */
-  planeEnName:'',
+  planeName:'A',
   /**
    * 商店数据数组
    * @type {Array}

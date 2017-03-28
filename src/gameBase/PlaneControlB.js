@@ -77,9 +77,11 @@ class PlaneControlB extends createjs.Container{
     let obj=data.heroPlane;
     for(let s in obj){
       if(s!=UserData.Name){
-        data=obj[s];
-        data=PSData.getObj(data);
-        this.enemyPDataArr.unshift(data);
+        let arr=obj[s];
+        for(let i=0;i<arr.length;i++){
+          data=PSData.getObj(arr[i]);
+          this.enemyPDataArr.unshift(data);
+        }
       }
     }
   }

@@ -69,7 +69,7 @@ class HeroPlaneNOR extends HeroPlaneB{
         e.AIP[s].life=0;
         GameData.send=true;
         e.psd.AI[e.AIP[s].Name]=e.AIP[s].life;
-        e.AIP[s].visible=false;
+        // e.AIP[s].visible=false;
         SocketClient.instance.send({KPI:Router.KPI.planeDie,name:this.Name,type:2,room:GameData.room,an:e.AIP[s].Name});
         break;
       }
