@@ -47,6 +47,31 @@ class BasePlane extends createjs.Container{
    */
   bulletSpeed=400/1000;
   /**
+   * 速度设置
+   * @type {number}
+   */
+  speedSet=100/1000;
+  /**
+   * 设置汽油值
+   * @type {number}
+   */
+  gasolineSet=100;
+  /**
+   * 设置子弹值 数量
+   * @type {number}
+   */
+  bulletNumSet=100;
+  /**
+   * 攻击时间
+   * @type {number}
+   */
+  attackTime=0;
+  /**
+   * 设置攻击时间
+   * @type {number}
+   */
+  attackTimeSet=100;
+  /**
    * 一局游戏击杀
    * @type {number}
    */
@@ -107,6 +132,10 @@ class BasePlane extends createjs.Container{
     NameSpr.registerPointCenter(this);
     this.hitArr=NameSpr.setHitPoint(this);
   }
+
+
+
+
 
   /**
    * 移动
@@ -205,6 +234,8 @@ class BasePlane extends createjs.Container{
     this.y = 100;
     this.rotation=0;
     this.life=this.lifeSet;
+    this.gasoline=this.gasolineSet;
+    this.bulletNum=this.bulletNumSet;
   }
 
   /**

@@ -76,10 +76,10 @@ class AIPlaneB extends BasePlane{
     if(this.bulletArr.length==0)
       this.bulletNumId=0;
     //攻击
-    if(this.attackNum>0){
-      this.attackNum--;
-      this.attack();
-    }
+    // if(this.attackNum>0){
+    //   this.attackNum--;
+    //   this.attack();
+    // }
     this.moveBullet();
     //子弹检测碰撞
     let heroPlane=GameData.planeControl.HeroPlane;

@@ -14,34 +14,16 @@ import SocketClient from '../common/socket/SocketClient';
  */
 class HeroPlaneB extends BasePlane{
   /**
-   * 速度设置
-   * @type {number}
+   * 上一帧的按键记录对象
+   * @type {{}}
    */
-  speedSet=100/1000;
-  /**
-   * 设置汽油值
-   * @type {number}
-   */
-  gasolineSet=100;
-  /**
-   * 设置子弹值 数量
-   * @type {number}
-   */
-  bulletNumSet=100;
-  /**
-   * 攻击时间
-   * @type {number}
-   */
-  attackTime=0;
-  /**
-   * 设置攻击时间
-   * @type {number}
-   */
-  attackTimeSet=100;
+  keyFrameO={};
 
   constructor() {
     super();
     this.init(GameData.planeNameO[GameData.planeName]);
+
+    this.keyLog();
   }
 
   /**
@@ -58,6 +40,14 @@ class HeroPlaneB extends BasePlane{
    * @param e {PlaneControl}
    */
   onFrame(e){
+    //按键判断处理
+    for(let s in this.keyFrameO){
+      if(this.keyFrameO[s]!=GameData[s]){
+        e.psd[s]=GameData[s];
+        GameData.send=true;
+      }
+    }
+    this.keyLog();
     //帧频开始状态初始化
     this.bulletArr.length==0&&(this.bulletNumId=0);
     this.speed=this.speedSet;
@@ -139,15 +129,22 @@ class HeroPlaneB extends BasePlane{
     // console.log('子弹',this.bulletArr.length);
   }
 
-
+  /**
+   * 按键记录
+   */
+  keyLog(){
+    this.keyFrameO.key_A=GameData.key_A;
+    this.keyFrameO.key_D=GameData.key_D;
+    this.keyFrameO.key_W=GameData.key_W;
+    this.keyFrameO.key_S=GameData.key_S;
+    this.keyFrameO.key_J=GameData.key_J;
+  }
 
   /**
    * 复活
    */
   rebirth(){
     super.rebirth();
-    this.gasoline=this.gasolineSet;
-    this.bulletNum=this.bulletNumSet;
   }
 
   /**

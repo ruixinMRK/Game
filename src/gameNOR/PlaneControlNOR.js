@@ -95,15 +95,20 @@ class PlaneControlNOR extends PlaneControlB{
     else if(data.type==2){//相撞
       if(data.an!=null){//AI
         GameData.dataShow.hitText(data.name+'和AI'+data.an+'相撞');
-        this.AIP[data.an].visible=false;
+        if(data.name!=this.HeroPlane.Name){
+          this.AIP[data.an].visible=false;
+          this.enemyP[data.name].visible=false;
+        }
       }
       else {//玩家
         GameData.dataShow.hitText(data.name+'和玩家'+data.en+'相撞');
         if(data.en==this.HeroPlane.Name){
           this.HeroPlane.life=0;
+          this.enemyP[data.name].visible=false;
         }
         else {
           this.enemyP[data.en].visible=false;
+          this.enemyP[data.name].visible=false;
         }
       }
     }

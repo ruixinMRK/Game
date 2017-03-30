@@ -77,6 +77,14 @@ class PSData{
     this.AI={};
 
 
+    //按键
+    this.key_A=null;
+    this.key_D=null;
+    this.key_W=null;
+    this.key_S=null;
+    this.key_J=null;
+
+
   }
 
   /**
@@ -102,6 +110,16 @@ class PSData{
         obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
       if(JSON.stringify(psdata.AI).length>2)
         obj[PSData.PSDataIndex['AI']]=psdata.AI;
+      if(psdata.key_A!=null)
+        obj[PSData.PSDataIndex['key_A']]=psdata.key_A;
+      if(psdata.key_D!=null)
+        obj[PSData.PSDataIndex['key_D']]=psdata.key_D;
+      if(psdata.key_W!=null)
+        obj[PSData.PSDataIndex['key_W']]=psdata.key_W;
+      if(psdata.key_S!=null)
+        obj[PSData.PSDataIndex['key_S']]=psdata.key_S;
+      if(psdata.key_J!=null)
+        obj[PSData.PSDataIndex['key_J']]=psdata.key_J;
       return obj;
     }
     else {
@@ -130,7 +148,7 @@ PSData.ObjIndex=null;
  * @type {{}}
  */
 PSData.PSDataIndex={Name:'n',room:'room',KPI:'KPI',life:'l',x:'x',y:'y',rot:'r',time:'t',attack:'a',hitObj:'h',
-AI:'AI'
+AI:'AI',key_A:'ka',key_D:'kd',key_W:'kw',key_S:'ks',key_J:'kj',
 };
 
 export default PSData;

@@ -167,11 +167,11 @@ class PlaneControlB extends createjs.Container{
    * 发送状态数据
    */
   sendData=()=>{
-    this.moveF--;
-    if(this.moveF<0){
-      this.moveF=this.moveFSet;
-      GameData.send=true;
-    }
+    // this.moveF--;
+    // if(this.moveF<0){
+    //   this.moveF=this.moveFSet;
+    //   GameData.send=true;
+    // }
     if(GameData.send==false||this.HeroPlane.visible==false) return;
     this.psd.Name=this.HeroPlane.Name;
     this.psd.room=GameData.room;
@@ -180,7 +180,6 @@ class PlaneControlB extends createjs.Container{
     this.psd.y=this.HeroPlane.y;
     this.psd.rot=this.HeroPlane.rotation;
     this.psd.time=new Date().getTime();
-
 
     SocketClient.instance.send(PSData.getObj(this.psd));
     this.psd.init();

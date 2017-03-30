@@ -42,6 +42,18 @@ class EnemyPlaneB extends BasePlane{
      * @type {number}
      */
     this.currentTime=0;
+    /**
+     * 按键对象
+     * @type {{*}}
+     */
+    this.keyO={
+      key_A:false,
+      key_D:false,
+      key_W:false,
+      key_S:false,
+      key_J:false,
+    };
+
     this.init(sprName);
   }
 
@@ -50,21 +62,21 @@ class EnemyPlaneB extends BasePlane{
    * @param obj {PSData}
    */
   dataDispose=(obj)=> {
-    if (obj.attack == 1){
-      console.log(obj.attack,obj.time);
-      this.attackNum++;
+
+    for(let s in this.keyO){
+      if(obj[s]!=null)
+        this.keyO[s]=obj[s];
     }
 
     if (obj.time < this.currentTime) return;
 
+
     this.life=obj.life;
 
-    this.targetX = obj.x;
-    this.targetY = obj.y;
-
-    this.targetRot = obj.rot;
-    if (Math.abs(this.targetRot - this.rotation) > 30)
-      this.rotation = obj.rot;
+    // this.x = obj.x;
+    // this.y = obj.y;
+    //
+    // this.rotation = obj.rot;
   }
 
   /**
@@ -72,39 +84,41 @@ class EnemyPlaneB extends BasePlane{
    * @param e
    */
   onFrame=(e)=>{
+
+    //帧频开始状态初始化
+    this.bulletArr.length==0&&(this.bulletNumId=0);
+    this.speed=this.speedSet;
+    this.attackTime-=GameData.timeDiff;
     this.frameHitB=false;
-    if(this.bulletArr.length==0)
-      this.bulletNumId=0;
-    //攻击
-    if(this.attackNum>0){
-      this.attackNum--;
-      this.attack();
+
+    //按键判断
+    if(this.keyO.key_A){
+      this.rotation-=this.rotationSpeed;
     }
+    else if(this.keyO.key_D){
+      this.rotation+=this.rotationSpeed;
+    }
+
+    if(this.visible&&this.keyO.key_J&&this.bulletNum>0&&this.attackTime<=0){
+      this.attack();
+      this.bulletNum--;
+      this.attackTime=this.attackTimeSet;
+    }
+    if(this.keyO.key_W){
+      this.speed*=2;
+    }
+    else if(this.keyO.key_S){
+      this.speed/=2;
+    }
+    //子弹移动
     this.moveBullet();
     //移动
-    // this.x=this.targetX;
-    // this.y=this.targetY;
-    if(this.rotation!=this.targetRot)
-    {
-      this.x += (this.targetX - this.x)　* 0.92;
-      this.y += (this.targetY - this.y)　* 0.92;
-    }
-    else {
+    if(this.gasoline>0){
+      this.gasoline-=this.speed/150;
       let angle=Tools.getHD(this.rotation);
-      let vx=Math.cos(angle)*this.speed;
-      let vy=Math.sin(angle)*this.speed;
+      let vx=Math.cos(angle)*this.speed*GameData.timeDiff;
+      let vy=Math.sin(angle)*this.speed*GameData.timeDiff;
       this.move(vx,vy);
-    }
-    //旋转  本地和服务器角度大于旋转速度按旋转速度旋转，小于直接赋值
-    if(this.rotation!=this.targetRot){
-      if(Math.abs(this.targetRot-this.rotation)>this.rotationSpeed){
-        if(this.targetRot>this.rotation)
-          this.rotation+=this.rotationSpeed;
-        else
-          this.rotation-=this.rotationSpeed;
-      }
-      else
-        this.rotation=this.targetRot;
     }
 
     //子弹碰撞检测移除，不做别的处理
@@ -115,6 +129,20 @@ class EnemyPlaneB extends BasePlane{
     // console.log('子弹',this.bulletArr.length);
   }
 
+
+  /**
+   * 复活
+   */
+  rebirth(){
+    super.rebirth();
+    this.keyO={
+      key_A:false,
+      key_D:false,
+      key_W:false,
+      key_S:false,
+      key_J:false,
+    };
+  }
 
 
 
