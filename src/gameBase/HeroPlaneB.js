@@ -65,7 +65,6 @@ class HeroPlaneB extends BasePlane{
       this.attack();
       this.bulletNum--;
       this.attackTime=this.attackTimeSet;
-      e.psd.attack=1;
       GameData.send=true;
     }
     if(GameData.key_W){
@@ -79,7 +78,6 @@ class HeroPlaneB extends BasePlane{
     //移动
     if(this.gasoline>0){
       this.gasoline-=this.speed/150;
-      // this.gasoline-=this.speed;
       let angle=Tools.getHD(this.rotation);
       let vx=Math.cos(angle)*this.speed*GameData.timeDiff;
       let vy=Math.sin(angle)*this.speed*GameData.timeDiff;
@@ -102,9 +100,6 @@ class HeroPlaneB extends BasePlane{
     }
     //子弹检测碰撞AI飞机
     for(let i=this.bulletArr.length-1;i>=0;i--){
-      /**
-       * @type {Bullet}
-       */
       let bullet=this.bulletArr[i];
       for(let s in e.AIP){
         if(e.AIP[s].frameHitB) continue;

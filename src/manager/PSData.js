@@ -61,11 +61,6 @@ class PSData{
      */
     this.time=0;
     /**
-     * 攻击 1-攻击 0-未攻击
-     * @type {number}
-     */
-    this.attack=0;
-    /**
      * 碰撞对象 Obj.子弹id=飞机name
      * @type {{}}
      */
@@ -104,8 +99,6 @@ class PSData{
       obj[PSData.PSDataIndex['y']]=Math.round(psdata.y);
       obj[PSData.PSDataIndex['rot']]=Math.round(psdata.rot);
       obj[PSData.PSDataIndex['time']]=psdata.time;
-      if(psdata.attack==1)
-        obj[PSData.PSDataIndex['attack']]=Math.round(psdata.attack);
       if(JSON.stringify(psdata.hitObj).length>2)
         obj[PSData.PSDataIndex['hitObj']]=psdata.hitObj;
       if(JSON.stringify(psdata.AI).length>2)
@@ -147,7 +140,7 @@ PSData.ObjIndex=null;
  * PSData索引，obj.PSData属性名=上传数据属性名
  * @type {{}}
  */
-PSData.PSDataIndex={Name:'n',room:'room',KPI:'KPI',life:'l',x:'x',y:'y',rot:'r',time:'t',attack:'a',hitObj:'h',
+PSData.PSDataIndex={Name:'n',room:'room',KPI:'KPI',life:'l',x:'x',y:'y',rot:'r',time:'t',hitObj:'h',
 AI:'AI',key_A:'ka',key_D:'kd',key_W:'kw',key_S:'ks',key_J:'kj',
 };
 

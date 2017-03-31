@@ -18,26 +18,6 @@ class EnemyPlaneB extends BasePlane{
   constructor(sprName){
     super();
     /**
-     * 攻击次数
-     * @type {number}
-     */
-    this.attackNum=0;
-    /**
-     * 目标x
-     * @type {number}
-     */
-    this.targetX=0;
-    /**
-     * 目标y
-     * @type {number}
-     */
-    this.targetY=0;
-    /**
-     * 目标角度
-     * @type {number}
-     */
-    this.targetRot=0;
-    /**
      * 当前最大时间
      * @type {number}
      */
@@ -72,11 +52,6 @@ class EnemyPlaneB extends BasePlane{
 
 
     this.life=obj.life;
-
-    // this.x = obj.x;
-    // this.y = obj.y;
-    //
-    // this.rotation = obj.rot;
   }
 
   /**

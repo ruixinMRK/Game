@@ -48,23 +48,11 @@ class PlaneControlB extends createjs.Container{
      * @type {Array}
      */
     this.AIPDataArr=[];
-    /**
-     * 移动数据发送帧间隔 位置矫正
-     * @type {number}
-     */
-    this.moveF=3;
-    /**
-     * 移动数据发送帧间隔设置 位置矫正
-     * @type {number}
-     */
-    this.moveFSet=3;
 
     //事件
     Router.instance.reg(Router.KPI.plane,this.socketPW);
     Router.instance.reg(Router.KPI.planeLive,this.socketLive);
     Router.instance.reg(Router.KPI.AiHit,this.socketAiHit);
-
-
   }
 
   //接受服务器的plan数据 移动
@@ -167,11 +155,6 @@ class PlaneControlB extends createjs.Container{
    * 发送状态数据
    */
   sendData=()=>{
-    // this.moveF--;
-    // if(this.moveF<0){
-    //   this.moveF=this.moveFSet;
-    //   GameData.send=true;
-    // }
     if(GameData.send==false||this.HeroPlane.visible==false) return;
     this.psd.Name=this.HeroPlane.Name;
     this.psd.room=GameData.room;

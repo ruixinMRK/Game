@@ -13,7 +13,6 @@ import PlaneGameNORMI from '../gameNOR/interface/PlaneGameNORMI';
 import GameNOROverIf from '../gameNOR/interface/GameNOROverIf';
 import SocketClient from '../common/socket/SocketClient';
 import ShopI from './ShopI';
-import Hit from './Hit';
 
 /**
  * 飞机游戏开始界面
@@ -34,10 +33,6 @@ class PlaneGameSI extends createjs.Container{
   constructor() {
     super();
     this.init();
-    this.s1=new Hit();
-    this.s1.x=100;
-    this.s1.y=100;
-    this.addChild(this.s1);
   }
 
   /**
